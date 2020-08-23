@@ -40,11 +40,16 @@ dependencies {
     kapt 'com.google.dagger:dagger-android-processor:2.+'
 
     //Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.+'
+    implementation 'com.squareup.retrofit2:retrofit:2.+'
+    implementation "com.squareup.retrofit2:converter-gson:2.+"
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.+'
+
 
     //OkHttp
-    compile 'com.squareup.okhttp3:okhttp:+'
-    compile 'com.squareup.okio:okio:+'
+    implementation 'com.squareup.okhttp3:okhttp:+'
+    implementation 'com.squareup.okio:okio:+'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

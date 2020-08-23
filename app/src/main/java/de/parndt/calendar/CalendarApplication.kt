@@ -12,7 +12,8 @@ class CalendarApplication:DaggerApplication(),HasAndroidInjector {
     lateinit var applicationComponent:ApplicationComponent
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        applicationComponent = DaggerApplicationComponent.builder().context(this).build()
+        applicationComponent = DaggerApplicationComponent.builder().networkModule("https://postit.allthing.eu").context(this).build()
         return applicationComponent
     }
+
 }

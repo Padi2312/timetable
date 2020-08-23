@@ -8,6 +8,7 @@ import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import de.parndt.calendar.CalendarApplication
 import de.parndt.calendar.ui.StartFragment
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Component(modules = [
@@ -25,6 +26,8 @@ interface ApplicationComponent:AndroidInjector<CalendarApplication> {
     interface Builder{
         @BindsInstance
         fun context(context:Context):Builder
+        @BindsInstance
+        fun networkModule(@Named("baseUrl")baseUrl:String):Builder
         fun build():ApplicationComponent
     }
 }
