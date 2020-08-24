@@ -6,7 +6,10 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
+import de.parndt.calendar.BuildConfig
 import okhttp3.Cache
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,34 +20,21 @@ import javax.inject.Singleton
 @Module
 class NetworkModule {
 
-    @Provides
     @Singleton
-    fun provideHttpCache(application: Application): Cache? {
-        val cacheSize = 10L * 1024L * 1024L
-        return Cache(application.cacheDir, cacheSize)
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient {
+        val clientBuilder = OkHttpClient.Builder()
+            .followRedirects(false)
+        return clientBuilder.build()
     }
+
+
 
     @Provides
     @Singleton
-    fun provideGson(): Gson? {
-        val gsonBuilder = GsonBuilder()
-        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        return gsonBuilder.create()
-    }
-
-    @Provides
-    @Singleton
-    fun provideOkhttpClient(cache: Cache?): OkHttpClient? {
-        val client = OkHttpClient.Builder()
-        client.cache(cache)
-        return client.build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(@Named("baseUrl")baseUrl:String,gson: Gson?, okHttpClient: OkHttpClient?): Retrofit? {
+    fun provideRetrofit(@Named("baseUrl")baseUrl:String, okHttpClient: OkHttpClient?): Retrofit {
         return Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(baseUrl)
             .client(okHttpClient)
             .build()

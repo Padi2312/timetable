@@ -5,13 +5,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ContextModule {
-    private lateinit var context: Context
-
-    constructor(context: Context){
-        this.context = context
-    }
-
+class ContextModule(private var context: Context) {
     @Provides
     fun provideContext():Context{
         return this.context

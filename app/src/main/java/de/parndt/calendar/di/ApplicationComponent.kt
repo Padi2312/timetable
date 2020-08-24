@@ -7,7 +7,6 @@ import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import de.parndt.calendar.CalendarApplication
-import de.parndt.calendar.ui.StartFragment
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -15,7 +14,8 @@ import javax.inject.Singleton
     AndroidInjectionModule::class,
     AndroidSupportInjectionModule::class,
     PlatformTypesInjectorModule::class,
-    MainActivityModule::class
+    MainActivityModule::class,
+    NetworkModule::class
 ])
 @Singleton
 interface ApplicationComponent:AndroidInjector<CalendarApplication> {

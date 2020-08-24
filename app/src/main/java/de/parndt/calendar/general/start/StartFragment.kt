@@ -1,4 +1,4 @@
-package de.parndt.calendar.ui
+package de.parndt.calendar.general.start
 
 import android.content.Context
 import android.os.Bundle
@@ -7,29 +7,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.calendar.R
 
-import de.parndt.calendar.services.network.NetworkService
+import de.parndt.calendar.services.backend.BackendService
 import kotlinx.android.synthetic.main.fragment_start.*
+import java.util.*
 import javax.inject.Inject
 
 class StartFragment : Fragment() {
 
-    @Inject lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Object>
-    @Inject lateinit var networkService: NetworkService
+    @Inject lateinit var backendService: BackendService
 
     @Inject lateinit var _context: Context
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        backendService.status.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(_context,it,Toast.LENGTH_SHORT).show()
+
+        })
 
         btn_test.setOnClickListener {
 
-            var result = networkService.Test()
-            Toast.makeText(_context,result.toString(),Toast.LENGTH_SHORT).show()
+            backendService.Test()
         }
 
     }

@@ -1,14 +1,10 @@
-package de.parndt.calendar
+package de.parndt.calendar.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import dagger.android.support.AndroidSupportInjection
-import de.parndt.calendar.ui.StartFragment
-import javax.inject.Inject
+import de.parndt.calendar.R
+import de.parndt.calendar.general.start.StartFragment
 
 
 class MainActivity : AppCompatActivity() {
