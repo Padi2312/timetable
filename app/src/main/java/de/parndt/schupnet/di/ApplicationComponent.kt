@@ -1,4 +1,4 @@
-package de.parndt.calendar.di
+package de.parndt.schupnet.di
 
 import android.content.Context
 import dagger.BindsInstance
@@ -6,7 +6,7 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import de.parndt.calendar.CalendarApplication
+import de.parndt.schupnet.SchupnetApplication
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -18,9 +18,9 @@ import javax.inject.Singleton
     NetworkModule::class
 ])
 @Singleton
-interface ApplicationComponent:AndroidInjector<CalendarApplication> {
+interface ApplicationComponent:AndroidInjector<SchupnetApplication> {
 
-    override fun inject(calendarApplication: CalendarApplication)
+    override fun inject(schupnetApplication: SchupnetApplication)
 
     @Component.Builder
     interface Builder{

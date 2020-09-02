@@ -1,4 +1,4 @@
-package de.parndt.calendar.general.start
+package de.parndt.schupnet.general.start
 
 import androidx.lifecycle.ViewModel
 import javax.inject.Singleton

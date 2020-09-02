@@ -1,14 +1,10 @@
-package de.parndt.calendar.services.backend
+package de.parndt.schupnet.services.backend
 
 
-import android.os.NetworkOnMainThreadException
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
-import de.parndt.calendar.services.backend.models.Test
+import de.parndt.schupnet.services.backend.models.Test
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
 import retrofit2.*
 import retrofit2.http.GET
 import javax.inject.Inject

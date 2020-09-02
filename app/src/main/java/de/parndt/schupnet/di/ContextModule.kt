@@ -1,4 +1,4 @@
-package de.parndt.calendar.di
+package de.parndt.schupnet.di
 
 import android.content.Context
 import dagger.Module

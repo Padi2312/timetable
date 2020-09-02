@@ -1,13 +1,12 @@
-package de.parndt.calendar
+package de.parndt.schupnet
 
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import dagger.android.HasAndroidInjector
-import de.parndt.calendar.di.ApplicationComponent
-import de.parndt.calendar.di.DaggerApplicationComponent
-import javax.inject.Inject
+import de.parndt.schupnet.di.ApplicationComponent
+import de.parndt.schupnet.di.DaggerApplicationComponent
 
-class CalendarApplication:DaggerApplication(),HasAndroidInjector {
+class SchupnetApplication:DaggerApplication(),HasAndroidInjector {
 
     lateinit var applicationComponent:ApplicationComponent
 

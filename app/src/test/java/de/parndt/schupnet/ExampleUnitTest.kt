@@ -1,4 +1,4 @@
-package de.parndt.calendar
+package de.parndt.schupnet
 
 import org.junit.Test
 

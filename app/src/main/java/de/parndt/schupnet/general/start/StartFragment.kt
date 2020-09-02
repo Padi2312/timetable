@@ -1,4 +1,4 @@
-package de.parndt.calendar.general.start
+package de.parndt.schupnet.general.start
 
 import android.content.Context
 import android.os.Bundle
@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection
-import de.parndt.calendar.R
+import de.parndt.schupnet.HomeFragment
+import de.parndt.schupnet.R
 
-import de.parndt.calendar.services.backend.BackendService
+import de.parndt.schupnet.services.backend.BackendService
+import de.parndt.schupnet.ui.MainActivity
 import kotlinx.android.synthetic.main.fragment_start.*
-import java.util.*
 import javax.inject.Inject
 
 class StartFragment : Fragment() {
@@ -31,11 +31,9 @@ class StartFragment : Fragment() {
 
         })
 
-        btn_test.setOnClickListener {
-
-            backendService.Test()
+        btn_login.setOnClickListener {
+            (activity as MainActivity).navigateToFragment(HomeFragment())
         }
-
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,10 +44,8 @@ class StartFragment : Fragment() {
     }
 
     override fun onAttach(context: Context) {
-
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
-
     }
 
 
