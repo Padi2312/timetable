@@ -1,5 +1,15 @@
 <resources>
-    <string name="app_name">Schupnet</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">"MyDo's"</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_label_home">Home</string>
+    <string name="tab_label_todos">TODOs</string>
+    <string name="tab_label_notes">Notizen</string>
+    <string name="tab_label_settings">Einstellungen</string>
+    <string name="text_label_new_todo">Neuer TODO Eintrag</string>
+    <string name="new_todo_title_hint">Titel</string>
+    <string name="new_todo_content_hint">Inhalt (Optional)</string>
+    <string name="new_todo_add_todo">Zur TODO-Liste hinzufügen</string>
+    <string name="global_cancel">Abbrechen</string>
+    <string name="new_todo_title_error">Titel erforderlich!</string>
+    <string name="settings_filter_only_checked">Nur fertige TODOs anzeigen</string>
 </resources>
