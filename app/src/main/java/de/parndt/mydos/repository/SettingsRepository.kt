@@ -1,11 +1,14 @@
 package de.parndt.mydos.repository
 
-import androidx.lifecycle.LiveData
 import de.parndt.mydos.database.MydosDatabase
-import de.parndt.mydos.database.models.settings.SettingsDao
+import de.parndt.mydos.database.persistence.SettingsDao
 import de.parndt.mydos.database.models.settings.SettingsEntity
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SettingsRepository @Inject constructor(
     database: MydosDatabase
 ) {
@@ -16,17 +19,32 @@ class SettingsRepository @Inject constructor(
         return dao.getAll()
     }
 
-    fun getSettingWithKey(setting: String) {
-
+    fun getSetting(
+        setting: Settings
+    ): SettingsEntity {
+        return dao.getSetting(setting.name)
     }
 
-    fun areSettingsSet():Boolean{
+    fun settingsInitialized(): Boolean {
         val empty = dao.isEmpty()?.value
-        return empty == null
+        return empty != null
     }
 
-    suspend fun setSetting(key:String, value:String): Long {
-        val settingsEntity = SettingsEntity(setting = key,value = value)
+    suspend fun createSetting(key: Settings, value: Boolean): Long {
+        val settingForEntity = key.name
+        val settingsEntity = SettingsEntity(setting = settingForEntity, value = value)
         return dao.insertSetting(settingsEntity)
+    }
+
+    suspend fun updateSetting(key: Settings, value: Boolean) {
+        GlobalScope.launch {
+            val setting = getSetting(key)
+            setting.value = value
+            dao.updateSetting(setting)
+        }
+    }
+
+    enum class Settings {
+        FILTER_ONLY_CHECKED
     }
 }

@@ -11,5 +11,6 @@
     <string name="new_todo_add_todo">Zur TODO-Liste hinzufügen</string>
     <string name="global_cancel">Abbrechen</string>
     <string name="new_todo_title_error">Titel erforderlich!</string>
-    <string name="settings_filter_only_checked">Nur fertige TODOs anzeigen</string>
+    <string name="settings_filter_only_checked">Nur nicht fertige TODOs anzeigen</string>
+    <string name="tab_todos_empty_todo_list">Kein TODOs vorhanden</string>
 </resources>

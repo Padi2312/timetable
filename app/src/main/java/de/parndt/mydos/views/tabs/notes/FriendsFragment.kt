@@ -23,6 +23,6 @@ class FriendsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab_notes, container, false)
+        return inflater.inflate(R.layout.tab_fragment_notes, container, false)
     }
 }

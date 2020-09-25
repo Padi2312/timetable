@@ -7,14 +7,16 @@ import dagger.android.AndroidInjection
 import de.parndt.mydos.R
 import de.parndt.mydos.repository.SettingsRepository
 import de.parndt.mydos.views.tabs.TabsFragment
-import kotlinx.coroutines.runBlocking
+import de.parndt.mydos.views.tabs.settings.SettingsUseCase
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var settingsRepository: SettingsRepository
+    lateinit var settingsUseCase: SettingsUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     fun init() {
         navigateToFragment(TabsFragment())
 
-        if (!settingsRepository.areSettingsSet()) {
+        if (!settingsUseCase.settingsInitialized()) {
             initSettings()
         }
     }
@@ -47,8 +49,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initSettings() {
-        runBlocking {
-            settingsRepository.setSetting("filter_only_checked", "false")
+        GlobalScope.launch {
+            settingsUseCase.createSettingWithKey(
+                SettingsRepository.Settings.FILTER_ONLY_CHECKED,
+                false
+            )
         }
     }
 }

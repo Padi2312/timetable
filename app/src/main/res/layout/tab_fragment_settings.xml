@@ -6,11 +6,11 @@
     android:orientation="horizontal"
     tools:context=".views.tabs.settings.SettingsFragment">
 
-
-    <com.google.android.material.checkbox.MaterialCheckBox
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/settingsFilterOnlyCheckedTodos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="12dp"
         android:text="@string/settings_filter_only_checked"/>
 
 

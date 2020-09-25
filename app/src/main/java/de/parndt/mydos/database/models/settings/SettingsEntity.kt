@@ -5,12 +5,15 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "settings")
-data class SettingsEntity(
+class SettingsEntity(setting: String, value: Boolean = false) {
     @ColumnInfo
     @PrimaryKey(autoGenerate = true)
-    val id:Int?=null,
+    var id: Int? = null
+
     @ColumnInfo(name = "setting")
-    var setting:String,
+    var setting: String = setting
+
     @ColumnInfo(name = "value")
-    var value: String
-)
+    var value: Boolean = value
+
+}

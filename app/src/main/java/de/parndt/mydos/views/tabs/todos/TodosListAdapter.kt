@@ -8,10 +8,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
-import kotlinx.android.synthetic.main.todo_list_item.view.*
+import kotlinx.android.synthetic.main.dialog_todo_item.view.*
+import kotlinx.android.synthetic.main.list_item_todo.view.*
 
 interface TodoOnCheck {
     fun onCheckboxClicked(todoId: Int, checked: Boolean)
+    fun onTodoItemClicked(todo: TodoEntity)
+    fun onTodoItemDeleteClicked(todo: TodoEntity)
+
 }
 
 class TodosListAdapter(val todoOnCheck: TodoOnCheck) :
@@ -27,7 +31,7 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck) :
         }
     }
 
-    inner class TodosViewHolder(view: View, todoOnCheck: TodoOnCheck) :
+    inner class TodosViewHolder(view: View) :
         RecyclerView.ViewHolder(view) {
 
         fun bind(item: TodoEntity) {
@@ -35,10 +39,16 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck) :
             itemView.todo_item_checkbox.isChecked = item.done
 
             itemView.todo_item_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked)
-                    todoOnCheck.onCheckboxClicked(item.id!!, isChecked)
+                todoOnCheck.onCheckboxClicked(item.id!!, isChecked)
             }
 
+            itemView.todo_item_delete.setOnClickListener {
+                todoOnCheck.onTodoItemDeleteClicked(item)
+            }
+
+            itemView.setOnClickListener {
+                todoOnCheck.onTodoItemClicked(item)
+            }
         }
 
     }
@@ -46,8 +56,7 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodosViewHolder {
         return TodosViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.todo_list_item, parent, false),
-            todoOnCheck
+                .inflate(R.layout.list_item_todo, parent, false)
         )
     }
 

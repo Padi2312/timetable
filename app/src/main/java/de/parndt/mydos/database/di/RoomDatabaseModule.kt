@@ -1,13 +1,10 @@
 package de.parndt.mydos.database.di
 
-import android.app.Application
-import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import de.parndt.mydos.MydosApplication
 import de.parndt.mydos.database.MydosDatabase
-import de.parndt.mydos.database.models.todo.TodoDao
 import javax.inject.Singleton
 
 

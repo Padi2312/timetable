@@ -1,6 +1,7 @@
-package de.parndt.mydos.database.models.todo
+package de.parndt.mydos.database.persistence
 
 import androidx.room.*
+import de.parndt.mydos.database.models.todo.TodoEntity
 
 @Dao
 interface TodoDao {
@@ -14,7 +15,7 @@ interface TodoDao {
     suspend fun updateStatus(todo: TodoEntity)
 
     @Delete
-    fun deleteTodo(vararg todo: TodoEntity)
+    fun deleteTodo(todo: TodoEntity)
 
     @Query("SELECT * FROM todos WHERE todos.id == :todoId")
     fun getById(todoId: Int): TodoEntity

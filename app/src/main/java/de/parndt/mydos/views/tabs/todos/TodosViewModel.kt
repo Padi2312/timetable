@@ -1,19 +1,16 @@
 package de.parndt.mydos.views.tabs.todos
 
 
-import android.app.AlertDialog
 import android.content.Context
-import android.widget.Button
-import android.widget.EditText
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
 import de.parndt.mydos.database.models.todo.TodoPriority
+import de.parndt.mydos.repository.SettingsRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
@@ -25,32 +22,45 @@ class TodosViewModel @Inject constructor() : ViewModel() {
     @Inject
     lateinit var useCase: TodosUseCase
 
-    private var _todoList: MutableLiveData<List<TodoEntity>> = MutableLiveData()
+    @Inject
+    lateinit var settings: SettingsRepository
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            var list = useCase.getAllTodos()
-            _todoList.postValue(list)
-        }
-    }
+    private var _todoList: MutableLiveData<List<TodoEntity>> = MutableLiveData()
 
     fun getAllTodos() = _todoList
 
+
+    fun startObservingTodos(
+    ) {
+        GlobalScope.launch {
+            settings.getSetting(SettingsRepository.Settings.FILTER_ONLY_CHECKED)
+            val todos = useCase.getAllTodos()
+            _todoList.postValue(todos)
+        }
+    }
 
     fun createTodoEntry(
         title: String,
         content: String,
         priority: TodoPriority = TodoPriority.DEFAULT
-    ): Long {
-
-        return runBlocking {
-            useCase.addNewTodoEntry(title, content, priority)
+    ) {
+        GlobalScope.launch {
+            val result = useCase.addNewTodoEntry(title, content, priority)
+            if (result != null)
+                _todoList.postValue(result)
         }
     }
 
-    fun updateTodoEntryStatus(todoId:Int,newStatus:Boolean){
+    fun updateTodoEntryStatus(todoId: Int, newStatus: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            useCase.updateTodoEntry(todoId,newStatus)
+            useCase.updateTodoEntry(todoId, newStatus)
+        }
+    }
+
+    fun deleteTodoEntry(todo: TodoEntity) {
+        GlobalScope.launch {
+            useCase.deleteTodoEntry(todo)
+            startObservingTodos()
         }
     }
 }

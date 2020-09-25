@@ -11,7 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
-import kotlinx.android.synthetic.main.fragment_tab_home.*
+import kotlinx.android.synthetic.main.tab_fragment_home.*
 import javax.inject.Inject
 
 
@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab_home, container, false)
+        return inflater.inflate(R.layout.tab_fragment_home, container, false)
     }
 
     override fun onAttach(context: Context) {
@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
 
     private fun openNewTodoPopUp() {
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setView(R.layout.popup_new_todo)
+        builder.setView(R.layout.dialog_new_todo)
 
         val dialog = builder.create()
         dialog.show()
