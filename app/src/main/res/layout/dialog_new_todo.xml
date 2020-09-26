@@ -7,7 +7,7 @@
     android:padding="10dp">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/newtodo_input_title_wrapper"
+        android:id="@+id/newtodoInputTitleWrapper"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,23 +15,66 @@
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/newtodo_input_title"
+            android:id="@+id/newtodoInputTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/newtodoSliderPriority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="25"
+            android:value="50"
+            android:valueFrom="0"
+            android:valueTo="100">
+
+        </com.google.android.material.slider.Slider>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:text="@string/new_todo_priority" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/newtodoPriorityLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/todo_priotiy_default" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/newtodoSwitchAddContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:text="@string/new_todo_add_content" />
+
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/newtodo_input_content_wrapper"
+        android:id="@+id/newtodoInputContentWrapper"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/new_todo_content_hint"
+        android:visibility="gone"
         app:errorEnabled="true">
 
         <EditText
-            android:id="@+id/newtodo_input_content"
+            android:id="@+id/newtodoInputContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="start"
@@ -46,13 +89,13 @@
         android:orientation="vertical">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/newtodo_btn_new_todo"
+            android:id="@+id/newtodoButtonNewTodo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/new_todo_add_todo" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/newtodo_btn_cancel"
+            android:id="@+id/newtodoButtonCancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/global_cancel" />

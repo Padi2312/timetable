@@ -20,10 +20,3 @@ data class TodoEntity(
 )
 
 
-enum class TodoPriority{
-    VERY_HIGH,
-    HIGH,
-    DEFAULT,
-    LOW,
-    VERY_LOW
-}

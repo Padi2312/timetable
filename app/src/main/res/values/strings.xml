@@ -7,10 +7,18 @@
     <string name="tab_label_settings">Einstellungen</string>
     <string name="text_label_new_todo">Neuer TODO Eintrag</string>
     <string name="new_todo_title_hint">Titel</string>
-    <string name="new_todo_content_hint">Inhalt (Optional)</string>
+    <string name="new_todo_content_hint">Beschreibung (Optional)</string>
+    <string name="new_todo_add_content">Beschreibung hinzufügen</string>
+    <string name="new_todo_priority">Priorität:</string>
     <string name="new_todo_add_todo">Zur TODO-Liste hinzufügen</string>
     <string name="global_cancel">Abbrechen</string>
     <string name="new_todo_title_error">Titel erforderlich!</string>
     <string name="settings_filter_only_checked">Nur nicht fertige TODOs anzeigen</string>
     <string name="tab_todos_empty_todo_list">Kein TODOs vorhanden</string>
+    <string name="todo_priotiy_very_low">Sehr niedrig</string>
+    <string name="todo_priotiy_low">Niedrig</string>
+    <string name="todo_priotiy_default">Normal</string>
+    <string name="todo_priotiy_high">Hoch</string>
+    <string name="todo_priotiy_very_high">Sehr hoch</string>
+    <string name="todos_delete_snackbar_text">TODO-Eintrag wurde gelöscht.</string>
 </resources>

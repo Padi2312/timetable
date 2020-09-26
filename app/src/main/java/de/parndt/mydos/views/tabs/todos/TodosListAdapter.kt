@@ -1,5 +1,6 @@
 package de.parndt.mydos.views.tabs.todos
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
+import de.parndt.mydos.database.models.todo.TodoPriority
+import de.parndt.mydos.database.models.todo.getIcon
 import kotlinx.android.synthetic.main.dialog_todo_item.view.*
 import kotlinx.android.synthetic.main.list_item_todo.view.*
 
@@ -18,7 +21,7 @@ interface TodoOnCheck {
 
 }
 
-class TodosListAdapter(val todoOnCheck: TodoOnCheck) :
+class TodosListAdapter(val todoOnCheck: TodoOnCheck, val _context: Context) :
     ListAdapter<TodoEntity, TodosListAdapter.TodosViewHolder>(DiffCallback()) {
 
     class DiffCallback : DiffUtil.ItemCallback<TodoEntity>() {
@@ -34,16 +37,16 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck) :
     inner class TodosViewHolder(view: View) :
         RecyclerView.ViewHolder(view) {
 
-        fun bind(item: TodoEntity) {
-            itemView.todo_item_checkbox.text = item.title
+        fun bind(item: TodoEntity, _context: Context) {
+            itemView.todo_item_title.text = item.title
             itemView.todo_item_checkbox.isChecked = item.done
+
+            itemView.todo_item_priority_icon.setImageDrawable(
+                TodoPriority.valueOf(item.priority).getIcon(_context)
+            )
 
             itemView.todo_item_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
                 todoOnCheck.onCheckboxClicked(item.id!!, isChecked)
-            }
-
-            itemView.todo_item_delete.setOnClickListener {
-                todoOnCheck.onTodoItemDeleteClicked(item)
             }
 
             itemView.setOnClickListener {
@@ -53,6 +56,11 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck) :
 
     }
 
+    fun getItemByPosition(position: Int): TodoEntity {
+        return getItem(position)
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodosViewHolder {
         return TodosViewHolder(
             LayoutInflater.from(parent.context)
@@ -61,7 +69,7 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck) :
     }
 
     override fun onBindViewHolder(holder: TodosViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), _context)
     }
 
     override fun getItemCount(): Int {

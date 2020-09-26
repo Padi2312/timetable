@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjection
 import de.parndt.mydos.R
 import de.parndt.mydos.repository.SettingsRepository
-import de.parndt.mydos.views.tabs.TabsFragment
+import de.parndt.mydos.views.TabsFragment
 import de.parndt.mydos.views.tabs.settings.SettingsUseCase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

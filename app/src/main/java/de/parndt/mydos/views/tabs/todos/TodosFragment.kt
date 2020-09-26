@@ -2,36 +2,37 @@ package de.parndt.mydos.views.tabs.todos
 
 import android.app.AlertDialog
 import android.content.Context
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
+import de.parndt.mydos.utils.dialogs.newtodo.NewTodoDialog
+import de.parndt.mydos.utils.dialogs.newtodo.NewTodoDialogResult
 import kotlinx.android.synthetic.main.tab_fragment_todos.*
-import kotlinx.android.synthetic.main.dialog_new_todo.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 import javax.inject.Inject
 
-class TodosFragment : Fragment(), TodoOnCheck {
+class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
 
     @Inject
     lateinit var todosViewModel: TodosViewModel
 
+    @Inject
+    lateinit var _context: Context
 
     private lateinit var adapter: TodosListAdapter
 
+    private lateinit var itemTouchHelper: ItemTouchHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,9 +44,12 @@ class TodosFragment : Fragment(), TodoOnCheck {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = TodosListAdapter(this)
+        adapter = TodosListAdapter(this, _context)
         todos_todo_list.adapter = adapter
         todos_todo_list.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(todos_todo_list)
 
         todos_floating_action_button.setOnClickListener {
             openNewTodoPopUp()
@@ -57,7 +61,7 @@ class TodosFragment : Fragment(), TodoOnCheck {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
 
-        todosViewModel.startObservingTodos()
+        todosViewModel.refreshTodoList()
 
         todosViewModel.getAllTodos().observe(this, Observer {
             if (it.isEmpty())
@@ -71,52 +75,32 @@ class TodosFragment : Fragment(), TodoOnCheck {
     }
 
     private fun openNewTodoPopUp() {
-        val builder = AlertDialog.Builder(context)
-        builder.setView(R.layout.dialog_new_todo)
-
-        val dialog = builder.create()
-        dialog.show()
-
-        val titleView = dialog.findViewById<EditText>(R.id.newtodo_input_title)
-        val contentView = dialog.findViewById<EditText>(R.id.newtodo_input_content)
-        val btnAddTodo = dialog.findViewById<Button>(R.id.newtodo_btn_new_todo)
-        val btnCancelAdd = dialog.findViewById<Button>(R.id.newtodo_btn_cancel)
-
-        titleView.setOnFocusChangeListener { v, hasFocus ->
-            if (titleView.text.isEmpty() && !hasFocus)
-                showErrorTitleOnNewTodoPopUp(dialog)
-            else
-                hideErrorTitleOnNewTodoPopUp(dialog)
-        }
-
-        btnAddTodo.setOnClickListener {
-
-            if (titleView.text.isEmpty()) {
-                showErrorTitleOnNewTodoPopUp(dialog)
-                return@setOnClickListener
-            } else
-                GlobalScope.launch {
-                    todosViewModel.createTodoEntry(
-                        titleView.text.toString(),
-                        contentView.text.toString()
-                    )
-                    dialog.dismiss()
-                }
-        }
-
-        btnCancelAdd.setOnClickListener {
-            dialog.dismiss()
-        }
+        NewTodoDialog.newInstance(this).show(parentFragmentManager, "dialog_new_todo")
     }
 
-    private fun showErrorTitleOnNewTodoPopUp(dialog: AlertDialog) {
-        dialog.newtodo_input_title_wrapper.error = context?.getString(R.string.new_todo_title_error)
-    }
+    val itemTouchHelperCallback =
+        object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
 
+                return false
+            }
 
-    private fun hideErrorTitleOnNewTodoPopUp(dialog: AlertDialog) {
-        dialog.newtodo_input_title_wrapper.error = ""
-    }
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                todosViewModel.deleteTodoEntry(adapter.getItemByPosition(viewHolder.adapterPosition))
+                Snackbar.make(
+                    requireActivity().findViewById(android.R.id.content),
+                    R.string.todos_delete_snackbar_text,
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+
+        }
+
 
     override fun onCheckboxClicked(todoId: Int, checked: Boolean) {
         todosViewModel.updateTodoEntryStatus(todoId, checked)
@@ -141,6 +125,10 @@ class TodosFragment : Fragment(), TodoOnCheck {
 
     override fun onTodoItemDeleteClicked(todo: TodoEntity) {
         todosViewModel.deleteTodoEntry(todo)
+    }
+
+    override fun addedEntry() {
+        todosViewModel.refreshTodoList()
     }
 
 }

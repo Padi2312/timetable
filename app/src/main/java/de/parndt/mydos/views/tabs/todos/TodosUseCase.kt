@@ -13,18 +13,6 @@ class TodosUseCase @Inject constructor(
 
     suspend fun getAllTodos() = todoRepository.getAllTodos()
 
-    suspend fun addNewTodoEntry(
-        title: String,
-        content: String? = null,
-        priority: TodoPriority = TodoPriority.DEFAULT
-    ): List<TodoEntity> {
-        var todo = TodoEntity(title = title, content = content, priority = priority.name)
-        if (todoRepository.createNewTodo(todo) != null)
-            return getAllTodos()
-        else
-            return listOf()
-    }
-
     suspend fun updateTodoEntry(todoId: Int, newStatus: Boolean) =
         todoRepository.updateTodo(todoId, newStatus)
 

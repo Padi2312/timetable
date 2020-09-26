@@ -2,8 +2,9 @@ package de.parndt.mydos.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import de.parndt.mydos.views.tabs.TabsFragment
+import de.parndt.mydos.views.TabsFragment
 import de.parndt.mydos.ui.MainActivity
+import de.parndt.mydos.utils.dialogs.newtodo.NewTodoDialog
 import de.parndt.mydos.views.tabs.notes.FriendsFragment
 import de.parndt.mydos.views.tabs.settings.SettingsFragment
 import de.parndt.mydos.views.tabs.home.HomeFragment
@@ -31,5 +32,7 @@ abstract class PlatformTypesInjectorModule {
     @ContributesAndroidInjector
     abstract fun contributeProfileFragment(): SettingsFragment
 
+    @ContributesAndroidInjector
+    abstract fun contributeDialogNewTodo(): NewTodoDialog
 }
 

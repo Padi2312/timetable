@@ -30,8 +30,7 @@ class TodosViewModel @Inject constructor() : ViewModel() {
     fun getAllTodos() = _todoList
 
 
-    fun startObservingTodos(
-    ) {
+    fun refreshTodoList() {
         GlobalScope.launch {
             settings.getSetting(SettingsRepository.Settings.FILTER_ONLY_CHECKED)
             val todos = useCase.getAllTodos()
@@ -39,28 +38,17 @@ class TodosViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun createTodoEntry(
-        title: String,
-        content: String,
-        priority: TodoPriority = TodoPriority.DEFAULT
-    ) {
-        GlobalScope.launch {
-            val result = useCase.addNewTodoEntry(title, content, priority)
-            if (result != null)
-                _todoList.postValue(result)
-        }
-    }
-
     fun updateTodoEntryStatus(todoId: Int, newStatus: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             useCase.updateTodoEntry(todoId, newStatus)
+            refreshTodoList()
         }
     }
 
     fun deleteTodoEntry(todo: TodoEntity) {
-        GlobalScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             useCase.deleteTodoEntry(todo)
-            startObservingTodos()
+            refreshTodoList()
         }
     }
 }

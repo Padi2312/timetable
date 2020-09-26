@@ -9,21 +9,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Switch
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.textfield.TextInputLayout
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
+import de.parndt.mydos.utils.dialogs.newtodo.NewTodoDialog
+import de.parndt.mydos.utils.dialogs.newtodo.NewTodoDialogResult
+import kotlinx.android.synthetic.main.dialog_new_todo.*
 import kotlinx.android.synthetic.main.tab_fragment_home.*
 import javax.inject.Inject
 
 
 class HomeFragment : Fragment() {
 
-
-    @Inject lateinit var homeViewModel: HomeViewModel
+    @Inject
+    lateinit var homeViewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -47,24 +51,10 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     private fun openNewTodoPopUp() {
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setView(R.layout.dialog_new_todo)
+        NewTodoDialog.newInstance(object : NewTodoDialogResult {
+            override fun addedEntry() {}
+        }).show(parentFragmentManager, "dialog_new_todo")
 
-        val dialog = builder.create()
-        dialog.show()
-        dialog.findViewById<Button>(R.id.newtodo_btn_new_todo).setOnClickListener {
-
-            val title = dialog.findViewById<EditText>(R.id.newtodo_input_title).text.toString()
-            val content = dialog.findViewById<EditText>(R.id.newtodo_input_content).text.toString()
-
-            homeViewModel.createTodoEntry(title,content)
-            dialog.dismiss()
-        }
-
-        dialog.findViewById<Button>(R.id.newtodo_btn_cancel).setOnClickListener {
-            dialog.dismiss()
-        }
     }
 }
