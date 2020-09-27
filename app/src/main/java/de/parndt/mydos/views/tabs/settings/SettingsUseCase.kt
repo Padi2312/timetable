@@ -2,6 +2,8 @@ package de.parndt.mydos.views.tabs.settings
 
 import de.parndt.mydos.database.models.settings.SettingsEntity
 import de.parndt.mydos.repository.SettingsRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SettingsUseCase @Inject constructor(private val settingsRepository: SettingsRepository) {
@@ -10,7 +12,7 @@ class SettingsUseCase @Inject constructor(private val settingsRepository: Settin
         return settingsRepository.settingsInitialized()
     }
 
-    suspend fun getSettingForKey(settingKey: SettingsRepository.Settings): SettingsEntity {
+    fun getSettingForKey(settingKey: SettingsRepository.Settings): SettingsEntity {
         return settingsRepository.getSetting(settingKey)
     }
 
@@ -22,4 +24,18 @@ class SettingsUseCase @Inject constructor(private val settingsRepository: Settin
         settingsRepository.updateSetting(settingKey, value)
     }
 
+    fun createInitialSettings() {
+        GlobalScope.launch {
+            createSettingWithKey(
+                SettingsRepository.Settings.FILTER_ONLY_UNCHECKED,
+                false
+            )
+
+            createSettingWithKey(
+                SettingsRepository.Settings.FILTER_BY_PRIORITY,
+                false
+            )
+        }
+
+    }
 }

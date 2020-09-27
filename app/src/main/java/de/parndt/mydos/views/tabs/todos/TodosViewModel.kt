@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.parndt.mydos.database.models.todo.TodoEntity
-import de.parndt.mydos.database.models.todo.TodoPriority
 import de.parndt.mydos.repository.SettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -32,7 +31,7 @@ class TodosViewModel @Inject constructor() : ViewModel() {
 
     fun refreshTodoList() {
         GlobalScope.launch {
-            settings.getSetting(SettingsRepository.Settings.FILTER_ONLY_CHECKED)
+            settings.getSetting(SettingsRepository.Settings.FILTER_ONLY_UNCHECKED)
             val todos = useCase.getAllTodos()
             _todoList.postValue(todos)
         }
@@ -49,6 +48,12 @@ class TodosViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             useCase.deleteTodoEntry(todo)
             refreshTodoList()
+        }
+    }
+
+    fun updateSettingWithKey(settingsKey: SettingsRepository.Settings, value: Boolean) {
+        viewModelScope.launch {
+            useCase.updateSettingWithKey(settingsKey, value)
         }
     }
 }

@@ -31,9 +31,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        filterOnlyCheckedChanged()
-
-        settingsViewModel.getSettinForKey(SettingsRepository.Settings.FILTER_ONLY_CHECKED)
+        settingsViewModel.getSettinForKey(SettingsRepository.Settings.FILTER_ONLY_UNCHECKED)
 
         settingsViewModel.getSettingsLiveData().observe(viewLifecycleOwner, Observer {
             settingsFilterOnlyCheckedTodos?.isChecked = it.value
@@ -46,13 +44,5 @@ class SettingsFragment : Fragment() {
         super.onAttach(context)
     }
 
-    private fun filterOnlyCheckedChanged() {
-        settingsFilterOnlyCheckedTodos.setOnCheckedChangeListener { buttonView, isChecked ->
-            settingsViewModel.updateSettingWithKey(
-                SettingsRepository.Settings.FILTER_ONLY_CHECKED,
-                isChecked
-            )
-        }
-    }
 
 }

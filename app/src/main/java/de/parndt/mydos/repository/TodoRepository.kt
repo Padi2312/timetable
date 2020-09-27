@@ -1,9 +1,8 @@
 package de.parndt.mydos.repository
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import de.parndt.mydos.database.MydosDatabase
 import de.parndt.mydos.database.models.todo.TodoEntity
+import de.parndt.mydos.database.models.todo.TodoPriority
 import de.parndt.mydos.database.persistence.SettingsDao
 import de.parndt.mydos.database.persistence.TodoDao
 import javax.inject.Inject
@@ -26,10 +25,19 @@ class TodoRepository @Inject constructor(
     ): List<TodoEntity> {
         val listOfTodos = todoDao.getAll()
 
-        val setting = settingsDao.getSetting(SettingsRepository.Settings.FILTER_ONLY_CHECKED.name)
-        if (setting.value)
+        val settingFilterOnlyUnchecked =
+            settingsDao.getSetting(SettingsRepository.Settings.FILTER_ONLY_UNCHECKED.name).value
+        val settingFilterOnlyPriority =
+            settingsDao.getSetting(SettingsRepository.Settings.FILTER_BY_PRIORITY.name).value
+
+        if (settingFilterOnlyUnchecked && !settingFilterOnlyPriority)
             return listOfTodos.filter { !it.done }
-        else
+        else if (settingFilterOnlyPriority && !settingFilterOnlyUnchecked)
+            return listOfTodos.sortedBy { TodoPriority.valueOf(it.priority) }
+        else if (settingFilterOnlyUnchecked && settingFilterOnlyPriority) {
+            val filteredList = listOfTodos.filter { !it.done }
+            return filteredList.sortedBy { TodoPriority.valueOf(it.priority) }
+        } else
             return listOfTodos
     }
 

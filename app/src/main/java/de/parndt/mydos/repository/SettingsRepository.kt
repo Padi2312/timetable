@@ -45,6 +45,7 @@ class SettingsRepository @Inject constructor(
     }
 
     enum class Settings {
-        FILTER_ONLY_CHECKED
+        FILTER_ONLY_UNCHECKED,
+        FILTER_BY_PRIORITY
     }
 }

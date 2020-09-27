@@ -49,11 +49,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initSettings() {
-        GlobalScope.launch {
-            settingsUseCase.createSettingWithKey(
-                SettingsRepository.Settings.FILTER_ONLY_CHECKED,
-                false
-            )
-        }
+        settingsUseCase.createInitialSettings()
     }
 }

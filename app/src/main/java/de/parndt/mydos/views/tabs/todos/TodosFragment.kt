@@ -16,6 +16,7 @@ import com.google.android.material.textview.MaterialTextView
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
+import de.parndt.mydos.repository.SettingsRepository
 import de.parndt.mydos.utils.dialogs.newtodo.NewTodoDialog
 import de.parndt.mydos.utils.dialogs.newtodo.NewTodoDialogResult
 import kotlinx.android.synthetic.main.tab_fragment_todos.*
@@ -48,6 +49,9 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
         todos_todo_list.adapter = adapter
         todos_todo_list.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
+        FilterEnableSwitch()
+        FilterFunctions()
+
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(todos_todo_list)
 
@@ -72,6 +76,49 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
             adapter.submitList(it)
         })
 
+    }
+
+    private fun FilterEnableSwitch() {
+        todosSwitchFilterEnable.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                todosFilterLayout.visibility = View.VISIBLE
+            } else {
+                todosFilterLayout.visibility = View.GONE
+                DisableFilterFunctions()
+                todosViewModel.refreshTodoList()
+            }
+        }
+    }
+
+    private fun DisableFilterFunctions() {
+        todosViewModel.updateSettingWithKey(
+            SettingsRepository.Settings.FILTER_ONLY_UNCHECKED,
+            false
+        )
+        todosViewModel.updateSettingWithKey(
+            SettingsRepository.Settings.FILTER_BY_PRIORITY,
+            false
+        )
+    }
+
+    private fun FilterFunctions() {
+
+        todosFilterFilterByUnchecked.setOnCheckedChangeListener { buttonView, isChecked ->
+            todosViewModel.updateSettingWithKey(
+                SettingsRepository.Settings.FILTER_ONLY_UNCHECKED,
+                isChecked
+            )
+
+            todosViewModel.refreshTodoList()
+        }
+
+        todosFilterFilterByPriority.setOnCheckedChangeListener { buttonView, isChecked ->
+            todosViewModel.updateSettingWithKey(
+                SettingsRepository.Settings.FILTER_BY_PRIORITY,
+                isChecked
+            )
+            todosViewModel.refreshTodoList()
+        }
     }
 
     private fun openNewTodoPopUp() {
