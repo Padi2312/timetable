@@ -21,6 +21,7 @@
     <string name="todo_priotiy_very_high">Sehr hoch</string>
     <string name="todos_enable_filter_label">Filter aktiveren</string>
     <string name="todos_filter_by_unchecked_label">Nur unfertige TODOs</string>
+    <string name="todos_filter_by_date_label">Nach Datum</string>
     <string name="todos_filter_by_priority_label">Nach Priorität</string>
     <string name="todos_delete_snackbar_text">TODO-Eintrag wurde gelöscht.</string>
 </resources>

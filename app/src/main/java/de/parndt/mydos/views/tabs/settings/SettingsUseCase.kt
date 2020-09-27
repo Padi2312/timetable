@@ -35,6 +35,11 @@ class SettingsUseCase @Inject constructor(private val settingsRepository: Settin
                 SettingsRepository.Settings.FILTER_BY_PRIORITY,
                 false
             )
+
+            createSettingWithKey(
+                SettingsRepository.Settings.FILTER_BY_DATE,
+                true
+            )
         }
 
     }

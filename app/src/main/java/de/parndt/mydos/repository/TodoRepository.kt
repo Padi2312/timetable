@@ -15,30 +15,15 @@ class TodoRepository @Inject constructor(
 ) {
 
     private var todoDao: TodoDao = database.todoDao()
-    private var settingsDao: SettingsDao = database.settingsDao()
 
     suspend fun createNewTodo(newTodo: TodoEntity): Long {
         return todoDao.insertTodo(newTodo)
     }
 
-    suspend fun getAllTodos(
+    fun getAllTodos(
     ): List<TodoEntity> {
         val listOfTodos = todoDao.getAll()
-
-        val settingFilterOnlyUnchecked =
-            settingsDao.getSetting(SettingsRepository.Settings.FILTER_ONLY_UNCHECKED.name).value
-        val settingFilterOnlyPriority =
-            settingsDao.getSetting(SettingsRepository.Settings.FILTER_BY_PRIORITY.name).value
-
-        if (settingFilterOnlyUnchecked && !settingFilterOnlyPriority)
-            return listOfTodos.filter { !it.done }
-        else if (settingFilterOnlyPriority && !settingFilterOnlyUnchecked)
-            return listOfTodos.sortedBy { TodoPriority.valueOf(it.priority) }
-        else if (settingFilterOnlyUnchecked && settingFilterOnlyPriority) {
-            val filteredList = listOfTodos.filter { !it.done }
-            return filteredList.sortedBy { TodoPriority.valueOf(it.priority) }
-        } else
-            return listOfTodos
+        return listOfTodos
     }
 
     suspend fun updateTodo(todoId: Int, newStatus: Boolean) {

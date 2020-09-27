@@ -50,7 +50,18 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
         todos_todo_list.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         FilterEnableSwitch()
-        FilterFunctions()
+        filterFunctions()
+
+        todosViewModel.initObserveSettings()
+
+        todosViewModel.observeSettings().observe(viewLifecycleOwner, Observer {
+            if (SettingsRepository.Settings.valueOf(it.setting) == SettingsRepository.Settings.FILTER_ONLY_UNCHECKED)
+                todosFilterFilterByUnchecked.isChecked = it.value
+            if (SettingsRepository.Settings.valueOf(it.setting) == SettingsRepository.Settings.FILTER_BY_DATE)
+                todosFilterFilterByDate.isChecked = it.value
+            if (SettingsRepository.Settings.valueOf(it.setting) == SettingsRepository.Settings.FILTER_BY_PRIORITY)
+                todosFilterFilterByPriority.isChecked = it.value
+        })
 
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(todos_todo_list)
@@ -78,19 +89,20 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
 
     }
 
+
     private fun FilterEnableSwitch() {
         todosSwitchFilterEnable.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 todosFilterLayout.visibility = View.VISIBLE
             } else {
                 todosFilterLayout.visibility = View.GONE
-                DisableFilterFunctions()
+                disableFilterFunctions()
                 todosViewModel.refreshTodoList()
             }
         }
     }
 
-    private fun DisableFilterFunctions() {
+    private fun disableFilterFunctions() {
         todosViewModel.updateSettingWithKey(
             SettingsRepository.Settings.FILTER_ONLY_UNCHECKED,
             false
@@ -99,17 +111,18 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
             SettingsRepository.Settings.FILTER_BY_PRIORITY,
             false
         )
+
+        todosFilterFilterByPriority.isChecked = false
+        todosFilterFilterByUnchecked.isChecked = false
     }
 
-    private fun FilterFunctions() {
+    private fun filterFunctions() {
 
         todosFilterFilterByUnchecked.setOnCheckedChangeListener { buttonView, isChecked ->
             todosViewModel.updateSettingWithKey(
                 SettingsRepository.Settings.FILTER_ONLY_UNCHECKED,
                 isChecked
             )
-
-            todosViewModel.refreshTodoList()
         }
 
         todosFilterFilterByPriority.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -117,7 +130,30 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
                 SettingsRepository.Settings.FILTER_BY_PRIORITY,
                 isChecked
             )
-            todosViewModel.refreshTodoList()
+
+            todosViewModel.updateSettingWithKey(
+                SettingsRepository.Settings.FILTER_BY_DATE,
+                !isChecked
+            )
+
+            if (todosFilterFilterByDate.isChecked && isChecked)
+                todosFilterFilterByDate.isChecked = false
+        }
+
+        todosFilterFilterByDate.setOnCheckedChangeListener { buttonView, isChecked ->
+            todosViewModel.updateSettingWithKey(
+                SettingsRepository.Settings.FILTER_BY_DATE,
+                isChecked
+            )
+
+            todosViewModel.updateSettingWithKey(
+                SettingsRepository.Settings.FILTER_BY_PRIORITY,
+                !isChecked
+            )
+
+
+            if (todosFilterFilterByPriority.isChecked && isChecked)
+                todosFilterFilterByPriority.isChecked = false
         }
     }
 

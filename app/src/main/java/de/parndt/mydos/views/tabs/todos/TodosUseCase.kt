@@ -1,6 +1,7 @@
 package de.parndt.mydos.views.tabs.todos
 
 import de.parndt.mydos.database.models.todo.TodoEntity
+import de.parndt.mydos.database.models.todo.TodoPriority
 import de.parndt.mydos.repository.SettingsRepository
 import de.parndt.mydos.repository.TodoRepository
 import javax.inject.Inject
@@ -12,7 +13,30 @@ class TodosUseCase @Inject constructor(
     private var settingsRepository: SettingsRepository
 ) {
 
-    suspend fun getAllTodos() = todoRepository.getAllTodos()
+    fun getAllTodos(): List<TodoEntity> {
+
+        var listOfTodos = todoRepository.getAllTodos().sortedBy { it.dateCreated }.reversed()
+
+        val settingFilterOnlyUnchecked =
+            settingsRepository.getSetting(SettingsRepository.Settings.FILTER_ONLY_UNCHECKED).value
+        val settingFilterOnlyPriority =
+            settingsRepository.getSetting(SettingsRepository.Settings.FILTER_BY_PRIORITY).value
+        val settingFilterByDate =
+            settingsRepository.getSetting(SettingsRepository.Settings.FILTER_BY_DATE).value
+
+
+        if (settingFilterOnlyUnchecked)
+            listOfTodos = listOfTodos.filter { !it.done }
+
+        if (settingFilterByDate)
+            listOfTodos = listOfTodos.sortedBy { it.dateCreated }.reversed()
+
+        if (settingFilterOnlyPriority)
+            listOfTodos = listOfTodos.sortedBy { TodoPriority.valueOf(it.priority) }
+
+        return listOfTodos
+
+    }
 
     suspend fun updateSettingWithKey(settingKey: SettingsRepository.Settings, value: Boolean) {
         settingsRepository.updateSetting(settingKey, value)
