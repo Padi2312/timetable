@@ -17,8 +17,8 @@ import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
 import de.parndt.mydos.repository.SettingsRepository
-import de.parndt.mydos.utils.dialogs.newtodo.NewTodoDialog
-import de.parndt.mydos.utils.dialogs.newtodo.NewTodoDialogResult
+import de.parndt.mydos.ui.customcomponent.dialogs.newtodo.NewTodoDialog
+import de.parndt.mydos.ui.customcomponent.dialogs.newtodo.NewTodoDialogResult
 import kotlinx.android.synthetic.main.tab_fragment_todos.*
 
 import javax.inject.Inject
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
 
     @Inject
-    lateinit var todosViewModel: TodosViewModel
+    lateinit var viewModel: TodosViewModel
 
     @Inject
     lateinit var _context: Context
@@ -49,19 +49,7 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
         todos_todo_list.adapter = adapter
         todos_todo_list.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        FilterEnableSwitch()
-        filterFunctions()
-
-        todosViewModel.initObserveSettings()
-
-        todosViewModel.observeSettings().observe(viewLifecycleOwner, Observer {
-            if (SettingsRepository.Settings.valueOf(it.setting) == SettingsRepository.Settings.FILTER_ONLY_UNCHECKED)
-                todosFilterFilterByUnchecked.isChecked = it.value
-            if (SettingsRepository.Settings.valueOf(it.setting) == SettingsRepository.Settings.FILTER_BY_DATE)
-                todosFilterFilterByDate.isChecked = it.value
-            if (SettingsRepository.Settings.valueOf(it.setting) == SettingsRepository.Settings.FILTER_BY_PRIORITY)
-                todosFilterFilterByPriority.isChecked = it.value
-        })
+        sortingTodosListener()
 
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(todos_todo_list)
@@ -76,9 +64,14 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
 
-        todosViewModel.refreshTodoList()
+        viewModel.refreshTodoList()
 
-        todosViewModel.getAllTodos().observe(this, Observer {
+
+        viewModel.observeNewTodos().observe(this, Observer {
+            viewModel.refreshTodoList()
+        })
+
+        viewModel.getAllTodos().observe(this, Observer {
             if (it.isEmpty())
                 todos_empty_todo_list_label.visibility = View.VISIBLE
             else
@@ -90,72 +83,43 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
     }
 
 
-    private fun FilterEnableSwitch() {
+    private fun sortingTodosListener() {
         todosSwitchFilterEnable.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 todosFilterLayout.visibility = View.VISIBLE
             } else {
                 todosFilterLayout.visibility = View.GONE
                 disableFilterFunctions()
-                todosViewModel.refreshTodoList()
+                viewModel.refreshTodoList()
             }
+        }
+
+        todosSwitchSortByPriority.setOnCheckedChangeListener { buttonView, isChecked ->
+            viewModel.updateSettingWithKey(
+                SettingsRepository.Settings.FILTER_BY_PRIORITY,
+                isChecked
+            )
+
+            viewModel.updateSettingWithKey(
+                SettingsRepository.Settings.FILTER_BY_DATE,
+                !isChecked
+            )
         }
     }
 
     private fun disableFilterFunctions() {
-        todosViewModel.updateSettingWithKey(
-            SettingsRepository.Settings.FILTER_ONLY_UNCHECKED,
-            false
+        viewModel.updateSettingWithKey(
+            SettingsRepository.Settings.FILTER_BY_DATE,
+            true
         )
-        todosViewModel.updateSettingWithKey(
+        viewModel.updateSettingWithKey(
             SettingsRepository.Settings.FILTER_BY_PRIORITY,
             false
         )
 
-        todosFilterFilterByPriority.isChecked = false
-        todosFilterFilterByUnchecked.isChecked = false
+        todosSwitchSortByPriority.isChecked = false
     }
 
-    private fun filterFunctions() {
-
-        todosFilterFilterByUnchecked.setOnCheckedChangeListener { buttonView, isChecked ->
-            todosViewModel.updateSettingWithKey(
-                SettingsRepository.Settings.FILTER_ONLY_UNCHECKED,
-                isChecked
-            )
-        }
-
-        todosFilterFilterByPriority.setOnCheckedChangeListener { buttonView, isChecked ->
-            todosViewModel.updateSettingWithKey(
-                SettingsRepository.Settings.FILTER_BY_PRIORITY,
-                isChecked
-            )
-
-            todosViewModel.updateSettingWithKey(
-                SettingsRepository.Settings.FILTER_BY_DATE,
-                !isChecked
-            )
-
-            if (todosFilterFilterByDate.isChecked && isChecked)
-                todosFilterFilterByDate.isChecked = false
-        }
-
-        todosFilterFilterByDate.setOnCheckedChangeListener { buttonView, isChecked ->
-            todosViewModel.updateSettingWithKey(
-                SettingsRepository.Settings.FILTER_BY_DATE,
-                isChecked
-            )
-
-            todosViewModel.updateSettingWithKey(
-                SettingsRepository.Settings.FILTER_BY_PRIORITY,
-                !isChecked
-            )
-
-
-            if (todosFilterFilterByPriority.isChecked && isChecked)
-                todosFilterFilterByPriority.isChecked = false
-        }
-    }
 
     private fun openNewTodoPopUp() {
         NewTodoDialog.newInstance(this).show(parentFragmentManager, "dialog_new_todo")
@@ -174,19 +138,20 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                todosViewModel.deleteTodoEntry(adapter.getItemByPosition(viewHolder.adapterPosition))
+                val item = adapter.getItemByPosition(viewHolder.adapterPosition)
+                viewModel.deleteTodoEntry(item)
                 Snackbar.make(
                     requireActivity().findViewById(android.R.id.content),
                     R.string.todos_delete_snackbar_text,
                     Snackbar.LENGTH_SHORT
-                ).show()
+                ).setAction(R.string.global_undo) { viewModel.undoDeleteTodo(item) }.show()
             }
 
         }
 
 
     override fun onCheckboxClicked(todoId: Int, checked: Boolean) {
-        todosViewModel.updateTodoEntryStatus(todoId, checked)
+        viewModel.updateTodoEntryStatus(todoId, checked)
     }
 
     override fun onTodoItemClicked(todo: TodoEntity) {
@@ -206,12 +171,13 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
             contentView.text = todo.content
     }
 
+
     override fun onTodoItemDeleteClicked(todo: TodoEntity) {
-        todosViewModel.deleteTodoEntry(todo)
+        viewModel.deleteTodoEntry(todo)
     }
 
     override fun addedEntry() {
-        todosViewModel.refreshTodoList()
+        viewModel.refreshTodoList()
     }
 
 }

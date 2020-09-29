@@ -41,8 +41,10 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck, val _context: Context) :
             itemView.todo_item_title.text = item.title
             itemView.todo_item_checkbox.isChecked = item.done
 
-            itemView.todoItemDate.text = item.dateCreated
-
+            if (!item.executionDate.isNullOrEmpty()){
+                itemView.todo_item_execution_date.visibility = View.VISIBLE
+                itemView.todo_item_execution_date.text = item.executionDate
+            }
             itemView.todo_item_priority_icon.setImageDrawable(
                 TodoPriority.valueOf(item.priority).getIcon(_context)
             )

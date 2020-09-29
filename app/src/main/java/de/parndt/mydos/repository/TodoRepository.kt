@@ -1,9 +1,8 @@
 package de.parndt.mydos.repository
 
+import androidx.lifecycle.MutableLiveData
 import de.parndt.mydos.database.MydosDatabase
 import de.parndt.mydos.database.models.todo.TodoEntity
-import de.parndt.mydos.database.models.todo.TodoPriority
-import de.parndt.mydos.database.persistence.SettingsDao
 import de.parndt.mydos.database.persistence.TodoDao
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,8 +14,13 @@ class TodoRepository @Inject constructor(
 ) {
 
     private var todoDao: TodoDao = database.todoDao()
+    private var _newTodoObserver = MutableLiveData<TodoEntity>()
+
+
+    fun observeNewTodos() = _newTodoObserver
 
     suspend fun createNewTodo(newTodo: TodoEntity): Long {
+        _newTodoObserver.postValue(newTodo)
         return todoDao.insertTodo(newTodo)
     }
 

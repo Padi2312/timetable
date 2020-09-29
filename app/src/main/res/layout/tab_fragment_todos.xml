@@ -18,35 +18,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="@string/todos_enable_filter_label" />
+            android:text="@string/todos_enable_sorting_label" />
 
         <LinearLayout
             android:id="@+id/todosFilterLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="12dp"
             android:visibility="gone">
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/todosFilterFilterByPriority"
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/todosSwitchSortByPriority"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
                 android:text="@string/todos_filter_by_priority_label" />
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/todosFilterFilterByUnchecked"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/todos_filter_by_unchecked_label" />
-
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/todosFilterFilterByDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/todos_filter_by_date_label" />
 
         </LinearLayout>
 

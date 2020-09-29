@@ -8,7 +8,7 @@ import de.parndt.mydos.database.models.todo.TodoEntity
 import de.parndt.mydos.database.persistence.TodoDao
 
 
-@Database(entities = [TodoEntity::class, SettingsEntity::class], version = 4, exportSchema = false)
+@Database(entities = [TodoEntity::class, SettingsEntity::class], version = 5, exportSchema = false)
 abstract class MydosDatabase : RoomDatabase() {
     abstract fun todoDao(): TodoDao
     abstract fun settingsDao(): SettingsDao

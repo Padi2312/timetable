@@ -21,6 +21,8 @@ data class TodoEntity(
     @ColumnInfo(name = "done")
     var done: Boolean = false,
     @ColumnInfo
+    var executionDate: String? = null,
+    @ColumnInfo
     var dateCreated: String = DateTimeFormatter
         .ofPattern("dd.MM.yyyy HH:mm:ss")
         .withZone(ZoneOffset.UTC)

@@ -1,9 +1,12 @@
 package de.parndt.mydos.views.tabs.todos
 
+import androidx.lifecycle.viewModelScope
 import de.parndt.mydos.database.models.todo.TodoEntity
 import de.parndt.mydos.database.models.todo.TodoPriority
 import de.parndt.mydos.repository.SettingsRepository
 import de.parndt.mydos.repository.TodoRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,6 +15,8 @@ class TodosUseCase @Inject constructor(
     private var todoRepository: TodoRepository,
     private var settingsRepository: SettingsRepository
 ) {
+
+    fun observeNewTodos() = todoRepository.observeNewTodos()
 
     fun getAllTodos(): List<TodoEntity> {
 
@@ -38,12 +43,19 @@ class TodosUseCase @Inject constructor(
 
     }
 
-    suspend fun updateSettingWithKey(settingKey: SettingsRepository.Settings, value: Boolean) {
-        settingsRepository.updateSetting(settingKey, value)
+    suspend fun updateSettingWithKey(
+        settingKey: SettingsRepository.Settings,
+        value: Boolean,
+        settingsUpdated: () -> Unit = {}
+    ) {
+        settingsRepository.updateSetting(settingKey, value, settingsUpdated)
     }
 
     suspend fun updateTodoEntry(todoId: Int, newStatus: Boolean) =
         todoRepository.updateTodo(todoId, newStatus)
 
     fun deleteTodoEntry(todo: TodoEntity) = todoRepository.removeTodoEntry(todo)
+
+    suspend fun undoDeleteTodo(todo: TodoEntity) = todoRepository.createNewTodo(todo)
+
 }

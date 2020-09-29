@@ -36,11 +36,12 @@ class SettingsRepository @Inject constructor(
         return dao.insertSetting(settingsEntity)
     }
 
-    suspend fun updateSetting(key: Settings, value: Boolean) {
+    suspend fun updateSetting(key: Settings, value: Boolean, settingUpdated: () -> Unit = {}) {
         GlobalScope.launch {
             val setting = getSetting(key)
             setting.value = value
             dao.updateSetting(setting)
+            settingUpdated()
         }
     }
 

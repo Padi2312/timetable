@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.parndt.mydos.database.models.settings.SettingsEntity
 import de.parndt.mydos.database.models.todo.TodoEntity
 import de.parndt.mydos.repository.SettingsRepository
 import kotlinx.coroutines.Dispatchers
@@ -22,16 +21,13 @@ class TodosViewModel @Inject constructor() : ViewModel() {
     @Inject
     lateinit var useCase: TodosUseCase
 
-    @Inject
-    lateinit var settings: SettingsRepository
 
     private var _todoList: MutableLiveData<List<TodoEntity>> = MutableLiveData()
 
-    private var _settingsLiveData: MutableLiveData<SettingsEntity> = MutableLiveData()
+    fun observeNewTodos() = useCase.observeNewTodos()
 
     fun getAllTodos() = _todoList
 
-    fun observeSettings() = _settingsLiveData
 
     fun refreshTodoList() {
         GlobalScope.launch {
@@ -56,17 +52,18 @@ class TodosViewModel @Inject constructor() : ViewModel() {
 
     fun updateSettingWithKey(settingsKey: SettingsRepository.Settings, value: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            useCase.updateSettingWithKey(settingsKey, value)
+            useCase.updateSettingWithKey(settingsKey, value) {
+                refreshTodoList()
+            }
+
+        }
+    }
+
+    fun undoDeleteTodo(todo: TodoEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            useCase.undoDeleteTodo(todo)
             refreshTodoList()
         }
     }
 
-
-    fun initObserveSettings() {
-        GlobalScope.launch {
-            _settingsLiveData.postValue(settings.getSetting(SettingsRepository.Settings.FILTER_ONLY_UNCHECKED))
-            _settingsLiveData.postValue(settings.getSetting(SettingsRepository.Settings.FILTER_BY_PRIORITY))
-            _settingsLiveData.postValue(settings.getSetting(SettingsRepository.Settings.FILTER_BY_DATE))
-        }
-    }
 }

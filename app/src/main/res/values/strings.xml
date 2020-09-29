@@ -19,9 +19,12 @@
     <string name="todo_priotiy_default">Normal</string>
     <string name="todo_priotiy_high">Hoch</string>
     <string name="todo_priotiy_very_high">Sehr hoch</string>
-    <string name="todos_enable_filter_label">Filter aktiveren</string>
+    <string name="todos_enable_sorting_label">Sortierung aktiveren</string>
     <string name="todos_filter_by_unchecked_label">Nur unfertige TODOs</string>
-    <string name="todos_filter_by_date_label">Nach Datum</string>
+    <string name="todos_execution_date_label">Zeitliche Ausführung</string>
+    <string name="todos_date_label">Ausführungsdatum</string>
+    <string name="todos_time_label">Ausführungszeit</string>
     <string name="todos_filter_by_priority_label">Nach Priorität</string>
     <string name="todos_delete_snackbar_text">TODO-Eintrag wurde gelöscht.</string>
+    <string name="global_undo">Rückgängig</string>
 </resources>
