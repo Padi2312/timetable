@@ -33,7 +33,7 @@ class SettingsFragment : Fragment() {
 
         filterOnlyCheckedChanged()
 
-        settingsViewModel.getSettinForKey(SettingsRepository.Settings.FILTER_ONLY_UNCHECKED)
+        settingsViewModel.getSettinForKey(SettingsRepository.Filter.FILTER_ONLY_UNCHECKED)
 
         settingsViewModel.getSettingsLiveData().observe(viewLifecycleOwner, Observer {
             settingsFilterOnlyCheckedTodos?.isChecked = it.value
@@ -49,7 +49,7 @@ class SettingsFragment : Fragment() {
     private fun filterOnlyCheckedChanged() {
         settingsFilterOnlyCheckedTodos.setOnCheckedChangeListener { buttonView, isChecked ->
             settingsViewModel.updateSettingWithKey(
-                SettingsRepository.Settings.FILTER_ONLY_UNCHECKED,
+                SettingsRepository.Filter.FILTER_ONLY_UNCHECKED,
                 isChecked
             )
         }

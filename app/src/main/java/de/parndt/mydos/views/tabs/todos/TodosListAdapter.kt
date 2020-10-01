@@ -22,17 +22,9 @@ interface TodoOnCheck {
 }
 
 class TodosListAdapter(val todoOnCheck: TodoOnCheck, val _context: Context) :
-    ListAdapter<TodoEntity, TodosListAdapter.TodosViewHolder>(DiffCallback()) {
+    ListAdapter<TodoEntity, TodosListAdapter.TodosViewHolder>(TodosListDiffCallback) {
 
-    class DiffCallback : DiffUtil.ItemCallback<TodoEntity>() {
-        override fun areItemsTheSame(oldItem: TodoEntity, newItem: TodoEntity): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: TodoEntity, newItem: TodoEntity): Boolean {
-            return oldItem == newItem
-        }
-    }
+    private var todosList: MutableList<TodoEntity> = mutableListOf()
 
     inner class TodosViewHolder(view: View) :
         RecyclerView.ViewHolder(view) {
@@ -41,7 +33,7 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck, val _context: Context) :
             itemView.todo_item_title.text = item.title
             itemView.todo_item_checkbox.isChecked = item.done
 
-            if (!item.executionDate.isNullOrEmpty()){
+            if (!item.executionDate.isNullOrEmpty()) {
                 itemView.todo_item_execution_date.visibility = View.VISIBLE
                 itemView.todo_item_execution_date.text = item.executionDate
             }
@@ -50,7 +42,7 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck, val _context: Context) :
             )
 
             itemView.todo_item_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
-                todoOnCheck.onCheckboxClicked(item.id!!, isChecked)
+                todoOnCheck.onCheckboxClicked(item.id, isChecked)
             }
 
             itemView.setOnClickListener {
@@ -61,9 +53,13 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck, val _context: Context) :
     }
 
     fun getItemByPosition(position: Int): TodoEntity {
-        return getItem(position)
+        return todosList[position]
     }
 
+    override fun submitList(list: MutableList<TodoEntity>?) {
+        super.submitList(list)
+        todosList = list ?: mutableListOf()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodosViewHolder {
         return TodosViewHolder(
@@ -81,3 +77,13 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck, val _context: Context) :
     }
 }
 
+
+object TodosListDiffCallback : DiffUtil.ItemCallback<TodoEntity>() {
+    override fun areItemsTheSame(oldItem: TodoEntity, newItem: TodoEntity): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: TodoEntity, newItem: TodoEntity): Boolean {
+        return oldItem.id == newItem.id
+    }
+}

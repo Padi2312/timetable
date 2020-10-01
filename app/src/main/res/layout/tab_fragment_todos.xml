@@ -12,30 +12,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/todosSwitchFilterEnable"
+        <Spinner
+            android:id="@+id/todosSorting"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:text="@string/todos_enable_sorting_label" />
-
-        <LinearLayout
-            android:id="@+id/todosFilterLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp"
-            android:visibility="gone">
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/todosSwitchSortByPriority"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/todos_filter_by_priority_label" />
-
-
-        </LinearLayout>
+            android:backgroundTint="@color/secondaryLightColor"
+            android:popupBackground="@color/primaryDarkColor"
+            android:spinnerMode="dropdown"
+            tools:listitem="@layout/dropdown_list_item_todos_filter" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/todos_todo_list"

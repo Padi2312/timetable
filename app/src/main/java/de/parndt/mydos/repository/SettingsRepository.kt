@@ -1,5 +1,6 @@
 package de.parndt.mydos.repository
 
+import android.content.Context
 import de.parndt.mydos.database.MydosDatabase
 import de.parndt.mydos.database.persistence.SettingsDao
 import de.parndt.mydos.database.models.settings.SettingsEntity
@@ -20,7 +21,7 @@ class SettingsRepository @Inject constructor(
     }
 
     fun getSetting(
-        setting: Settings
+        setting: Filter
     ): SettingsEntity {
         return dao.getSetting(setting.name)
     }
@@ -30,13 +31,13 @@ class SettingsRepository @Inject constructor(
         return empty != null
     }
 
-    suspend fun createSetting(key: Settings, value: Boolean): Long {
+    suspend fun createSetting(key: Filter, value: Boolean): Long {
         val settingForEntity = key.name
         val settingsEntity = SettingsEntity(setting = settingForEntity, value = value)
         return dao.insertSetting(settingsEntity)
     }
 
-    suspend fun updateSetting(key: Settings, value: Boolean, settingUpdated: () -> Unit = {}) {
+    suspend fun updateSetting(key: Filter, value: Boolean, settingUpdated: () -> Unit = {}) {
         GlobalScope.launch {
             val setting = getSetting(key)
             setting.value = value
@@ -45,9 +46,18 @@ class SettingsRepository @Inject constructor(
         }
     }
 
-    enum class Settings {
+    enum class Filter {
         FILTER_ONLY_UNCHECKED,
         FILTER_BY_PRIORITY,
         FILTER_BY_DATE
     }
+
+    fun Filter.getString(appcontext: Context): String {
+        return when (this) {
+            Filter.FILTER_BY_DATE -> appcontext.getString(de.parndt.mydos.R.string.todos_filter_by_date)
+            Filter.FILTER_BY_PRIORITY -> appcontext.getString(de.parndt.mydos.R.string.todos_filter_by_priority)
+            else -> ""
+        }
+    }
+
 }

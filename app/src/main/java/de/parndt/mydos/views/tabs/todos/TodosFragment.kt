@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -51,6 +53,13 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
 
         sortingTodosListener()
 
+        todosSorting.adapter = ArrayAdapter.createFromResource(
+            _context,
+            R.array.todo_filter,
+            R.layout.dropdown_list_item_todos_filter
+        )
+        todosSorting.setSelection(0)
+
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(todos_todo_list)
 
@@ -84,40 +93,31 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
 
 
     private fun sortingTodosListener() {
-        todosSwitchFilterEnable.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                todosFilterLayout.visibility = View.VISIBLE
-            } else {
-                todosFilterLayout.visibility = View.GONE
-                disableFilterFunctions()
-                viewModel.refreshTodoList()
+
+        todosSorting.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedFilter = when (todosSorting.selectedItem.toString()) {
+                    _context.getString(R.string.todos_filter_by_date) -> SettingsRepository.Filter.FILTER_BY_DATE
+                    _context.getString(R.string.todos_filter_by_priority) -> SettingsRepository.Filter.FILTER_BY_PRIORITY
+                    else -> SettingsRepository.Filter.FILTER_ONLY_UNCHECKED
+                }
+
+                when (selectedFilter) {
+                    SettingsRepository.Filter.FILTER_ONLY_UNCHECKED -> {}
+                    SettingsRepository.Filter.FILTER_BY_PRIORITY -> viewModel.filterTodosByPriority()
+                    SettingsRepository.Filter.FILTER_BY_DATE -> viewModel.filterTodosByDate()
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
             }
         }
-
-        todosSwitchSortByPriority.setOnCheckedChangeListener { buttonView, isChecked ->
-            viewModel.updateSettingWithKey(
-                SettingsRepository.Settings.FILTER_BY_PRIORITY,
-                isChecked
-            )
-
-            viewModel.updateSettingWithKey(
-                SettingsRepository.Settings.FILTER_BY_DATE,
-                !isChecked
-            )
-        }
-    }
-
-    private fun disableFilterFunctions() {
-        viewModel.updateSettingWithKey(
-            SettingsRepository.Settings.FILTER_BY_DATE,
-            true
-        )
-        viewModel.updateSettingWithKey(
-            SettingsRepository.Settings.FILTER_BY_PRIORITY,
-            false
-        )
-
-        todosSwitchSortByPriority.isChecked = false
     }
 
 
@@ -138,13 +138,17 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = adapter.getItemByPosition(viewHolder.adapterPosition)
+                val itemPosition = viewHolder.adapterPosition
+                val item = adapter.getItemByPosition(itemPosition)
                 viewModel.deleteTodoEntry(item)
+
                 Snackbar.make(
                     requireActivity().findViewById(android.R.id.content),
                     R.string.todos_delete_snackbar_text,
                     Snackbar.LENGTH_SHORT
-                ).setAction(R.string.global_undo) { viewModel.undoDeleteTodo(item) }.show()
+                ).setAction(R.string.global_undo) {
+                    viewModel.undoDeleteTodo(item)
+                }.show()
             }
 
         }

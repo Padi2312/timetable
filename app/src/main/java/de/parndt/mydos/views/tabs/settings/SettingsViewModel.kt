@@ -1,6 +1,5 @@
 package de.parndt.mydos.views.tabs.settings
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,21 +16,21 @@ class SettingsViewModel @Inject constructor(private val useCase: SettingsUseCase
 
     fun getSettingsLiveData() = settingsLiveData
 
-    fun getSettinForKey(settingsKey: SettingsRepository.Settings) {
+    fun getSettinForKey(filterKey: SettingsRepository.Filter) {
         GlobalScope.launch {
-            settingsLiveData.postValue(useCase.getSettingForKey(settingsKey))
+            settingsLiveData.postValue(useCase.getSettingForKey(filterKey))
         }
     }
 
-    fun createSettingWithKey(settingsKey: SettingsRepository.Settings, value: Boolean) {
+    fun createSettingWithKey(filterKey: SettingsRepository.Filter, value: Boolean) {
         viewModelScope.launch {
-            useCase.updateSettingWithKey(settingsKey, value)
+            useCase.updateSettingWithKey(filterKey, value)
         }
     }
 
-    fun updateSettingWithKey(settingsKey: SettingsRepository.Settings, value: Boolean) {
+    fun updateSettingWithKey(filterKey: SettingsRepository.Filter, value: Boolean) {
         viewModelScope.launch {
-            useCase.updateSettingWithKey(settingsKey, value)
+            useCase.updateSettingWithKey(filterKey, value)
         }
     }
 }

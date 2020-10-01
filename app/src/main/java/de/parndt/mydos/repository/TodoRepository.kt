@@ -24,24 +24,36 @@ class TodoRepository @Inject constructor(
         return todoDao.insertTodo(newTodo)
     }
 
-    fun getAllTodos(
-    ): List<TodoEntity> {
-        val listOfTodos = todoDao.getAll()
-        return listOfTodos
+    fun getAllTodos(): MutableList<TodoEntity> {
+        val list = todoDao.getWithoutDeletedFlag()
+        list.sortBy { it.dateCreated }
+        list.reverse()
+        return list
     }
 
-    suspend fun updateTodo(todoId: Int, newStatus: Boolean) {
+    suspend fun updateTodoStatus(todoId: Int, newStatus: Boolean) {
         val todo = getTodoById(todoId)
         todo.done = newStatus
-        return todoDao.updateStatus(todo)
+        todoDao.update(todo)
+    }
+
+    suspend fun updateDeletedFlag(todoId: Int, newStatus: Boolean) {
+        val todo = getTodoById(todoId)
+        todo.apply {
+            deleted = newStatus
+        }
+        todoDao.update(todo)
     }
 
     fun getTodoById(todoId: Int): TodoEntity {
         return todoDao.getById(todoId)
     }
 
-    fun removeTodoEntry(todo: TodoEntity) {
-        todoDao.deleteTodo(todo)
+    suspend fun removeTodoEntry(todo: TodoEntity) {
+        todo.apply {
+            deleted = true
+        }
+        todoDao.update(todo)
     }
 
 }

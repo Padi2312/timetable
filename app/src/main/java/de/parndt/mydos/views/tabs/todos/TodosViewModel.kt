@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.parndt.mydos.database.models.todo.TodoEntity
+import de.parndt.mydos.database.models.todo.TodoPriority
 import de.parndt.mydos.repository.SettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -22,7 +23,7 @@ class TodosViewModel @Inject constructor() : ViewModel() {
     lateinit var useCase: TodosUseCase
 
 
-    private var _todoList: MutableLiveData<List<TodoEntity>> = MutableLiveData()
+    private var _todoList: MutableLiveData<MutableList<TodoEntity>> = MutableLiveData()
 
     fun observeNewTodos() = useCase.observeNewTodos()
 
@@ -30,8 +31,25 @@ class TodosViewModel @Inject constructor() : ViewModel() {
 
 
     fun refreshTodoList() {
-        GlobalScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val todos = useCase.getAllTodos()
+            _todoList.postValue(todos)
+        }
+    }
+
+    fun filterTodosByDate() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val todos = useCase.getAllTodos()
+            todos.sortBy { it.dateCreated }
+            todos.reverse()
+            _todoList.postValue(todos)
+        }
+    }
+
+    fun filterTodosByPriority() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val todos = useCase.getAllTodos()
+            todos.sortBy { TodoPriority.valueOf(it.priority) }
             _todoList.postValue(todos)
         }
     }
@@ -50,9 +68,9 @@ class TodosViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun updateSettingWithKey(settingsKey: SettingsRepository.Settings, value: Boolean) {
+    fun updateFilterWithKey(filterKey: SettingsRepository.Filter, value: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            useCase.updateSettingWithKey(settingsKey, value) {
+            useCase.updateSettingWithKey(filterKey, value) {
                 refreshTodoList()
             }
 
@@ -65,5 +83,6 @@ class TodosViewModel @Inject constructor() : ViewModel() {
             refreshTodoList()
         }
     }
+
 
 }

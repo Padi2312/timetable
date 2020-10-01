@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
 data class TodoEntity(
     @ColumnInfo
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
+    val id: Int = 0,
     @ColumnInfo(name = "title")
     var title: String,
     @ColumnInfo(name = "priority")
@@ -26,7 +26,10 @@ data class TodoEntity(
     var dateCreated: String = DateTimeFormatter
         .ofPattern("dd.MM.yyyy HH:mm:ss")
         .withZone(ZoneOffset.UTC)
-        .format(Instant.now())
+        .format(Instant.now()),
+    @ColumnInfo
+    var deleted: Boolean = false
+
 )
 
 

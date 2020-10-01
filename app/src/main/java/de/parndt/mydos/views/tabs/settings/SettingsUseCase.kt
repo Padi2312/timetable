@@ -12,32 +12,32 @@ class SettingsUseCase @Inject constructor(private val settingsRepository: Settin
         return settingsRepository.settingsInitialized()
     }
 
-    fun getSettingForKey(settingKey: SettingsRepository.Settings): SettingsEntity {
+    fun getSettingForKey(settingKey: SettingsRepository.Filter): SettingsEntity {
         return settingsRepository.getSetting(settingKey)
     }
 
-    suspend fun createSettingWithKey(settingKey: SettingsRepository.Settings, value: Boolean) {
+    suspend fun createSettingWithKey(settingKey: SettingsRepository.Filter, value: Boolean) {
         settingsRepository.createSetting(settingKey, value)
     }
 
-    suspend fun updateSettingWithKey(settingKey: SettingsRepository.Settings, value: Boolean) {
+    suspend fun updateSettingWithKey(settingKey: SettingsRepository.Filter, value: Boolean) {
         settingsRepository.updateSetting(settingKey, value)
     }
 
     fun createInitialSettings() {
         GlobalScope.launch {
             createSettingWithKey(
-                SettingsRepository.Settings.FILTER_ONLY_UNCHECKED,
+                SettingsRepository.Filter.FILTER_ONLY_UNCHECKED,
                 false
             )
 
             createSettingWithKey(
-                SettingsRepository.Settings.FILTER_BY_PRIORITY,
+                SettingsRepository.Filter.FILTER_BY_PRIORITY,
                 false
             )
 
             createSettingWithKey(
-                SettingsRepository.Settings.FILTER_BY_DATE,
+                SettingsRepository.Filter.FILTER_BY_DATE,
                 true
             )
         }

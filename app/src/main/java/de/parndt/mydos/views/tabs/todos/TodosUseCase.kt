@@ -1,12 +1,9 @@
 package de.parndt.mydos.views.tabs.todos
 
-import androidx.lifecycle.viewModelScope
 import de.parndt.mydos.database.models.todo.TodoEntity
 import de.parndt.mydos.database.models.todo.TodoPriority
 import de.parndt.mydos.repository.SettingsRepository
 import de.parndt.mydos.repository.TodoRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,33 +15,19 @@ class TodosUseCase @Inject constructor(
 
     fun observeNewTodos() = todoRepository.observeNewTodos()
 
-    fun getAllTodos(): List<TodoEntity> {
-
+    fun getAllTodos(): MutableList<TodoEntity> {
         var listOfTodos = todoRepository.getAllTodos().sortedBy { it.dateCreated }.reversed()
-
         val settingFilterOnlyUnchecked =
-            settingsRepository.getSetting(SettingsRepository.Settings.FILTER_ONLY_UNCHECKED).value
-        val settingFilterOnlyPriority =
-            settingsRepository.getSetting(SettingsRepository.Settings.FILTER_BY_PRIORITY).value
-        val settingFilterByDate =
-            settingsRepository.getSetting(SettingsRepository.Settings.FILTER_BY_DATE).value
-
+            settingsRepository.getSetting(SettingsRepository.Filter.FILTER_ONLY_UNCHECKED).value
 
         if (settingFilterOnlyUnchecked)
             listOfTodos = listOfTodos.filter { !it.done }
 
-        if (settingFilterByDate)
-            listOfTodos = listOfTodos.sortedBy { it.dateCreated }.reversed()
-
-        if (settingFilterOnlyPriority)
-            listOfTodos = listOfTodos.sortedBy { TodoPriority.valueOf(it.priority) }
-
-        return listOfTodos
-
+        return listOfTodos.toMutableList()
     }
 
     suspend fun updateSettingWithKey(
-        settingKey: SettingsRepository.Settings,
+        settingKey: SettingsRepository.Filter,
         value: Boolean,
         settingsUpdated: () -> Unit = {}
     ) {
@@ -52,10 +35,12 @@ class TodosUseCase @Inject constructor(
     }
 
     suspend fun updateTodoEntry(todoId: Int, newStatus: Boolean) =
-        todoRepository.updateTodo(todoId, newStatus)
+        todoRepository.updateTodoStatus(todoId, newStatus)
 
-    fun deleteTodoEntry(todo: TodoEntity) = todoRepository.removeTodoEntry(todo)
+    suspend fun deleteTodoEntry(todo: TodoEntity) = todoRepository.removeTodoEntry(todo)
 
-    suspend fun undoDeleteTodo(todo: TodoEntity) = todoRepository.createNewTodo(todo)
+    suspend fun undoDeleteTodo(todo: TodoEntity) {
+        todoRepository.updateDeletedFlag(todo.id,false)
+    }
 
 }

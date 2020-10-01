@@ -5,17 +5,18 @@ import de.parndt.mydos.database.models.todo.TodoEntity
 
 @Dao
 interface TodoDao {
+
+    @Query("SELECT * FROM todos WHERE todos.deleted == 0")
+    fun getWithoutDeletedFlag(): MutableList<TodoEntity>
+
     @Query("SELECT * FROM todos")
-    fun getAll(): List<TodoEntity>
+    fun getAll(): MutableList<TodoEntity>
 
     @Insert
     suspend fun insertTodo(todo: TodoEntity): Long
 
     @Update
-    suspend fun updateStatus(todo: TodoEntity)
-
-    @Delete
-    fun deleteTodo(todo: TodoEntity)
+    suspend fun update(todo: TodoEntity)
 
     @Query("SELECT * FROM todos WHERE todos.id == :todoId")
     fun getById(todoId: Int): TodoEntity

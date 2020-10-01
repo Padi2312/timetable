@@ -24,7 +24,9 @@
     <string name="todos_execution_date_label">Zeitliche Ausführung</string>
     <string name="todos_date_label">Ausführungsdatum</string>
     <string name="todos_time_label">Ausführungszeit</string>
-    <string name="todos_filter_by_priority_label">Nach Priorität</string>
+    <string name="todos_filter_hint">Filter</string>
+    <string name="todos_filter_by_date">Nach Datum</string>
+    <string name="todos_filter_by_priority">Nach Priorität</string>
     <string name="todos_delete_snackbar_text">TODO-Eintrag wurde gelöscht.</string>
     <string name="global_undo">Rückgängig</string>
 </resources>

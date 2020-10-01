@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="todo_filter">
+        <item name="date">@string/todos_filter_by_date</item>
+        <item name="priority">@string/todos_filter_by_priority</item>
+    </string-array>
+</resources>
