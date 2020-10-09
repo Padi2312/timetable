@@ -9,8 +9,11 @@
     <string name="new_todo_title_hint">Titel</string>
     <string name="new_todo_content_hint">Beschreibung (Optional)</string>
     <string name="new_todo_add_content">Beschreibung hinzufügen</string>
-    <string name="new_todo_priority">Priorität:</string>
+    <string name="new_todo_priority">Priorität</string>
     <string name="new_todo_add_todo">Zur TODO-Liste hinzufügen</string>
+    <string name="new_todo_reset_execution">Zurücksetzen</string>
+    <string name="new_todo_execution_date">Datum:</string>
+    <string name="new_todo_execution_date_label">Zeitliche Ausführung</string>
     <string name="global_cancel">Abbrechen</string>
     <string name="new_todo_title_error">Titel erforderlich!</string>
     <string name="tab_todos_empty_todo_list">Kein TODOs vorhanden</string>
@@ -21,7 +24,6 @@
     <string name="todo_priotiy_very_high">Sehr hoch</string>
     <string name="todos_enable_sorting_label">Sortierung aktiveren</string>
     <string name="todos_filter_by_unchecked_label">Nur unfertige TODOs</string>
-    <string name="todos_execution_date_label">Zeitliche Ausführung</string>
     <string name="todos_date_label">Ausführungsdatum</string>
     <string name="todos_time_label">Ausführungszeit</string>
     <string name="todos_filter_hint">Filter</string>

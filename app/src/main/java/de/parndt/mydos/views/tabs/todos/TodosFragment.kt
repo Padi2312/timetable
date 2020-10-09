@@ -19,8 +19,8 @@ import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
 import de.parndt.mydos.repository.SettingsRepository
-import de.parndt.mydos.ui.customcomponent.dialogs.newtodo.NewTodoDialog
-import de.parndt.mydos.ui.customcomponent.dialogs.newtodo.NewTodoDialogResult
+import de.parndt.mydos.ui.customcomponent.newtododialog.NewTodoDialogFragment
+import de.parndt.mydos.ui.customcomponent.newtododialog.NewTodoDialogResult
 import kotlinx.android.synthetic.main.tab_fragment_todos.*
 
 import javax.inject.Inject
@@ -122,7 +122,7 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
 
 
     private fun openNewTodoPopUp() {
-        NewTodoDialog.newInstance(this).show(parentFragmentManager, "dialog_new_todo")
+        NewTodoDialogFragment.newInstance(this).show(parentFragmentManager, "dialog_new_todo")
     }
 
     val itemTouchHelperCallback =

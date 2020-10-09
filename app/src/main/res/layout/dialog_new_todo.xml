@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:context=".ui.customcomponent.newtododialog.NewTodoDialogFragment">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="0dp"
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -21,122 +25,80 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/newtodoInputTitle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:inputType="text"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <!--region Priority Slider-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <Button
+                android:id="@+id/newTodoExpandPriority"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:drawableEnd="@drawable/ic_baseline_expand_more_24"
+                android:text="@string/new_todo_priority"
+                android:textAlignment="textStart"
+                android:textSize="12sp" />
+
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/newtodoSliderPriority"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:stepSize="25"
                 android:value="50"
                 android:valueFrom="0"
-                android:valueTo="100">
-
-            </com.google.android.material.slider.Slider>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:text="@string/new_todo_priority" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/newtodoPriorityLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/todo_priotiy_default" />
-            </LinearLayout>
+                android:valueTo="100"
+                android:visibility="gone" />
         </LinearLayout>
-        <!--endregion Priority Slider-->
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/newTodoSwitchExecutionDateTime"
+                android:id="@+id/newTodoExpandDateTimeSelection"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:clickable="true"
                 android:drawableEnd="@drawable/ic_baseline_expand_more_24"
-                android:text="@string/todos_execution_date_label"
+                android:text="@string/new_todo_execution_date_label"
                 android:textAlignment="textStart"
-                android:textSize="12dp" />
+                android:textSize="12sp" />
 
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/newTodoExecutionDateTimeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
-                <LinearLayout
+                <FrameLayout
+                    android:id="@+id/newTodoDateTimeSelection"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp">
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/newTodoSwitchExecutionDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/todos_date_label" />
-
-                    <DatePicker
-                        android:id="@+id/newTodoExecutionDatePicker"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="14dp"
-                        android:calendarViewShown="false"
-                        android:datePickerMode="spinner"
-                        android:visibility="gone" />
-
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/newTodoSwitchExecutionTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:text="@string/todos_time_label" />
-
-                    <TimePicker
-                        android:id="@+id/newTodoExecutionTimePicker"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:timePickerMode="spinner"
-                        android:visibility="gone" />
-
-                </LinearLayout>
+                    android:layout_height="match_parent" />
             </androidx.core.widget.NestedScrollView>
         </LinearLayout>
 
         <Button
-            android:id="@+id/newTodoButtonAddContent"
+            android:id="@+id/newTodoExpandContent"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:clickable="true"
             android:drawableEnd="@drawable/ic_baseline_expand_more_24"
             android:text="@string/new_todo_add_content"
             android:textAlignment="textStart"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/newTodoInputContentWrapper"

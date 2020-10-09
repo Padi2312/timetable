@@ -2,14 +2,14 @@ package de.parndt.mydos.views.tabs.home
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
-import de.parndt.mydos.ui.customcomponent.dialogs.newtodo.NewTodoDialog
-import de.parndt.mydos.ui.customcomponent.dialogs.newtodo.NewTodoDialogResult
+import de.parndt.mydos.ui.customcomponent.newtododialog.NewTodoDialogFragment
+import de.parndt.mydos.ui.customcomponent.newtododialog.NewTodoDialogResult
 import kotlinx.android.synthetic.main.tab_fragment_home.*
 import javax.inject.Inject
 
@@ -18,10 +18,6 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var homeViewModel: HomeViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +41,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun openNewTodoPopUp() {
-        NewTodoDialog.newInstance(object : NewTodoDialogResult {
+        NewTodoDialogFragment.newInstance(object : NewTodoDialogResult {
             override fun addedEntry() {}
         }).show(parentFragmentManager, "dialog_new_todo")
 

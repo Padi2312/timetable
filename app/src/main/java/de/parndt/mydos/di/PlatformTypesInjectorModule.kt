@@ -2,12 +2,13 @@ package de.parndt.mydos.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import de.parndt.mydos.views.TabsFragment
 import de.parndt.mydos.ui.MainActivity
-import de.parndt.mydos.ui.customcomponent.dialogs.newtodo.NewTodoDialog
+import de.parndt.mydos.ui.customcomponent.datetimeselection.DateTimeSelectionFragment
+import de.parndt.mydos.ui.customcomponent.newtododialog.NewTodoDialogFragment
+import de.parndt.mydos.views.TabsFragment
+import de.parndt.mydos.views.tabs.home.HomeFragment
 import de.parndt.mydos.views.tabs.notes.FriendsFragment
 import de.parndt.mydos.views.tabs.settings.SettingsFragment
-import de.parndt.mydos.views.tabs.home.HomeFragment
 import de.parndt.mydos.views.tabs.todos.TodosFragment
 
 @Module
@@ -33,6 +34,9 @@ abstract class PlatformTypesInjectorModule {
     abstract fun contributeProfileFragment(): SettingsFragment
 
     @ContributesAndroidInjector
-    abstract fun contributeDialogNewTodo(): NewTodoDialog
+    abstract fun contributeDialogNewTodo(): NewTodoDialogFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeDateTimeSelectionFragment(): DateTimeSelectionFragment
 }
 
