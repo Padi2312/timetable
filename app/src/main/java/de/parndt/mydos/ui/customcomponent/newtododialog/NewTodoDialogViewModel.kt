@@ -18,17 +18,20 @@ class NewTodoDialogViewModel @Inject constructor(
 
     private var date: String? = null
     fun setDate(value: String?) = apply { date = value }
+    fun getDate() = date
     private var time: String? = null
     fun setTime(value: String?) = apply { time = value }
+    fun getTime() = time
 
     fun createTodoEntry(
         title: String,
         content: String? = null,
         priority: TodoPriority = TodoPriority.DEFAULT,
-        executionDate: String? = null
+        executionDate: String? = null,
+        executionTime: String? = null
     ) {
         GlobalScope.launch(Dispatchers.IO) {
-            useCase.createTodoEntry(title, content, priority, executionDate)
+            useCase.createTodoEntry(title, content, priority, executionDate, executionTime)
         }
     }
 

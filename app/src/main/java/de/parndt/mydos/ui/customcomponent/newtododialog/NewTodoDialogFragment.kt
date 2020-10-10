@@ -151,10 +151,11 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
                 content = null
 
             viewModel.createTodoEntry(
-                newtodoInputTitle.text.toString(),
-                content,
-                TodoPriority.fromInt(newtodoSliderPriority.value.toInt()),
-                viewModel.getFormatedDateTime()
+                title = newtodoInputTitle.text.toString(),
+                content = content,
+                priority = TodoPriority.fromInt(newtodoSliderPriority.value.toInt()),
+                executionDate = viewModel.getDate(),
+                executionTime = viewModel.getTime()
             )
 
             callback.addedEntry()

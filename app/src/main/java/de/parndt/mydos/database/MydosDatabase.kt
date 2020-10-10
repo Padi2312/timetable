@@ -13,7 +13,7 @@ import de.parndt.mydos.database.persistence.TodoDao
         TodoEntity::class,
         SettingsEntity::class
     ],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 abstract class MydosDatabase : RoomDatabase() {

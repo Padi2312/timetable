@@ -13,14 +13,16 @@ class NewTodoDialogUseCase @Inject constructor(private var todoRepository: TodoR
         title: String,
         content: String? = null,
         priority: TodoPriority = TodoPriority.DEFAULT,
-        executionDate: String? = null
+        executionDate: String? = null,
+        executionTime: String? = null
     ) {
         GlobalScope.launch {
             val todo = TodoEntity(
                 title = title,
                 content = content,
                 priority = priority.name,
-                executionDate = executionDate
+                executionDate = executionDate,
+                executionTime = executionTime
             )
             todoRepository.createNewTodo(todo)
         }

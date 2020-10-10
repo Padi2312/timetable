@@ -5,7 +5,6 @@ import javax.inject.Inject
 
 class DateTimeSelectionViewModel @Inject constructor() : ViewModel() {
 
-
     private var executionDate: String? = null
     fun getDate() = executionDate
 

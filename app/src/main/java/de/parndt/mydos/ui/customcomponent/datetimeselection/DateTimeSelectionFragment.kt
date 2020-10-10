@@ -42,6 +42,11 @@ class DateTimeSelectionFragment : Fragment() {
 
         newTodoExpandDatePicker.setOnClickListener {
             updateShowDatePicker()
+            updateDateValue(
+                newTodoDatePicker.dayOfMonth,
+                newTodoDatePicker.month,
+                newTodoDatePicker.year
+            )
         }
 
         newTodoExpandTimePicker.isEnabled = false
@@ -86,8 +91,6 @@ class DateTimeSelectionFragment : Fragment() {
         viewModel.resetTime()
         callbacks.onFormatedDate(null)
         newTodoExpandDatePicker.setText(R.string.todos_date_label)
-
-
     }
 
     private fun updateDateValue(day: Int, month: Int, year: Int) {
