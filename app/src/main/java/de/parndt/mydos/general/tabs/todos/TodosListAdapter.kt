@@ -1,4 +1,4 @@
-package de.parndt.mydos.views.tabs.todos
+package de.parndt.mydos.general.tabs.todos
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
 import de.parndt.mydos.database.models.todo.TodoPriority
 import de.parndt.mydos.database.models.todo.getIcon
-import kotlinx.android.synthetic.main.dialog_todo_item.view.*
 import kotlinx.android.synthetic.main.list_item_todo.view.*
 
 interface TodoOnCheck {
@@ -33,10 +32,17 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck, val _context: Context) :
             itemView.todo_item_title.text = item.title
             itemView.todo_item_checkbox.isChecked = item.done
 
-            if (!item.executionDate.isNullOrEmpty()) {
+            if (!item.executionDate.isNullOrEmpty() && !item.executionTime.isNullOrEmpty()) {
                 itemView.todo_item_execution_date.visibility = View.VISIBLE
-                itemView.todo_item_execution_date.text = item.executionDate
+                itemView.todo_item_execution_date.text =
+                    "${item.executionDate} - ${item.executionTime} Uhr"
+            } else if (!item.executionDate.isNullOrEmpty()) {
+                itemView.todo_item_execution_date.visibility = View.VISIBLE
+                itemView.todo_item_execution_date.text = "${item.executionDate}"
+            } else {
+                itemView.todo_item_execution_date.visibility = View.GONE
             }
+
             itemView.todo_item_priority_icon.setImageDrawable(
                 TodoPriority.valueOf(item.priority).getIcon(_context)
             )

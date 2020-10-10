@@ -2,6 +2,7 @@ package de.parndt.mydos.ui.customcomponent.newtododialog
 
 import android.app.Dialog
 import android.content.Context
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,12 @@ import androidx.fragment.app.DialogFragment
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoPriority
+import de.parndt.mydos.notification.NotificationAlarmManager
 import de.parndt.mydos.ui.customcomponent.datetimeselection.DateTimeSelectionFragment
 import de.parndt.mydos.utils.setDrawableEndShowLess
 import de.parndt.mydos.utils.setDrawableEndShowMore
 import kotlinx.android.synthetic.main.dialog_new_todo.*
+import java.util.*
 import javax.inject.Inject
 
 interface NewTodoDialogResult {
@@ -25,6 +28,9 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
 
     @Inject
     lateinit var viewModel: NewTodoDialogViewModel
+
+    @Inject
+    lateinit var notificationAlarmManager: NotificationAlarmManager
 
     @Inject
     lateinit var _context: Context
@@ -73,10 +79,15 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
             )
         }
         newTodoExpandContent.setOnClickListener { updateShowContentLayout() }
-        newTodoExpandDateTimeSelection.setOnClickListener { updateShowExecutionDateTimeLayout() }
+        newTodoExpandDateTimeSelection.setOnClickListener {
+            updateShowExecutionDateTimeLayout()
+            viewModel.closeKeyboard(view)
+        }
 
-        newTodoExpandPriority.setOnClickListener { updatePriorityLayout() }
-
+        newTodoExpandPriority.setOnClickListener {
+            updatePriorityLayout()
+            viewModel.closeKeyboard(view)
+        }
 
         newtodoSliderPriority.addOnChangeListener { _, value, _ ->
             setLabelForPrioritySlider(value.toInt())
@@ -158,6 +169,22 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
                 executionTime = viewModel.getTime()
             )
 
+
+            if (viewModel.getDate() != null) {
+                val calendar = Calendar.getInstance()
+                if (viewModel.getTime() != null) {
+                    val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN)
+                    calendar.time = sdf.parse("${viewModel.getDate()} ${viewModel.getTime()}")
+                } else {
+                    val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN)
+                    calendar.time = sdf.parse("${viewModel.getDate()}")
+                }
+                notificationAlarmManager.startAlarm(
+                    calendar,
+                    newtodoInputTitle.text.toString(),
+                    content ?: ""
+                )
+            }
             callback.addedEntry()
             dialog?.dismiss()
         }

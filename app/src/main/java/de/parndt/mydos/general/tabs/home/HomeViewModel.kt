@@ -1,8 +1,6 @@
-package de.parndt.mydos.views.tabs.home
+package de.parndt.mydos.general.tabs.home
 
 import androidx.lifecycle.ViewModel
-import de.parndt.mydos.database.models.todo.TodoPriority
-import kotlinx.coroutines.*
 import javax.inject.Inject
 
 

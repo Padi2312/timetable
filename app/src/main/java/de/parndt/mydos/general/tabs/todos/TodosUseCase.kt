@@ -1,7 +1,6 @@
-package de.parndt.mydos.views.tabs.todos
+package de.parndt.mydos.general.tabs.todos
 
 import de.parndt.mydos.database.models.todo.TodoEntity
-import de.parndt.mydos.database.models.todo.TodoPriority
 import de.parndt.mydos.repository.SettingsRepository
 import de.parndt.mydos.repository.TodoRepository
 import javax.inject.Inject

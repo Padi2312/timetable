@@ -1,14 +1,14 @@
-package de.parndt.mydos.views.tabs.settings
+package de.parndt.mydos.general.tabs.settings
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
+import de.parndt.mydos.notification.NotificationAlarmManager
 import de.parndt.mydos.repository.SettingsRepository
 import kotlinx.android.synthetic.main.tab_fragment_settings.*
 import javax.inject.Inject
@@ -18,7 +18,8 @@ class SettingsFragment : Fragment() {
 
     @Inject
     lateinit var settingsViewModel: SettingsViewModel
-
+    @Inject
+    lateinit var notificationAlarmManager: NotificationAlarmManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +36,7 @@ class SettingsFragment : Fragment() {
 
         settingsViewModel.getSettinForKey(SettingsRepository.Filter.FILTER_ONLY_UNCHECKED)
 
-        settingsViewModel.getSettingsLiveData().observe(viewLifecycleOwner, Observer {
+        settingsViewModel.getSettingsLiveData().observe(viewLifecycleOwner, {
             settingsFilterOnlyCheckedTodos?.isChecked = it.value
         })
 

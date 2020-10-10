@@ -7,7 +7,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NewTodoDialogUseCase @Inject constructor(private var todoRepository: TodoRepository) {
+class NewTodoDialogUseCase @Inject constructor(
+    private var todoRepository: TodoRepository
+) {
 
     fun createTodoEntry(
         title: String,

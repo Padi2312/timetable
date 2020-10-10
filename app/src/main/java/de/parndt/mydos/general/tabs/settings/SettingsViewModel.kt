@@ -1,4 +1,4 @@
-package de.parndt.mydos.views.tabs.settings
+package de.parndt.mydos.general.tabs.settings
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

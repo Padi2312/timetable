@@ -1,4 +1,4 @@
-package de.parndt.mydos.views.tabs.settings
+package de.parndt.mydos.general.tabs.settings
 
 import de.parndt.mydos.database.models.settings.SettingsEntity
 import de.parndt.mydos.repository.SettingsRepository

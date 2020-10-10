@@ -1,4 +1,4 @@
-package de.parndt.mydos.views.tabs.home
+package de.parndt.mydos.general.tabs.home
 
 import android.content.Context
 import android.os.Bundle

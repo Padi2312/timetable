@@ -1,4 +1,4 @@
-package de.parndt.mydos.views.tabs.todos
+package de.parndt.mydos.general.tabs.todos
 
 import android.app.AlertDialog
 import android.content.Context

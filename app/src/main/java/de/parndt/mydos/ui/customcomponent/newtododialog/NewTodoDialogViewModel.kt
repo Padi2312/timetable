@@ -1,6 +1,9 @@
 package de.parndt.mydos.ui.customcomponent.newtododialog
 
+import android.app.Activity
 import android.content.Context
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModel
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoPriority
@@ -42,14 +45,10 @@ class NewTodoDialogViewModel @Inject constructor(
         }"
     }
 
-    fun getFormatedDateTime(): String? {
-        return if (time == null)
-            "$date"
-        else if (date != null && time != null)
-            "$date - $time Uhr"
-        else
-            null
-
+    fun closeKeyboard(view: View) {
+        val inputMethodManager =
+            _context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
 

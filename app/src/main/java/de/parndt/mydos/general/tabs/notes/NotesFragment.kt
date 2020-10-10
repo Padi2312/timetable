@@ -1,15 +1,15 @@
-package de.parndt.mydos.views.tabs.notes
+package de.parndt.mydos.general.tabs.notes
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
 
 
-class FriendsFragment : Fragment() {
+class NotesFragment : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

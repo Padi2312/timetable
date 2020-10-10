@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context=".views.tabs.settings.SettingsFragment">
+    tools:context=".general.tabs.settings.SettingsFragment">
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/settingsFilterOnlyCheckedTodos"

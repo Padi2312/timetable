@@ -1,18 +1,18 @@
-package de.parndt.mydos.views
+package de.parndt.mydos.general
 
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
-import de.parndt.mydos.views.tabs.notes.FriendsFragment
-import de.parndt.mydos.views.tabs.settings.SettingsFragment
-import de.parndt.mydos.views.tabs.home.HomeFragment
-import de.parndt.mydos.views.tabs.todos.TodosFragment
+import de.parndt.mydos.general.tabs.home.HomeFragment
+import de.parndt.mydos.general.tabs.notes.NotesFragment
+import de.parndt.mydos.general.tabs.settings.SettingsFragment
+import de.parndt.mydos.general.tabs.todos.TodosFragment
 import de.parndt.mydos.ui.MainActivity
 import kotlinx.android.synthetic.main.fragment_tabs.*
 
@@ -56,7 +56,7 @@ class TabsFragment : Fragment() {
                     true
                 }
                 R.id.tab_notes -> {
-                    (activity as MainActivity).navigateToTab(FriendsFragment())
+                    (activity as MainActivity).navigateToTab(NotesFragment())
                     true
                 }
                 R.id.tab_settings -> {
