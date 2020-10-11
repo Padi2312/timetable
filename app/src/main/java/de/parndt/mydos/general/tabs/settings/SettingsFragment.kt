@@ -18,6 +18,7 @@ class SettingsFragment : Fragment() {
 
     @Inject
     lateinit var settingsViewModel: SettingsViewModel
+
     @Inject
     lateinit var notificationAlarmManager: NotificationAlarmManager
 
@@ -36,9 +37,9 @@ class SettingsFragment : Fragment() {
 
         settingsViewModel.getSettinForKey(SettingsRepository.Filter.FILTER_ONLY_UNCHECKED)
 
-        settingsViewModel.getSettingsLiveData().observe(viewLifecycleOwner, {
+        settingsViewModel.getSettingsLiveData().observe(viewLifecycleOwner) {
             settingsFilterOnlyCheckedTodos?.isChecked = it.value
-        })
+        }
 
     }
 

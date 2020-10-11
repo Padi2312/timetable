@@ -3,7 +3,6 @@ package de.parndt.mydos.di
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import de.parndt.mydos.general.TabsFragment
-import de.parndt.mydos.general.tabs.home.HomeFragment
 import de.parndt.mydos.general.tabs.notes.NotesFragment
 import de.parndt.mydos.general.tabs.settings.SettingsFragment
 import de.parndt.mydos.general.tabs.todos.TodosFragment
@@ -20,9 +19,6 @@ abstract class PlatformTypesInjectorModule {
 
     @ContributesAndroidInjector
     abstract fun contributeTabsFragment(): TabsFragment
-
-    @ContributesAndroidInjector
-    abstract fun contributeHomeFragment(): HomeFragment
 
     @ContributesAndroidInjector
     abstract fun contributeTodosFragment(): TodosFragment

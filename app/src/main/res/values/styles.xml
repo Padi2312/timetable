@@ -3,7 +3,6 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your theme here. -->
         <item name="materialThemeOverlay">@style/ButtonStyleTextColor</item>
-
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorSecondary">@color/primaryLightColor</item>

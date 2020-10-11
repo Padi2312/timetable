@@ -35,3 +35,6 @@ data class TodoEntity(
 )
 
 
+fun TodoEntity.getDateObject(){
+
+}

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +21,6 @@ import de.parndt.mydos.repository.SettingsRepository
 import de.parndt.mydos.ui.customcomponent.newtododialog.NewTodoDialogFragment
 import de.parndt.mydos.ui.customcomponent.newtododialog.NewTodoDialogResult
 import kotlinx.android.synthetic.main.tab_fragment_todos.*
-
 import javax.inject.Inject
 
 class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
@@ -68,28 +66,25 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
 
         sortingTodosListener()
 
-    }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-
-        viewModel.refreshTodoList()
-
-
-        viewModel.observeNewTodos().observe(this, Observer {
+        viewModel.observeNewTodos().observe(viewLifecycleOwner) {
             viewModel.refreshTodoList()
-        })
+        }
 
-        viewModel.getAllTodos().observe(this, Observer {
+        viewModel.getAllTodos().observe(viewLifecycleOwner) {
             if (it.isEmpty())
                 todos_empty_todo_list_label.visibility = View.VISIBLE
             else
                 todos_empty_todo_list_label.visibility = View.GONE
 
             adapter.submitList(it)
-        })
+        }
 
+    }
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+        viewModel.refreshTodoList()
     }
 
 
@@ -102,18 +97,13 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
                 position: Int,
                 id: Long
             ) {
-                val selectedFilter = when (todosSorting.selectedItem.toString()) {
-                    _context.getString(R.string.todos_sort_by_date_created) -> SettingsRepository.Filter.FILTER_BY_DATE_CREATED
-                    _context.getString(R.string.todos_sort_by_execution_date) -> SettingsRepository.Filter.FILTER_BY_EXECUTION_DATE
-                    _context.getString(R.string.todos_sort_by_priority) -> SettingsRepository.Filter.FILTER_BY_PRIORITY
-                    else -> SettingsRepository.Filter.FILTER_ONLY_UNCHECKED
-                }
-
-                when (selectedFilter) {
-                    SettingsRepository.Filter.FILTER_ONLY_UNCHECKED -> {}
+                when (viewModel.getSortingFromItem(todosSorting.selectedItem.toString())) {
+                    SettingsRepository.Filter.FILTER_ONLY_UNCHECKED -> {
+                    }
                     SettingsRepository.Filter.FILTER_BY_PRIORITY -> viewModel.filterTodosByPriority()
                     SettingsRepository.Filter.FILTER_BY_DATE_CREATED -> viewModel.filterTodosByDateCreated()
-                    SettingsRepository.Filter.FILTER_BY_EXECUTION_DATE -> viewModel.filterTodosByExecutionDate()
+                    SettingsRepository.Filter.FILTER_BY_EXECUTION_DATE -> {
+                    }
                 }
             }
 
@@ -128,7 +118,7 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
         NewTodoDialogFragment.newInstance(this).show(parentFragmentManager, "dialog_new_todo")
     }
 
-    val itemTouchHelperCallback =
+    private val itemTouchHelperCallback =
         object :
             ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(

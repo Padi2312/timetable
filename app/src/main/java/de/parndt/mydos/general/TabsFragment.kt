@@ -1,6 +1,5 @@
 package de.parndt.mydos.general
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
-import de.parndt.mydos.general.tabs.home.HomeFragment
 import de.parndt.mydos.general.tabs.notes.NotesFragment
 import de.parndt.mydos.general.tabs.settings.SettingsFragment
 import de.parndt.mydos.general.tabs.todos.TodosFragment
@@ -29,28 +27,13 @@ class TabsFragment : Fragment() {
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
-
-        if (true == false) {
-            val builder = AlertDialog.Builder(requireActivity())
-            builder.setTitle("Datenbank-Fehler")
-            builder.setMessage("Die Datenbank konnte nicht geöffnet werden. Versuchen sie es erneut.")
-
-            // Create the AlertDialog object and return it
-            builder.create()
-            builder.show()
-
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).navigateToTab(HomeFragment())
+        (activity as MainActivity).navigateToTab(TodosFragment())
         navigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.tab_home -> {
-                    (activity as MainActivity).navigateToTab(HomeFragment())
-                    true
-                }
                 R.id.tab_todos -> {
                     (activity as MainActivity).navigateToTab(TodosFragment())
                     true

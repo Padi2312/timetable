@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
 import de.parndt.mydos.database.models.todo.TodoPriority
 import de.parndt.mydos.repository.SettingsRepository
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class TodosViewModel @Inject constructor() : ViewModel() {
 
     @Inject
-    lateinit var context: Context
+    lateinit var _context: Context
 
     @Inject
     lateinit var useCase: TodosUseCase
@@ -57,7 +58,7 @@ class TodosViewModel @Inject constructor() : ViewModel() {
     fun filterTodosByExecutionDate() {
         viewModelScope.launch(Dispatchers.IO) {
             val todos = useCase.getAllTodos()
-            todos.sortBy { TodoPriority.valueOf(it.priority) }
+            //TODO: Filter todos by execution date
             _todoList.postValue(todos)
         }
     }
@@ -92,6 +93,13 @@ class TodosViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-
+    fun getSortingFromItem(selectedItem: String): SettingsRepository.Filter {
+        return when (selectedItem) {
+            _context.getString(R.string.todos_sort_by_date_created) -> SettingsRepository.Filter.FILTER_BY_DATE_CREATED
+            _context.getString(R.string.todos_sort_by_execution_date) -> SettingsRepository.Filter.FILTER_BY_EXECUTION_DATE
+            _context.getString(R.string.todos_sort_by_priority) -> SettingsRepository.Filter.FILTER_BY_PRIORITY
+            else -> SettingsRepository.Filter.FILTER_ONLY_UNCHECKED
+        }
+    }
 
 }
