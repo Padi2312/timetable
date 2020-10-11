@@ -7,11 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.tabs.TabLayout
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoPriority
-import de.parndt.mydos.extensions.setDrawableEndShowLess
-import de.parndt.mydos.extensions.setDrawableEndShowMore
+import de.parndt.mydos.database.models.todo.getDrawableResource
 import de.parndt.mydos.notification.NotificationAlarmManager
 import de.parndt.mydos.ui.customcomponent.datetimeselection.DateTimeSelectionFragment
 import kotlinx.android.synthetic.main.dialog_new_todo.*
@@ -68,9 +68,6 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
 
         setDateTimeSelection()
 
-        newTodoExpandPriority.text =
-            viewModel.getPriorityStringByValue(newtodoSliderPriority.value.toInt())
-
         viewModel.setEnableNotification(false)
 
         newtodoInputTitle.setOnFocusChangeListener { v, hasFocus ->
@@ -78,7 +75,7 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
                 hasFocus
             )
         }
-        newTodoExpandContent.setOnClickListener { updateShowContentLayout() }
+        /*newTodoExpandContent.setOnClickListener { updateShowContentLayout() }
         newTodoExpandDateTimeSelection.setOnClickListener {
             updateShowExecutionDateTimeLayout()
             viewModel.closeKeyboard(view)
@@ -87,19 +84,57 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
         newTodoExpandPriority.setOnClickListener {
             updatePriorityLayout()
             viewModel.closeKeyboard(view)
-        }
+        }*/
 
         newtodoSliderPriority.addOnChangeListener { _, value, _ ->
-            setLabelForPrioritySlider(value.toInt())
+            setDrawableForPriorityButton(value.toInt())
         }
 
         newTodoButtonNewTodo.setOnClickListener {
             addNewTodo()
         }
 
+        newTodoActionTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.icon) {
+                    _context.getDrawable(R.drawable.ic_baseline_priority_high_24) -> {
+                        updatePriorityLayout()
+                        viewModel.closeKeyboard(view)
+                        true
+                    }
+                    _context.getDrawable(R.drawable.ic_baseline_access_time_24) -> {
+                        updateShowExecutionDateTimeLayout()
+                        viewModel.closeKeyboard(view)
+                        true
+                    }
+                    _context.getDrawable(R.drawable.ic_baseline_description_24) -> {
+                        updateShowContentLayout()
+                        true
+                    }
+                    else -> {
+                        false
+                    }
+
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+        })
+
         newTodoButtonCancel.setOnClickListener {
             dialog?.dismiss()
         }
+    }
+
+    private fun setDrawableForPriorityButton(value: Int) {
+        val priority = TodoPriority.fromInt(value)
+        val drawable = priority.getDrawableResource()
+        newTodoActionTabLayout.getTabAt(0)?.setIcon(drawable)
     }
 
     private fun setDateTimeSelection() {
@@ -113,31 +148,30 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
     private fun updatePriorityLayout() {
         if (newtodoSliderPriority.visibility == View.GONE) {
             newtodoSliderPriority.visibility = View.VISIBLE
-            newTodoExpandPriority.setDrawableEndShowLess( _context)
+            newTodoExecutionDateTimeLayout.visibility = View.GONE
+            newTodoInputContentWrapper.visibility = View.GONE
         } else {
             newtodoSliderPriority.visibility = View.GONE
-            newTodoExpandPriority.setDrawableEndShowMore( _context)
         }
     }
-
 
     private fun updateShowExecutionDateTimeLayout() {
         if (newTodoExecutionDateTimeLayout.visibility == View.GONE) {
             newTodoExecutionDateTimeLayout.visibility = View.VISIBLE
-            newTodoExpandPriority.setDrawableEndShowLess( _context)
+            newtodoSliderPriority.visibility = View.GONE
+            newTodoInputContentWrapper.visibility = View.GONE
         } else {
             newTodoExecutionDateTimeLayout.visibility = View.GONE
-            newTodoExpandDateTimeSelection.setDrawableEndShowMore( _context)
         }
     }
 
     private fun updateShowContentLayout() {
         if (newTodoInputContentWrapper.visibility == View.GONE) {
             newTodoInputContentWrapper.visibility = View.VISIBLE
-            newTodoExpandContent.setDrawableEndShowLess( _context)
+            newTodoExecutionDateTimeLayout.visibility = View.GONE
+            newtodoSliderPriority.visibility = View.GONE
         } else {
             newTodoInputContentWrapper.visibility = View.GONE
-            newTodoExpandContent.setDrawableEndShowMore( _context)
         }
     }
 
@@ -146,11 +180,6 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
             showErrorTitleOnNewTodoPopUp(dialog)
         else
             hideErrorTitleOnNewTodoPopUp(dialog)
-    }
-
-    private fun setLabelForPrioritySlider(value: Int) {
-        newTodoExpandPriority.text =
-            viewModel.getPriorityStringByValue(value)
     }
 
     private fun addNewTodo() {
@@ -191,11 +220,11 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
     }
 
     override fun onFormatedDate(date: String?) {
-        newTodoExpandDateTimeSelection.text = viewModel.getFormatedDate(date)
+        viewModel.getFormatedDate(date)
     }
 
     override fun onFormatedDateTime(date: String?, time: String?) {
-        newTodoExpandDateTimeSelection.text = viewModel.getFormatedDateTime(date, time)
+        viewModel.getFormatedDateTime(date, time)
     }
 
     override fun onSwitchNotificationChanged(isChecked: Boolean) {

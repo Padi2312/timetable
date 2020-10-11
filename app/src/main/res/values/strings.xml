@@ -6,13 +6,13 @@
     <string name="text_label_new_todo">Neuer TODO Eintrag</string>
     <string name="new_todo_title_hint">Titel</string>
     <string name="new_todo_content_hint">Beschreibung (Optional)</string>
-    <string name="new_todo_add_content">Beschreibung hinzufügen</string>
+    <string name="new_todo_add_content">Beschreibung</string>
     <string name="new_todo_priority">Priorität</string>
     <string name="new_todo_add_todo">Zur TODO-Liste hinzufügen</string>
     <string name="new_todo_reset_execution">Zurücksetzen</string>
     <string name="new_todo_enable_notification">Benachrichtigung aktivieren</string>
-    <string name="new_todo_execution_date">Datum:</string>
-    <string name="new_todo_execution_date_label">Zeitliche Ausführung</string>
+    <string name="new_todo_date_label">Datum:</string>
+    <string name="new_todo_execution_date">Zeitliche Ausführung</string>
     <string name="global_cancel">Abbrechen</string>
     <string name="new_todo_title_error">Titel erforderlich!</string>
     <string name="tab_todos_empty_todo_list">Kein TODOs vorhanden</string>

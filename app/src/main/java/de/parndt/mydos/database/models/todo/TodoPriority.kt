@@ -27,12 +27,23 @@ fun TodoPriority.getString(context: Context): String {
 }
 
 
-fun TodoPriority.getIcon(context: Context): Drawable? {
+fun TodoPriority.getDrawable(context: Context): Drawable? {
     return when (this) {
         TodoPriority.VERY_HIGH -> context.getDrawable(R.drawable.ic_baseline_keyboard_double_arrow_up_24)
         TodoPriority.HIGH -> context.getDrawable(R.drawable.ic_baseline_keyboard_arrow_up_24)
         TodoPriority.DEFAULT -> context.getDrawable(R.drawable.ic_baseline_panorama_fish_eye_24)
         TodoPriority.LOW -> context.getDrawable(R.drawable.ic_baseline_keyboard_arrow_down_24)
         TodoPriority.VERY_LOW -> context.getDrawable(R.drawable.ic_baseline_keyboard_double_arrow_down_24)
+    }
+}
+
+
+fun TodoPriority.getDrawableResource(): Int {
+    return when (this) {
+        TodoPriority.VERY_HIGH -> R.drawable.ic_baseline_keyboard_double_arrow_up_24
+        TodoPriority.HIGH -> R.drawable.ic_baseline_keyboard_arrow_up_24
+        TodoPriority.DEFAULT -> R.drawable.ic_baseline_panorama_fish_eye_24
+        TodoPriority.LOW -> R.drawable.ic_baseline_keyboard_arrow_down_24
+        TodoPriority.VERY_LOW -> R.drawable.ic_baseline_keyboard_double_arrow_down_24
     }
 }

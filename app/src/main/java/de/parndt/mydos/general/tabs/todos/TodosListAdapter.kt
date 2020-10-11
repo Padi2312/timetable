@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
 import de.parndt.mydos.database.models.todo.TodoPriority
-import de.parndt.mydos.database.models.todo.getIcon
+import de.parndt.mydos.database.models.todo.getDrawable
 import kotlinx.android.synthetic.main.list_item_todo.view.*
 
 interface TodoOnCheck {
@@ -44,7 +44,7 @@ class TodosListAdapter(val todoOnCheck: TodoOnCheck, val _context: Context) :
             }
 
             itemView.todo_item_priority_icon.setImageDrawable(
-                TodoPriority.valueOf(item.priority).getIcon(_context)
+                TodoPriority.valueOf(item.priority).getDrawable(_context)
             )
 
             itemView.todo_item_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->

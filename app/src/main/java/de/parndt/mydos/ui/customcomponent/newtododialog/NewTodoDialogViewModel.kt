@@ -79,20 +79,20 @@ class NewTodoDialogViewModel @Inject constructor(
     fun getFormatedDate(date: String?): String {
         setDate(date)
         return if (date != null) {
-            "${_context.getString(R.string.new_todo_execution_date)} $date"
+            "${_context.getString(R.string.new_todo_date_label)} $date"
         } else
-            _context.getString(R.string.new_todo_execution_date_label)
+            _context.getString(R.string.new_todo_execution_date)
     }
 
     fun getFormatedDateTime(date: String?, time: String?): String {
         setDate(date)
         setTime(time)
         return if (date != null && time != null) {
-            "${_context.getString(R.string.new_todo_execution_date)} $date - $time Uhr"
+            "${_context.getString(R.string.new_todo_date_label)} $date - $time Uhr"
         } else if (date != null && time == null) {
-            "${_context.getString(R.string.new_todo_execution_date)} $date"
+            "${_context.getString(R.string.new_todo_date_label)} $date"
         } else {
-            _context.getString(R.string.new_todo_execution_date_label)
+            _context.getString(R.string.new_todo_execution_date)
         }
     }
 
