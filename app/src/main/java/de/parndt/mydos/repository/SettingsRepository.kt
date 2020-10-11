@@ -2,8 +2,8 @@ package de.parndt.mydos.repository
 
 import android.content.Context
 import de.parndt.mydos.database.MydosDatabase
-import de.parndt.mydos.database.persistence.SettingsDao
 import de.parndt.mydos.database.models.settings.SettingsEntity
+import de.parndt.mydos.database.persistence.SettingsDao
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -49,13 +49,14 @@ class SettingsRepository @Inject constructor(
     enum class Filter {
         FILTER_ONLY_UNCHECKED,
         FILTER_BY_PRIORITY,
-        FILTER_BY_DATE
+        FILTER_BY_EXECUTION_DATE,
+        FILTER_BY_DATE_CREATED
     }
 
     fun Filter.getString(appcontext: Context): String {
         return when (this) {
-            Filter.FILTER_BY_DATE -> appcontext.getString(de.parndt.mydos.R.string.todos_filter_by_date)
-            Filter.FILTER_BY_PRIORITY -> appcontext.getString(de.parndt.mydos.R.string.todos_filter_by_priority)
+            Filter.FILTER_BY_DATE_CREATED -> appcontext.getString(de.parndt.mydos.R.string.todos_sort_by_date_created)
+            Filter.FILTER_BY_PRIORITY -> appcontext.getString(de.parndt.mydos.R.string.todos_sort_by_priority)
             else -> ""
         }
     }

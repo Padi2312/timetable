@@ -51,11 +51,10 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
         todos_todo_list.adapter = adapter
         todos_todo_list.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        sortingTodosListener()
 
         todosSorting.adapter = ArrayAdapter.createFromResource(
             _context,
-            R.array.todo_filter,
+            R.array.todo_sorts,
             R.layout.dropdown_list_item_todos_filter
         )
         todosSorting.setSelection(0)
@@ -66,6 +65,8 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
         todos_floating_action_button.setOnClickListener {
             openNewTodoPopUp()
         }
+
+        sortingTodosListener()
 
     }
 
@@ -102,15 +103,17 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
                 id: Long
             ) {
                 val selectedFilter = when (todosSorting.selectedItem.toString()) {
-                    _context.getString(R.string.todos_filter_by_date) -> SettingsRepository.Filter.FILTER_BY_DATE
-                    _context.getString(R.string.todos_filter_by_priority) -> SettingsRepository.Filter.FILTER_BY_PRIORITY
+                    _context.getString(R.string.todos_sort_by_date_created) -> SettingsRepository.Filter.FILTER_BY_DATE_CREATED
+                    _context.getString(R.string.todos_sort_by_execution_date) -> SettingsRepository.Filter.FILTER_BY_EXECUTION_DATE
+                    _context.getString(R.string.todos_sort_by_priority) -> SettingsRepository.Filter.FILTER_BY_PRIORITY
                     else -> SettingsRepository.Filter.FILTER_ONLY_UNCHECKED
                 }
 
                 when (selectedFilter) {
                     SettingsRepository.Filter.FILTER_ONLY_UNCHECKED -> {}
                     SettingsRepository.Filter.FILTER_BY_PRIORITY -> viewModel.filterTodosByPriority()
-                    SettingsRepository.Filter.FILTER_BY_DATE -> viewModel.filterTodosByDate()
+                    SettingsRepository.Filter.FILTER_BY_DATE_CREATED -> viewModel.filterTodosByDateCreated()
+                    SettingsRepository.Filter.FILTER_BY_EXECUTION_DATE -> viewModel.filterTodosByExecutionDate()
                 }
             }
 

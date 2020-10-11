@@ -1,7 +1,6 @@
 package de.parndt.mydos.ui.customcomponent.datetimeselection
 
 import android.content.Context
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
-import de.parndt.mydos.utils.setDrawableEndShowLess
-import de.parndt.mydos.utils.setDrawableEndShowMore
+import de.parndt.mydos.extensions.setDrawableEndShowLess
+import de.parndt.mydos.extensions.setDrawableEndShowMore
 import kotlinx.android.synthetic.main.fragment_datetime_selection.*
 import javax.inject.Inject
 
@@ -59,7 +58,9 @@ class DateTimeSelectionFragment : Fragment() {
         newTodoTimePicker.setOnTimeChangedListener { _, hourOfDay, minute ->
             updateTimeValue(hourOfDay, minute)
         }
-
+        newTodoSwitchEnableNotification.setOnCheckedChangeListener { _, isChecked ->
+            callbacks.onSwitchNotificationChanged(isChecked)
+        }
         newTodoResetDate.setOnClickListener { resetDate() }
         newTodoResetTime.setOnClickListener { resetTime() }
     }
@@ -67,20 +68,17 @@ class DateTimeSelectionFragment : Fragment() {
     private fun resetTime() {
         viewModel.resetTime()
         callbacks.onFormatedDateTime(viewModel.getDate(), null)
+        if (newTodoTimeLayout.visibility == View.VISIBLE)
+            updateShowTimePicker()
         newTodoExpandTimePicker.setText(R.string.todos_time_label)
     }
 
     private fun resetDate() {
-        val calendar: Calendar = Calendar.getInstance()
+        val currentDate = viewModel.getCurrentDateTime()
 
-        newTodoDatePicker.updateDate(
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-
-        newTodoTimePicker.hour = calendar.get(Calendar.HOUR_OF_DAY)
-        newTodoTimePicker.minute = calendar.get(Calendar.MINUTE)
+        newTodoDatePicker.updateDate(currentDate.year, currentDate.month, currentDate.dayOfMonth)
+        newTodoTimePicker.hour = currentDate.hour
+        newTodoTimePicker.minute = currentDate.minute
         newTodoExpandTimePicker.setText(R.string.todos_time_label)
         newTodoExpandTimePicker.isEnabled = false
 
@@ -90,6 +88,8 @@ class DateTimeSelectionFragment : Fragment() {
         viewModel.resetDate()
         viewModel.resetTime()
         callbacks.onFormatedDate(null)
+        if (newTodoDateLayout.visibility == View.VISIBLE)
+            updateShowDatePicker()
         newTodoExpandDatePicker.setText(R.string.todos_date_label)
     }
 
@@ -121,10 +121,10 @@ class DateTimeSelectionFragment : Fragment() {
     private fun updateShowDatePicker() {
         if (newTodoDateLayout.visibility == View.GONE) {
             newTodoDateLayout.visibility = View.VISIBLE
-            setDrawableEndShowLess(newTodoExpandDatePicker, _context)
+            newTodoExpandDatePicker.setDrawableEndShowLess(_context)
         } else {
             newTodoDateLayout.visibility = View.GONE
-            setDrawableEndShowMore(newTodoExpandDatePicker, _context)
+            newTodoExpandDatePicker.setDrawableEndShowMore(_context)
             if (viewModel.dateEmpty())
                 newTodoTimeLayout.visibility = View.GONE
         }
@@ -133,10 +133,10 @@ class DateTimeSelectionFragment : Fragment() {
     private fun updateShowTimePicker() {
         if (newTodoTimeLayout.visibility == View.GONE) {
             newTodoTimeLayout.visibility = View.VISIBLE
-            setDrawableEndShowLess(newTodoExpandTimePicker, _context)
+            newTodoExpandTimePicker.setDrawableEndShowLess(_context)
         } else {
             newTodoTimeLayout.visibility = View.GONE
-            setDrawableEndShowMore(newTodoExpandTimePicker, _context)
+            newTodoExpandTimePicker.setDrawableEndShowMore(_context)
         }
     }
 
@@ -151,5 +151,6 @@ class DateTimeSelectionFragment : Fragment() {
         fun onTimeChanged(hours: Int, minutes: Int, date: String? = null) {}
         fun onFormatedDate(date: String?)
         fun onFormatedDateTime(date: String?, time: String?)
+        fun onSwitchNotificationChanged(isChecked: Boolean)
     }
 }

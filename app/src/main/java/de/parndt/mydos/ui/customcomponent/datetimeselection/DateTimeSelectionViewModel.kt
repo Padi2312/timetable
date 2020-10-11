@@ -1,5 +1,6 @@
 package de.parndt.mydos.ui.customcomponent.datetimeselection
 
+import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
@@ -34,9 +35,15 @@ class DateTimeSelectionViewModel @Inject constructor() : ViewModel() {
         return executionDate!!
     }
 
-    fun resetExecution() {
-        executionDate = null
-        executionTime = null
+    fun getCurrentDateTime(): DateTimeDto {
+        val calendar: Calendar = Calendar.getInstance()
+        return DateTimeDto(
+            calendar.get(Calendar.DAY_OF_MONTH),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE)
+        )
     }
 
     fun resetTime() {
@@ -58,4 +65,12 @@ class DateTimeSelectionViewModel @Inject constructor() : ViewModel() {
             "${hour}:${minute}"
         return executionTime!!
     }
+
+    data class DateTimeDto(
+        val dayOfMonth: Int,
+        val month: Int,
+        val year: Int,
+        val hour: Int,
+        val minute: Int
+    )
 }

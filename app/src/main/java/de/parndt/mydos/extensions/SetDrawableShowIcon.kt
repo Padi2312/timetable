@@ -1,12 +1,12 @@
-package de.parndt.mydos.utils
+package de.parndt.mydos.extensions
 
 import android.content.Context
 import android.widget.Button
 import androidx.core.content.ContextCompat
 import de.parndt.mydos.R
 
-fun setDrawableEndShowMore(button: Button, _context: Context) {
-    button.setCompoundDrawablesWithIntrinsicBounds(
+fun Button.setDrawableEndShowMore(_context: Context) {
+    this.setCompoundDrawablesWithIntrinsicBounds(
         null,
         null,
         ContextCompat.getDrawable(_context, R.drawable.ic_baseline_expand_more_24),
@@ -14,8 +14,8 @@ fun setDrawableEndShowMore(button: Button, _context: Context) {
     )
 }
 
-fun setDrawableEndShowLess(button: Button, _context: Context) {
-    button.setCompoundDrawablesWithIntrinsicBounds(
+fun Button.setDrawableEndShowLess(_context: Context) {
+    this.setCompoundDrawablesWithIntrinsicBounds(
         null,
         null,
         ContextCompat.getDrawable(_context, R.drawable.ic_baseline_expand_less_24),

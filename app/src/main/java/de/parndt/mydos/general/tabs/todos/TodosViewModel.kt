@@ -36,7 +36,7 @@ class TodosViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun filterTodosByDate() {
+    fun filterTodosByDateCreated() {
         viewModelScope.launch(Dispatchers.IO) {
             val todos = useCase.getAllTodos()
             todos.sortBy { it.dateCreated }
@@ -46,6 +46,15 @@ class TodosViewModel @Inject constructor() : ViewModel() {
     }
 
     fun filterTodosByPriority() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val todos = useCase.getAllTodos()
+            todos.sortBy { TodoPriority.valueOf(it.priority) }
+            _todoList.postValue(todos)
+        }
+    }
+
+
+    fun filterTodosByExecutionDate() {
         viewModelScope.launch(Dispatchers.IO) {
             val todos = useCase.getAllTodos()
             todos.sortBy { TodoPriority.valueOf(it.priority) }
@@ -82,6 +91,7 @@ class TodosViewModel @Inject constructor() : ViewModel() {
             refreshTodoList()
         }
     }
+
 
 
 }
