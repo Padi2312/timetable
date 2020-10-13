@@ -3,15 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".general.tabs.settings.SettingsFragment">
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/settingsFilterOnlyCheckedTodos"
+        android:id="@+id/settingsOptionShowDeletedTodos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:text="@string/todos_filter_by_unchecked_label"/>
+        android:text="@string/settings_option_show_deleted_todos" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/settingsOptionShowDoneTodos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="@string/settings_option_show_done_todos" />
+
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/settingsOptionDeleteOnCheckTodo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="@string/settings_option_delete_oncheck" />
 
 
 </LinearLayout>

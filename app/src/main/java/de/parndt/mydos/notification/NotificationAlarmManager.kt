@@ -27,7 +27,7 @@ class NotificationAlarmManager @Inject constructor(private val _context: Context
     fun cancelAlarm() {
         val alarmManager = _context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
         val intent = Intent(_context, NotificationReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(_context, 1, intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(_context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         alarmManager!!.cancel(pendingIntent)
     }
 }

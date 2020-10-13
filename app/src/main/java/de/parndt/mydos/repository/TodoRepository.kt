@@ -31,6 +31,13 @@ class TodoRepository @Inject constructor(
         return list
     }
 
+    fun getAllTodosWithDeleted(): MutableList<TodoEntity> {
+        val list = todoDao.getAll()
+        list.sortBy { it.dateCreated }
+        list.reverse()
+        return list
+    }
+
     suspend fun updateTodoStatus(todoId: Int, newStatus: Boolean) {
         val todo = getTodoById(todoId)
         todo.done = newStatus

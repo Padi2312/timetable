@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
 import de.parndt.mydos.database.models.todo.TodoPriority
+import de.parndt.mydos.general.tabs.settings.SettingsUseCase
 import de.parndt.mydos.repository.SettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +22,9 @@ class TodosViewModel @Inject constructor() : ViewModel() {
 
     @Inject
     lateinit var useCase: TodosUseCase
+
+    @Inject
+    lateinit var settingsUseCase: SettingsUseCase
 
 
     private var _todoList: MutableLiveData<MutableList<TodoEntity>> = MutableLiveData()
@@ -58,8 +62,11 @@ class TodosViewModel @Inject constructor() : ViewModel() {
     fun filterTodosByExecutionDate() {
         viewModelScope.launch(Dispatchers.IO) {
             val todos = useCase.getAllTodos()
-            //TODO: Filter todos by execution date
-            _todoList.postValue(todos)
+            val sortedList =
+                todos.sortedWith(compareBy({ it.executionDate }, { it.executionTime }))
+                    .toMutableList()
+            sortedList.reverse()
+            _todoList.postValue(sortedList)
         }
     }
 
@@ -77,7 +84,19 @@ class TodosViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun updateFilterWithKey(filterKey: SettingsRepository.Filter, value: Boolean) {
+    fun deleteTodoEntry(todoId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val todo = useCase.getTodoById(todoId)
+            useCase.deleteTodoEntry(todo)
+            refreshTodoList()
+        }
+    }
+
+    fun isDeleteOnCheckEnabled(): Boolean {
+        return settingsUseCase.getSettingForKey(SettingsRepository.Settings.DELETE_ONCHECK).value
+    }
+
+    fun updateFilterWithKey(filterKey: SettingsRepository.Settings, value: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             useCase.updateSettingWithKey(filterKey, value) {
                 refreshTodoList()
@@ -93,13 +112,18 @@ class TodosViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun getSortingFromItem(selectedItem: String): SettingsRepository.Filter {
+    fun getSortingFromItem(selectedItem: String): Filter {
         return when (selectedItem) {
-            _context.getString(R.string.todos_sort_by_date_created) -> SettingsRepository.Filter.FILTER_BY_DATE_CREATED
-            _context.getString(R.string.todos_sort_by_execution_date) -> SettingsRepository.Filter.FILTER_BY_EXECUTION_DATE
-            _context.getString(R.string.todos_sort_by_priority) -> SettingsRepository.Filter.FILTER_BY_PRIORITY
-            else -> SettingsRepository.Filter.FILTER_ONLY_UNCHECKED
+            _context.getString(R.string.todos_sort_by_date_created) -> Filter.FILTER_BY_DATE_CREATED
+            _context.getString(R.string.todos_sort_by_execution_date) -> Filter.FILTER_BY_EXECUTION_DATE
+            _context.getString(R.string.todos_sort_by_priority) -> Filter.FILTER_BY_PRIORITY
+            else -> Filter.FILTER_BY_DATE_CREATED
         }
     }
 
+    enum class Filter {
+        FILTER_BY_PRIORITY,
+        FILTER_BY_EXECUTION_DATE,
+        FILTER_BY_DATE_CREATED
+    }
 }

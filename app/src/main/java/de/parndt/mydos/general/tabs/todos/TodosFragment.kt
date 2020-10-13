@@ -17,10 +17,12 @@ import com.google.android.material.textview.MaterialTextView
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoEntity
-import de.parndt.mydos.repository.SettingsRepository
 import de.parndt.mydos.ui.customcomponent.newtododialog.NewTodoDialogFragment
 import de.parndt.mydos.ui.customcomponent.newtododialog.NewTodoDialogResult
 import kotlinx.android.synthetic.main.tab_fragment_todos.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
@@ -98,12 +100,10 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
                 id: Long
             ) {
                 when (viewModel.getSortingFromItem(todosSorting.selectedItem.toString())) {
-                    SettingsRepository.Filter.FILTER_ONLY_UNCHECKED -> {
-                    }
-                    SettingsRepository.Filter.FILTER_BY_PRIORITY -> viewModel.filterTodosByPriority()
-                    SettingsRepository.Filter.FILTER_BY_DATE_CREATED -> viewModel.filterTodosByDateCreated()
-                    SettingsRepository.Filter.FILTER_BY_EXECUTION_DATE -> {
-                    }
+                    TodosViewModel.Filter.FILTER_BY_PRIORITY -> viewModel.filterTodosByPriority()
+                    TodosViewModel.Filter.FILTER_BY_DATE_CREATED -> viewModel.filterTodosByDateCreated()
+                    TodosViewModel.Filter.FILTER_BY_EXECUTION_DATE -> viewModel.filterTodosByExecutionDate()
+
                 }
             }
 
@@ -147,10 +147,6 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
         }
 
 
-    override fun onCheckboxClicked(todoId: Int, checked: Boolean) {
-        viewModel.updateTodoEntryStatus(todoId, checked)
-    }
-
     override fun onTodoItemClicked(todo: TodoEntity) {
         val builder = AlertDialog.Builder(context)
         builder.setView(R.layout.dialog_todo_item)
@@ -168,13 +164,17 @@ class TodosFragment : Fragment(), TodoOnCheck, NewTodoDialogResult {
             contentView.text = todo.content
     }
 
-
-    override fun onTodoItemDeleteClicked(todo: TodoEntity) {
-        viewModel.deleteTodoEntry(todo)
-    }
-
     override fun addedEntry() {
         viewModel.refreshTodoList()
     }
+
+    override fun onCheckboxClicked(todoId: Int, checked: Boolean) {
+        viewModel.updateTodoEntryStatus(todoId, checked)
+        GlobalScope.launch(Dispatchers.IO) {
+            if (viewModel.isDeleteOnCheckEnabled())
+                viewModel.deleteTodoEntry(todoId)
+        }
+    }
+
 
 }

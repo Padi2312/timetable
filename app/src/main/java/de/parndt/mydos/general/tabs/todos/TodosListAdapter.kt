@@ -16,8 +16,6 @@ import kotlinx.android.synthetic.main.list_item_todo.view.*
 interface TodoOnCheck {
     fun onCheckboxClicked(todoId: Int, checked: Boolean)
     fun onTodoItemClicked(todo: TodoEntity)
-    fun onTodoItemDeleteClicked(todo: TodoEntity)
-
 }
 
 class TodosListAdapter(val todoOnCheck: TodoOnCheck, val _context: Context) :

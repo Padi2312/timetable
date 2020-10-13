@@ -16,17 +16,27 @@ class TodosUseCase @Inject constructor(
 
     fun getAllTodos(): MutableList<TodoEntity> {
         var listOfTodos = todoRepository.getAllTodos().sortedBy { it.dateCreated }.reversed()
-        val settingFilterOnlyUnchecked =
-            settingsRepository.getSetting(SettingsRepository.Filter.FILTER_ONLY_UNCHECKED).value
+        val settingsShowDoneTodos =
+            settingsRepository.getSetting(SettingsRepository.Settings.SHOW_DONE_TODOS).value
 
-        if (settingFilterOnlyUnchecked)
+        val settingsShowDeletedTodos =
+            settingsRepository.getSetting(SettingsRepository.Settings.SHOW_DELETED_TODOS).value
+
+        if (settingsShowDeletedTodos)
+            listOfTodos = todoRepository.getAllTodosWithDeleted()
+
+        if (!settingsShowDoneTodos)
             listOfTodos = listOfTodos.filter { !it.done }
 
         return listOfTodos.toMutableList()
     }
 
+    fun getTodoById(todoId: Int): TodoEntity {
+        return todoRepository.getTodoById(todoId)
+    }
+
     suspend fun updateSettingWithKey(
-        settingKey: SettingsRepository.Filter,
+        settingKey: SettingsRepository.Settings,
         value: Boolean,
         settingsUpdated: () -> Unit = {}
     ) {
@@ -39,7 +49,7 @@ class TodosUseCase @Inject constructor(
     suspend fun deleteTodoEntry(todo: TodoEntity) = todoRepository.removeTodoEntry(todo)
 
     suspend fun undoDeleteTodo(todo: TodoEntity) {
-        todoRepository.updateDeletedFlag(todo.id,false)
+        todoRepository.updateDeletedFlag(todo.id, false)
     }
 
 }

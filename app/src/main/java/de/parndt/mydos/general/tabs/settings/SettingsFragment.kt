@@ -26,20 +26,28 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.tab_fragment_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        filterOnlyCheckedChanged()
+        settingsChanged()
 
-        settingsViewModel.getSettinForKey(SettingsRepository.Filter.FILTER_ONLY_UNCHECKED)
+        settingsViewModel.getSettingForKey(SettingsRepository.Settings.SHOW_DELETED_TODOS){
+            settingsOptionShowDeletedTodos?.isChecked = it.value
 
-        settingsViewModel.getSettingsLiveData().observe(viewLifecycleOwner) {
-            settingsFilterOnlyCheckedTodos?.isChecked = it.value
         }
+        settingsViewModel.getSettingForKey(SettingsRepository.Settings.DELETE_ONCHECK){
+            settingsOptionDeleteOnCheckTodo?.isChecked = it.value
+
+        }
+        settingsViewModel.getSettingForKey(SettingsRepository.Settings.SHOW_DONE_TODOS){
+            settingsOptionShowDoneTodos?.isChecked = it.value
+
+        }
+
+
 
     }
 
@@ -48,10 +56,24 @@ class SettingsFragment : Fragment() {
         super.onAttach(context)
     }
 
-    private fun filterOnlyCheckedChanged() {
-        settingsFilterOnlyCheckedTodos.setOnCheckedChangeListener { buttonView, isChecked ->
+    private fun settingsChanged() {
+        settingsOptionShowDeletedTodos.setOnCheckedChangeListener { _, isChecked ->
             settingsViewModel.updateSettingWithKey(
-                SettingsRepository.Filter.FILTER_ONLY_UNCHECKED,
+                SettingsRepository.Settings.SHOW_DELETED_TODOS,
+                isChecked
+            )
+        }
+
+        settingsOptionShowDoneTodos.setOnCheckedChangeListener { _, isChecked ->
+            settingsViewModel.updateSettingWithKey(
+                SettingsRepository.Settings.SHOW_DONE_TODOS,
+                isChecked
+            )
+        }
+
+        settingsOptionDeleteOnCheckTodo.setOnCheckedChangeListener { _, isChecked ->
+            settingsViewModel.updateSettingWithKey(
+                SettingsRepository.Settings.DELETE_ONCHECK,
                 isChecked
             )
         }

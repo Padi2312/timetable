@@ -31,22 +31,58 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:weightSum="90">
 
-            <Button
+
+            <ImageButton
                 android:id="@+id/newTodoExpandPriority"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:background="@drawable/background_image_button_new_todo"
                 android:clickable="true"
-                android:drawableEnd="@drawable/ic_baseline_expand_more_24"
+                android:src="@drawable/ic_baseline_priority_high_24"
                 android:text="@string/new_todo_priority"
                 android:textAlignment="textStart"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:tooltipText="@string/new_todo_priority" />
 
+            <ImageButton
+                android:id="@+id/newTodoExpandDateTimeSelection"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:background="@drawable/background_image_button_new_todo"
+                android:clickable="true"
+                android:src="@drawable/ic_baseline_access_time_24"
+                android:text="@string/new_todo_execution_date"
+                android:textAlignment="textStart"
+                android:textSize="12sp"
+                android:tooltipText="@string/new_todo_execution_date" />
+
+            <ImageButton
+                android:id="@+id/newTodoExpandContent"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                android:background="@drawable/background_image_button_new_todo"
+                android:clickable="true"
+                android:src="@drawable/ic_baseline_description_24"
+                android:text="@string/new_todo_add_content"
+                android:textAlignment="textStart"
+                android:textSize="12sp"
+                android:tooltipText="@string/new_todo_add_content" />
+
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/newtodoSliderPriority"
@@ -58,66 +94,56 @@
                 android:valueFrom="0"
                 android:valueTo="100"
                 android:visibility="gone" />
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <LinearLayout
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/newTodoExecutionDateTimeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/newTodoExpandDateTimeSelection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:drawableEnd="@drawable/ic_baseline_expand_more_24"
-                android:text="@string/new_todo_execution_date"
-                android:textAlignment="textStart"
-                android:textSize="12sp" />
-
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:visibility="gone">
 
             <androidx.core.widget.NestedScrollView
-                android:id="@+id/newTodoExecutionDateTimeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:layout_height="wrap_content">
 
                 <FrameLayout
                     android:id="@+id/newTodoDateTimeSelection"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </androidx.core.widget.NestedScrollView>
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <Button
-            android:id="@+id/newTodoExpandContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:drawableEnd="@drawable/ic_baseline_expand_more_24"
-            android:text="@string/new_todo_add_content"
-            android:textAlignment="textStart"
-            android:textSize="12sp" />
 
-        <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/newTodoInputContentWrapper"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/new_todo_content_hint"
-            android:visibility="gone"
-            app:errorEnabled="true">
+            android:visibility="gone">
 
-            <EditText
-                android:id="@+id/newTodoInputContent"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="start"
-                android:inputType="textMultiLine"
-                android:lines="4" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:hint="@string/new_todo_content_hint"
+                app:errorEnabled="true">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/newTodoInputContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="start"
+                    android:inputType="textMultiLine"
+                    android:lines="4" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
 
         <View
             android:layout_width="match_parent"
@@ -133,20 +159,21 @@
             android:weightSum="100">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/newTodoButtonNewTodo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="50"
-                android:layout_margin="4dp"
-                android:text="@string/new_todo_add_todo" />
-
-            <com.google.android.material.button.MaterialButton
                 android:id="@+id/newTodoButtonCancel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
                 android:layout_weight="50"
                 android:text="@string/global_cancel" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/newTodoButtonNewTodo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:layout_weight="50"
+                android:text="@string/new_todo_add_todo" />
+
 
         </LinearLayout>
 

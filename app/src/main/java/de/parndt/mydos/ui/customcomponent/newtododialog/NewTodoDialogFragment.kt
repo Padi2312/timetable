@@ -1,23 +1,22 @@
 package de.parndt.mydos.ui.customcomponent.newtododialog
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IdRes
 import androidx.fragment.app.DialogFragment
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoPriority
-import de.parndt.mydos.extensions.setDrawableEndShowLess
-import de.parndt.mydos.extensions.setDrawableEndShowMore
 import de.parndt.mydos.notification.NotificationAlarmManager
 import de.parndt.mydos.ui.customcomponent.datetimeselection.DateTimeSelectionFragment
 import kotlinx.android.synthetic.main.dialog_new_todo.*
-import java.util.*
 import javax.inject.Inject
+
 
 interface NewTodoDialogResult {
     fun addedEntry()
@@ -70,12 +69,12 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
 
         setDateTimeSelection()
 
-        newTodoExpandPriority.text =
-            viewModel.getPriorityStringByValue(newtodoSliderPriority.value.toInt())
 
         viewModel.setEnableNotification(false)
 
         newtodoInputTitle.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus)
+                viewModel.setContent(newtodoInputTitle.text.toString())
             updateShowErrorOnTitleView(
                 hasFocus
             )
@@ -92,7 +91,7 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
         }
 
         newtodoSliderPriority.addOnChangeListener { _, value, _ ->
-            setLabelForPrioritySlider(value.toInt())
+            onPrioritySliderChanged(value.toInt())
         }
 
         newTodoButtonNewTodo.setOnClickListener {
@@ -100,7 +99,7 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
         }
 
         newTodoButtonCancel.setOnClickListener {
-            dialog?.dismiss()
+            onClickCancelButton()
         }
     }
 
@@ -112,34 +111,78 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
 
     }
 
-    private fun updatePriorityLayout() {
-        if (newtodoSliderPriority.visibility == View.GONE) {
-            newtodoSliderPriority.visibility = View.VISIBLE
+    private fun onClickCancelButton() {
+        if (viewModel.hasTodoChanges()) {
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.new_todo_hasChanges_title)
+                .setMessage(R.string.new_todo_hasChanges_message)
+                .setPositiveButton(R.string.new_todo_hasChanges_positive_button) { _, _ ->
+                    dialog?.dismiss()
+                }
+                .setNegativeButton(R.string.new_todo_hasChanges_negative_button, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show()
         } else {
-            newtodoSliderPriority.visibility = View.GONE
+            dialog?.dismiss()
         }
     }
 
+    private fun changeVisibilityOfElement(@IdRes elementToChangeVisibility: Int) {
+        when (elementToChangeVisibility) {
+            R.id.newtodoSliderPriority -> {
+                newtodoSliderPriority.visibility = View.VISIBLE
+                newTodoExpandPriority.setImageResource(R.drawable.ic_baseline_priority_high_24_selected)
+                newTodoInputContentWrapper.visibility = View.GONE
+                newTodoExpandContent.setImageResource(R.drawable.ic_baseline_description_24)
+                newTodoExecutionDateTimeLayout.visibility = View.GONE
+                newTodoExpandDateTimeSelection.setImageResource(R.drawable.ic_baseline_access_time_24)
+            }
+            R.id.newTodoExecutionDateTimeLayout -> {
+                newTodoExecutionDateTimeLayout.visibility = View.VISIBLE
+                newTodoExpandDateTimeSelection.setImageResource(R.drawable.ic_baseline_access_time_24_selected)
+                newTodoInputContentWrapper.visibility = View.GONE
+                newTodoExpandContent.setImageResource(R.drawable.ic_baseline_description_24)
+                newtodoSliderPriority.visibility = View.GONE
+                newTodoExpandPriority.setImageResource(R.drawable.ic_baseline_priority_high_24)
+            }
+            R.id.newTodoInputContentWrapper -> {
+                newTodoInputContentWrapper.visibility = View.VISIBLE
+                newTodoExpandContent.setImageResource(R.drawable.ic_baseline_description_24_selected)
+                newTodoExecutionDateTimeLayout.visibility = View.GONE
+                newTodoExpandDateTimeSelection.setImageResource(R.drawable.ic_baseline_access_time_24)
+                newtodoSliderPriority.visibility = View.GONE
+                newTodoExpandPriority.setImageResource(R.drawable.ic_baseline_priority_high_24)
+            }
+        }
+    }
+
+    private fun updatePriorityLayout() {
+        if (newtodoSliderPriority.visibility == View.GONE) {
+            changeVisibilityOfElement(R.id.newtodoSliderPriority)
+        } else {
+            newtodoSliderPriority.visibility = View.GONE
+            newTodoExpandPriority.setImageResource(R.drawable.ic_baseline_priority_high_24)
+        }
+    }
 
     private fun updateShowExecutionDateTimeLayout() {
         if (newTodoExecutionDateTimeLayout.visibility == View.GONE) {
-            newTodoExecutionDateTimeLayout.visibility = View.VISIBLE
-            newTodoExpandPriority.setDrawableEndShowLess( _context)
+            changeVisibilityOfElement(R.id.newTodoExecutionDateTimeLayout)
         } else {
             newTodoExecutionDateTimeLayout.visibility = View.GONE
-            newTodoExpandDateTimeSelection.setDrawableEndShowMore( _context)
+            newTodoExpandDateTimeSelection.setImageResource(R.drawable.ic_baseline_access_time_24)
         }
     }
 
     private fun updateShowContentLayout() {
         if (newTodoInputContentWrapper.visibility == View.GONE) {
-            newTodoInputContentWrapper.visibility = View.VISIBLE
-            newTodoExpandContent.setDrawableEndShowLess( _context)
+            changeVisibilityOfElement(R.id.newTodoInputContentWrapper)
         } else {
             newTodoInputContentWrapper.visibility = View.GONE
-            newTodoExpandContent.setDrawableEndShowMore( _context)
+            newTodoExpandContent.setImageResource(R.drawable.ic_baseline_description_24)
         }
     }
+
 
     private fun updateShowErrorOnTitleView(hasFocus: Boolean) {
         if (newtodoInputTitle.text?.isEmpty()!! && !hasFocus)
@@ -148,9 +191,8 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
             hideErrorTitleOnNewTodoPopUp(dialog)
     }
 
-    private fun setLabelForPrioritySlider(value: Int) {
-        newTodoExpandPriority.text =
-            viewModel.getPriorityStringByValue(value)
+    private fun onPrioritySliderChanged(value: Int) {
+        viewModel.setPriority(value)
     }
 
     private fun addNewTodo() {
@@ -173,22 +215,6 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
             if (viewModel.getEnableNotification())
                 viewModel.addNotificationAlarm(title, content)
 
-            if (viewModel.getDate() != null) {
-                val calendar = Calendar.getInstance()
-                if (viewModel.getTime() != null) {
-                    val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN)
-                    calendar.time = sdf.parse("${viewModel.getDate()} ${viewModel.getTime()}")
-                } else {
-                    val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN)
-                    calendar.time = sdf.parse("${viewModel.getDate()}")
-                }
-                notificationAlarmManager.startAlarm(
-                    calendar,
-                    newtodoInputTitle.text.toString(),
-                    content ?: ""
-                )
-            }
-
             callback.addedEntry()
             dialog?.dismiss()
         }
@@ -206,30 +232,12 @@ class NewTodoDialogFragment(private var callback: NewTodoDialogResult) : DialogF
     }
 
     override fun onFormatedDate(date: String?) {
-        if (date != null) {
-            newTodoExpandDateTimeSelection.text =
-                "${requireContext().getString(R.string.new_todo_execution_date)} $date"
-            viewModel.setDate(date)
-        } else
-            newTodoExpandDateTimeSelection.setText(R.string.new_todo_execution_date)
-
-        newTodoExpandDateTimeSelection.text = viewModel.getFormatedDate(date)
+        viewModel.setDate(date)
     }
 
     override fun onFormatedDateTime(date: String?, time: String?) {
-        if (date != null && time != null) {
-            newTodoExpandDateTimeSelection.text =
-                "${requireContext().getString(R.string.new_todo_execution_date)} $date - $time Uhr"
-            viewModel.setDate(date)
-            viewModel.setTime(time)
-        } else if (date != null && time == null) {
-            newTodoExpandDateTimeSelection.text =
-                "${requireContext().getString(R.string.new_todo_execution_date)} $date"
-            viewModel.setDate(date)
-            viewModel.setTime(time)
-        } else
-            newTodoExpandDateTimeSelection.setText(R.string.new_todo_execution_date)
-        newTodoExpandDateTimeSelection.text = viewModel.getFormatedDateTime(date, time)
+        viewModel.setDate(date)
+        viewModel.setTime(time)
     }
 
     override fun onSwitchNotificationChanged(isChecked: Boolean) {

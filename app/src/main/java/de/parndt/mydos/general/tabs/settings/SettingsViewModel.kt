@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.parndt.mydos.database.models.settings.SettingsEntity
 import de.parndt.mydos.repository.SettingsRepository
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,21 +16,24 @@ class SettingsViewModel @Inject constructor(private val useCase: SettingsUseCase
 
     fun getSettingsLiveData() = settingsLiveData
 
-    fun getSettinForKey(filterKey: SettingsRepository.Filter) {
-        GlobalScope.launch {
-            settingsLiveData.postValue(useCase.getSettingForKey(filterKey))
+    fun getSettingForKey(
+        settingsKey: SettingsRepository.Settings,
+        callback: (SettingsEntity) -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            callback(useCase.getSettingForKey(settingsKey))
         }
     }
 
-    fun createSettingWithKey(filterKey: SettingsRepository.Filter, value: Boolean) {
+    fun createSettingWithKey(settingsKey: SettingsRepository.Settings, value: Boolean) {
         viewModelScope.launch {
-            useCase.updateSettingWithKey(filterKey, value)
+            useCase.updateSettingWithKey(settingsKey, value)
         }
     }
 
-    fun updateSettingWithKey(filterKey: SettingsRepository.Filter, value: Boolean) {
+    fun updateSettingWithKey(settingsKey: SettingsRepository.Settings, value: Boolean) {
         viewModelScope.launch {
-            useCase.updateSettingWithKey(filterKey, value)
+            useCase.updateSettingWithKey(settingsKey, value)
         }
     }
 }

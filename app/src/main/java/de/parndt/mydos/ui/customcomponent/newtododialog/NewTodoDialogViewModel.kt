@@ -8,7 +8,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModel
 import de.parndt.mydos.R
 import de.parndt.mydos.database.models.todo.TodoPriority
-import de.parndt.mydos.database.models.todo.getString
 import de.parndt.mydos.notification.NotificationAlarmManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -30,6 +29,11 @@ class NewTodoDialogViewModel @Inject constructor(
     fun setTime(value: String?) = apply { time = value }
     fun getTime() = time
 
+    private var priority: TodoPriority = TodoPriority.DEFAULT
+    fun setPriority(value: Int) = apply { priority = TodoPriority.fromInt(value) }
+
+    private var content: String? = null
+
     private var enableNotification: Boolean = false
     fun getEnableNotification() = enableNotification
     fun setEnableNotification(value: Boolean) = apply { enableNotification = value }
@@ -47,13 +51,6 @@ class NewTodoDialogViewModel @Inject constructor(
         }
     }
 
-
-    fun getPriorityStringByValue(value: Int): String {
-        return "${_context.getString(R.string.new_todo_priority)}: ${
-            TodoPriority.fromInt(value).getString(_context)
-        }"
-    }
-
     fun closeKeyboard(view: View) {
         val inputMethodManager =
             _context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -61,19 +58,34 @@ class NewTodoDialogViewModel @Inject constructor(
     }
 
     fun addNotificationAlarm(title: String, content: String?) {
-        val calendar = Calendar.getInstance()
-        if (getTime() != null) {
+        var calendar = Calendar.getInstance()
+        if (getTime() != null && getDate() != null) {
             val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN)
             calendar.time = sdf.parse("${getDate()} ${getTime()}")
-        } else {
+        } else if (getDate() != null && getTime() == null) {
             val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN)
             calendar.time = sdf.parse("${getDate()}")
+        } else {
+            calendar = null
         }
-        notificationAlarmManager.startAlarm(
-            calendar,
-            title,
-            content ?: ""
-        )
+
+        if (enableNotification && calendar != null)
+            notificationAlarmManager.startAlarm(
+                calendar,
+                title,
+                content ?: ""
+            )
+    }
+
+    fun setContent(value: String?) {
+        content = if (value.isNullOrEmpty())
+            null
+        else
+            value
+    }
+
+    fun hasTodoChanges(): Boolean {
+        return date != null || time != null || content != null || priority != TodoPriority.DEFAULT
     }
 
     fun getFormatedDate(date: String?): String {

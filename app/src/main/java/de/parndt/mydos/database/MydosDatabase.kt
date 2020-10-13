@@ -2,9 +2,9 @@ package de.parndt.mydos.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import de.parndt.mydos.database.persistence.SettingsDao
 import de.parndt.mydos.database.models.settings.SettingsEntity
 import de.parndt.mydos.database.models.todo.TodoEntity
+import de.parndt.mydos.database.persistence.SettingsDao
 import de.parndt.mydos.database.persistence.TodoDao
 
 
@@ -13,7 +13,7 @@ import de.parndt.mydos.database.persistence.TodoDao
         TodoEntity::class,
         SettingsEntity::class
     ],
-    version = 8,
+    version = 9,
     exportSchema = false
 )
 abstract class MydosDatabase : RoomDatabase() {

@@ -13,6 +13,10 @@
     <string name="new_todo_enable_notification">Benachrichtigung aktivieren</string>
     <string name="new_todo_date_label">Datum:</string>
     <string name="new_todo_execution_date">Zeitliche Ausführung</string>
+    <string name="new_todo_hasChanges_title">Nicht gespeicherte Änderungen</string>
+    <string name="new_todo_hasChanges_message">Wollen sie die Änderungen verwerfen?</string>
+    <string name="new_todo_hasChanges_positive_button">Verwerfen</string>
+    <string name="new_todo_hasChanges_negative_button">Nein</string>
     <string name="global_cancel">Abbrechen</string>
     <string name="new_todo_title_error">Titel erforderlich!</string>
     <string name="tab_todos_empty_todo_list">Kein TODOs vorhanden</string>
@@ -22,7 +26,9 @@
     <string name="todo_priotiy_high">Hoch</string>
     <string name="todo_priotiy_very_high">Sehr hoch</string>
     <string name="todos_enable_sorting_label">Sortierung aktiveren</string>
-    <string name="todos_filter_by_unchecked_label">Nur unfertige TODOs</string>
+    <string name="settings_option_delete_oncheck">TODOs beim abhaken löschen</string>
+    <string name="settings_option_show_deleted_todos">Gelöschte TODOs anzeigen</string>
+    <string name="settings_option_show_done_todos">Fertige TODOs anzeigen</string>
     <string name="todos_date_label">Ausführungsdatum</string>
     <string name="todos_time_label">Ausführungszeit</string>
     <string name="todos_sort_hint">Sortieren</string>

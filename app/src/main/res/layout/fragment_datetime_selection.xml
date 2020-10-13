@@ -4,14 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="16dp"
     tools:context=".ui.customcomponent.datetimeselection.DateTimeSelectionFragment">
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/newTodoSwitchEnableNotification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/new_todo_enable_notification"/>
+        android:text="@string/new_todo_enable_notification" />
 
     <Button
         android:id="@+id/newTodoExpandDatePicker"
