@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.parndt.mydos">
-
+    package="de.parndt.timetable">
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Timetable"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:name=".MydosApplication"
+        android:name="de.parndt.timetable.TimetableApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name="de.parndt.timetable.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,8 +18,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".notification.NotificationReceiver" />
+        <receiver android:name="de.parndt.timetable.notification.NotificationReceiver" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

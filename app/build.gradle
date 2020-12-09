@@ -9,7 +9,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "de.parndt.mydos"
+        applicationId "de.parndt.timetable"
         minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
@@ -35,7 +35,6 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
-
 
 }
 
@@ -78,6 +77,10 @@ dependencies {
     //OkHttp
     implementation 'com.squareup.okhttp3:okhttp:4.+'
     implementation 'com.squareup.okio:okio:2.+'
+
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
+
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
