@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="todo_sorts">
-        <item name="date_created">@string/todos_sort_by_date_created</item>
-        <item name="execution_date">@string/todos_sort_by_execution_date</item>
-        <item name="priority">@string/todos_sort_by_priority</item>
-    </string-array>
-</resources>

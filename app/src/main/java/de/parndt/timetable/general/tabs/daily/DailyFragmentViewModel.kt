@@ -17,18 +17,18 @@ class DailyFragmentViewModel @Inject constructor(
     private val timeTableUseCase: TimeTableUseCase
 ) : ViewModel() {
 
-    private val lecturesLiveData = MutableLiveData<List<Lecture>>()
+    private val _dailyLectures = MutableLiveData<List<Lecture>>()
     private val currentDateLiveData = MutableLiveData<Pair<String, String>>()
 
     private var selectedDate: LocalDateTime = timeTableUseCase.getCurrentDate()
 
-    fun getLectures(): LiveData<List<Lecture>> = lecturesLiveData
+    fun getDailyLectures(): LiveData<List<Lecture>> = _dailyLectures
 
 
-    fun loadTodaysLectures() {
+    fun loadDailyLectures() {
         viewModelScope.launch(Dispatchers.IO) {
             val list = timeTableUseCase.getTodaysLectures()
-            lecturesLiveData.postValue(list)
+            _dailyLectures.postValue(list)
             val date = timeTableUseCase.parseDateToString(selectedDate)
             val datePair =
                 Pair(date, selectedDate.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.GERMANY))
@@ -51,34 +51,28 @@ class DailyFragmentViewModel @Inject constructor(
 
     fun getNextDateLectures() {
         selectedDate = selectedDate.plusDays(1)
-        jumpToNextWeek()
+
+        val selectedDayOfWeek = selectedDate.dayOfWeek
+
+        selectedDate = when (selectedDayOfWeek) {
+            DayOfWeek.SATURDAY -> {
+                selectedDate.plusDays(2)
+            }
+            DayOfWeek.SUNDAY -> {
+                selectedDate.plusDays(1)
+            }
+            else -> {
+                selectedDate
+            }
+        }
         loadLecturesByDate(selectedDate)
     }
 
     fun getPreviousDateLectures() {
         selectedDate = selectedDate.minusDays(1)
-        jumpToPreviousWeek()
+        if (selectedDate.dayOfWeek == DayOfWeek.SUNDAY)
+            selectedDate = selectedDate.minusDays(2)
         loadLecturesByDate(selectedDate)
-    }
-
-    /**
-     * If the current selected day is either saturday or sunday
-     * then jump to the next Monday
-     */
-    private fun jumpToNextWeek() {
-        selectedDate = if (selectedDate.dayOfWeek == DayOfWeek.SATURDAY)
-            selectedDate.plusDays(2)
-        else if (selectedDate.dayOfWeek == DayOfWeek.SUNDAY)
-            selectedDate.plusDays(1)
-        else
-            selectedDate
-    }
-
-    private fun jumpToPreviousWeek() {
-        selectedDate = if (selectedDate.dayOfWeek == DayOfWeek.SUNDAY)
-            selectedDate.minusDays(2)
-        else
-            selectedDate
     }
 
     private fun loadLecturesByDate(dateTime: LocalDateTime) {
@@ -88,7 +82,7 @@ class DailyFragmentViewModel @Inject constructor(
     }
 
     private fun updateLiveDatas(lectures: List<Lecture>, date: String) {
-        lecturesLiveData.postValue(lectures)
+        _dailyLectures.postValue(lectures)
         val datePair =
             Pair(date, selectedDate.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.GERMANY))
         currentDateLiveData.postValue(datePair)
@@ -97,7 +91,6 @@ class DailyFragmentViewModel @Inject constructor(
     fun getCurrentDate(): String {
         return timeTableUseCase.getCurrentDateAsString()
     }
-
 
     fun currentDateChanged() = currentDateLiveData
 

@@ -1,11 +1,11 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/primaryColor</item>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary">#ffcc0000</item>
+        <!-- Customize your theme here.
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorSecondary">@color/primaryLightColor</item>
-        <item name="colorBackgroundFloating">@color/secondaryTextColor</item>
+        <item name="colorBackgroundFloating">@color/secondaryTextColor</item>-->
     </style>
 
 </resources>

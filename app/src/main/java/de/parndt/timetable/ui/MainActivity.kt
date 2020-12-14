@@ -1,15 +1,24 @@
 package de.parndt.timetable.ui
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjection
 import de.parndt.timetable.R
 import de.parndt.timetable.general.TabsFragment
-
+import de.parndt.timetable.general.timetable.TimetableParser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var timetableParser: TimetableParser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,8 +28,24 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.refreshButton) {
+            GlobalScope.launch(Dispatchers.IO) {
+                timetableParser.setAndUpdateTimeTable()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     fun init() {
         navigateToFragment(TabsFragment())
+
     }
 
     fun navigateToFragment(fragment: Fragment) {

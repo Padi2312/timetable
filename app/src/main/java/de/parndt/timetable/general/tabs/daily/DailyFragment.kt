@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.timetable.R
-import de.parndt.timetable.utils.OnSwipeTouchListener
 import kotlinx.android.synthetic.main.tab_fragment_daily.*
 import javax.inject.Inject
 
@@ -39,9 +38,7 @@ class DailyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initCurrentDate()
-        checkSwipeGesture()
-
-
+        initPreviousNextButtons()
 
         adapter = DailyLecutresListAdapter(requireContext())
         dailyFragmentLecutres.adapter = adapter
@@ -49,7 +46,7 @@ class DailyFragment : Fragment() {
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
         //Observe the lectures of the selected date
-        viewModel.getLectures().observe(viewLifecycleOwner) {
+        viewModel.getDailyLectures().observe(viewLifecycleOwner) {
             adapter.submitList(it)
             loadingIndicator.visibility = View.GONE
         }
@@ -69,7 +66,7 @@ class DailyFragment : Fragment() {
         }
 
         //Inital load of todays lectures
-        viewModel.loadTodaysLectures()
+        viewModel.loadDailyLectures()
     }
 
     private fun setSelectedDate(date: Pair<String, String>) {
@@ -100,6 +97,19 @@ class DailyFragment : Fragment() {
         viewModel.setCurrentDateToToday()
     }
 
+    private fun initPreviousNextButtons(){
+        dailyFragmentButtonPreviousWeek.setOnClickListener {
+            loadingIndicator.visibility = View.VISIBLE
+            viewModel.getPreviousDateLectures()
+
+        }
+
+        dailyFragmentButtonNextWeek.setOnClickListener {
+            loadingIndicator.visibility = View.VISIBLE
+            viewModel.getNextDateLectures()
+
+        }
+    }
 
     private fun openDatePickerDialog() {
         val c: Calendar = Calendar.getInstance()
@@ -118,22 +128,4 @@ class DailyFragment : Fragment() {
         dpd.show()
     }
 
-    private fun checkSwipeGesture() {
-        dailyFragmentLecutres.setOnTouchListener(object : OnSwipeTouchListener(requireContext()) {
-            override fun onSwipeRight() {
-                loadingIndicator.visibility = View.VISIBLE
-                viewModel.getPreviousDateLectures()
-            }
-
-            override fun onSwipeLeft() {
-                loadingIndicator.visibility = View.VISIBLE
-                viewModel.getNextDateLectures()
-            }
-
-            override fun onSwipeTop() {}
-
-            override fun onSwipeBottom() {}
-
-        })
-    }
 }

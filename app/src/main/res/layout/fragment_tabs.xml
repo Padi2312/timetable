@@ -5,29 +5,41 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#5E5E5E"
     tools:context=".ui.MainActivity">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#AAAAAA"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabSelectedTextColor="@color/primaryDarkColor"
+        app:tabTextColor="@android:color/white">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Heute" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Diese Woche" />
+
+    </com.google.android.material.tabs.TabLayout>
 
     <FrameLayout
         android:id="@+id/navigation_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="12dp"
-        app:layout_constraintBottom_toTopOf="@id/navigation"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:itemBackground="@color/tabBar_background"
-        app:itemIconTint="@drawable/tab_selector"
-        app:itemTextColor="@drawable/tab_selector"
-        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_navigation_tabs" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

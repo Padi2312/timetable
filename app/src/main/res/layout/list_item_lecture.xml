@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
+    android:elevation="8dp"
+    app:cardBackgroundColor="@android:color/darker_gray"
+    app:cardUseCompatPadding="true"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:elevation="4dp">
+    app:layout_constraintTop_toTopOf="parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,15 +21,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:textSize="20sp"
-            android:text="Vorlesung" />
+            android:text="Vorlesung"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/lecutreTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="Start/Endzeit" />
+            android:text="Start/Endzeit"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="20sp" />
 
     </LinearLayout>
 

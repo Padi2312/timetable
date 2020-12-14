@@ -4,14 +4,11 @@
     android:id="@+id/bottom_navigation_menu"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:itemBackground="@color/tabBar_background"
-    app:itemIconTint="@drawable/tab_selector"
-    app:itemTextColor="@drawable/tab_selector"
     app:labelVisibilityMode="labeled"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:menu="@menu/bottom_navigation_tabs" />
+    app:menu="@menu/menu" />
 
 
