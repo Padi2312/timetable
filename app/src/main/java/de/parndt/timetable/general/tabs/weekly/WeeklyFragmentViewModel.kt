@@ -47,12 +47,16 @@ class WeeklyFragmentViewModel @Inject constructor(
     }
 
     private fun updateWeekNumber(weekNumber: Int) {
-        selectedWeekNumber = if (weekNumber > timeTableUseCase.getNumberOfWeeksInYear()) {
-            1
-        } else if (weekNumber < 1) {
-            timeTableUseCase.getNumberOfWeeksInYear()
-        } else {
-            weekNumber
+        selectedWeekNumber = when {
+            weekNumber > timeTableUseCase.getNumberOfWeeksInYear() -> {
+                1
+            }
+            weekNumber < 1 -> {
+                timeTableUseCase.getNumberOfWeeksInYear()
+            }
+            else -> {
+                weekNumber
+            }
         }
     }
 

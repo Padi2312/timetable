@@ -34,7 +34,7 @@ class TabsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).navigateToTab(DailyFragment())
 
-        navigation.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab!!.position) {
@@ -58,6 +58,9 @@ class TabsFragment : Fragment() {
                 // Handle tab unselect
             }
         })
+
+
     }
+
 
 }
