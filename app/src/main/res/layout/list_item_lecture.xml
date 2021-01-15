@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="8dp"
+    app:cardBackgroundColor="@android:color/darker_gray"
+    app:cardUseCompatPadding="true"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/lecutreName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Vorlesung"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/lecutreTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start/Endzeit"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
+
