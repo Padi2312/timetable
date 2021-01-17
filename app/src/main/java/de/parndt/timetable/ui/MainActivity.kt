@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjection
 import de.parndt.timetable.R
-import de.parndt.timetable.general.TabsFragment
+import de.parndt.timetable.general.lectures.LecturesFragment
 import de.parndt.timetable.general.timetable.TimetableParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun init() {
-        navigateToFragment(TabsFragment())
+        navigateToFragment(LecturesFragment())
 
     }
 
@@ -55,10 +55,4 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-    fun navigateToTab(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.navigation_layout, fragment)
-        fragmentTransaction.commit()
-    }
 }

@@ -1,5 +1,7 @@
 package de.parndt.timetable.general.timetable
 
+import de.parndt.timetable.lecturesmodels.Lecture
+import de.parndt.timetable.lecturesmodels.LecturesDay
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -8,7 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 class TimeTableUseCase @Inject constructor(
-    private val timetableParser: TimetableParser
+        private val timetableParser: TimetableParser
 ) {
 
     private var listOfLectures: List<Lecture>? = null
@@ -33,16 +35,14 @@ class TimeTableUseCase @Inject constructor(
         return listOfLectures!!
     }
 
-    fun getTodaysLectures(): List<Lecture> {
-        return getAllLectures().filter { it.date == getCurrentDateAsString() }
-    }
-
-    fun getCurrentWeekLectures(): Week {
-        val currentWeekNumber = getCurrentWeekNumber()
-        val allWeeklyLectures = timetableParser.getAllWeeklyLectures()
-
-        return allWeeklyLectures.find { it.getCalendarWeek() == currentWeekNumber }
-            ?: return Week(listOf(), 0)
+    fun getDailyLectures(): List<LecturesDay> {
+        val listLecturesDay: MutableList<LecturesDay> = mutableListOf()
+        val mapDateLecture = getAllLectures().groupBy { it.date }
+        mapDateLecture.forEach { (t, u) ->
+            listLecturesDay.add(LecturesDay(t, u))
+        }
+        listLecturesDay.sortBy { it.getDateValue() }
+        return listLecturesDay
     }
 
     fun getCurrentWeekNumber(): Int {
@@ -58,21 +58,6 @@ class TimeTableUseCase @Inject constructor(
         val cal: Calendar = Calendar.getInstance()
         cal.set(getCurrentDate().year, getCurrentDate().monthValue - 1, getCurrentDate().dayOfMonth)
         return cal
-    }
-
-    fun getWeeklyLecturesFromWeekNumber(weekNumber: Int): Week {
-        val cal = getCalendarWithCurrentDate()
-        val _weekNumber = if (weekNumber > cal.weeksInWeekYear) {
-            1
-        } else {
-            weekNumber
-        }
-
-        val allWeeklyLectures = timetableParser.getAllWeeklyLectures()
-
-        return allWeeklyLectures.find { it.getCalendarWeek() == _weekNumber }
-            ?: return Week(listOf(), _weekNumber)
-
     }
 
     fun getLecutresFromDate(date: String): List<Lecture> {

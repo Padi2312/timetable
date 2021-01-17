@@ -5,4 +5,9 @@
     android:id="@+id/refreshButton"
     android:orderInCategory="100"
     android:title="Aktualisieren" />
+
+    <item
+        android:id="@+id/settingsButton"
+        android:orderInCategory="100"
+        android:title="Einstellungen" />
 </menu>

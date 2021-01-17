@@ -3,33 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="8dp"
     android:layout_margin="4dp"
+    android:elevation="8dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="8dp">
+
 
         <TextView
-            android:id="@+id/lectureName"
+            android:id="@+id/lectureDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
-            android:text="Vorlesung"
+            android:text="12.02.2021"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/lectureTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Start/Endzeit"
-            android:textSize="12sp" />
+    <LinearLayout
+        android:id="@+id/lecturesOfDay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
 
     </LinearLayout>
+
+
 </com.google.android.material.card.MaterialCardView>
 
