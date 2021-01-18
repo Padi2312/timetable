@@ -1,35 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="8dp"
     android:layout_margin="4dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    android:orientation="vertical"
+    android:padding="10dp">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/lectureName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:text="Vorlesung"
+        android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/lectureName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:text="Vorlesung"
-            android:textSize="16sp" />
+    <TextView
+        android:id="@+id/lectureTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start/Endzeit"
+        android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/lectureTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Start/Endzeit"
-            android:textSize="12sp" />
-
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+</LinearLayout>
 

@@ -14,13 +14,18 @@ class LecturesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _lectures = MutableLiveData<List<LecturesDay>>()
-    fun getLectures():LiveData<List<LecturesDay>> = _lectures
+    fun getLectures(): LiveData<List<LecturesDay>> = _lectures
 
-    fun loadLectures(){
+    fun loadLectures() {
         viewModelScope.launch(Dispatchers.IO) {
             val list = timeTableUseCase.getDailyLectures()
             _lectures.postValue(list)
         }
+    }
+
+    fun getTodaysLecturesDay(): LecturesDay? {
+        val lectures = _lectures.value ?: return null
+        return lectures.find { it.getDateValue() == timeTableUseCase.getCurrentDate() }
     }
 
 

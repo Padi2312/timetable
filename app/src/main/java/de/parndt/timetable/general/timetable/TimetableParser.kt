@@ -5,6 +5,7 @@ import de.parndt.timetable.utils.JsoupHelper
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.TextNode
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,7 +28,7 @@ class TimetableParser @Inject constructor() {
             val date = getDateOnly(dateTime)
 
             listOfLectures.add(
-                Lecture(name, date, time)
+                Lecture(UUID.randomUUID().toString(),name, date, time)
             )
         }
 

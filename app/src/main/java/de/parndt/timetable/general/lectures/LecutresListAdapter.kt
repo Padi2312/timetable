@@ -57,15 +57,6 @@ class LecutresListAdapter(val _context: Context) :
         return seperator
     }
 
-    fun getItemByPosition(position: Int): LecturesDay {
-        return lecturesList[position]
-    }
-
-    fun getItemPostionByDate(date:String):Int{
-        val index = lecturesList.indexOfFirst { it.getDate() == date }
-        return index
-    }
-
     override fun submitList(list: List<LecturesDay>?) {
         super.submitList(list)
         lecturesList = list ?: mutableListOf()
@@ -85,24 +76,24 @@ class LecutresListAdapter(val _context: Context) :
     override fun getItemCount(): Int {
         return currentList.size
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }
 
 
 object LecturesListDiffCallback : DiffUtil.ItemCallback<LecturesDay>() {
     override fun areItemsTheSame(oldItem: LecturesDay, newItem: LecturesDay): Boolean {
-        return oldItem.getDateValue() == newItem.getDateValue()
+        return oldItem.getUUID() == newItem.getUUID()
     }
 
     override fun areContentsTheSame(oldItem: LecturesDay, newItem: LecturesDay): Boolean {
 
-        var contentSame = true
-
-        for (i in oldItem.getLecturesOfDay().indices) {
-            contentSame = oldItem.getLecturesOfDay()[i].name == newItem.getLecturesOfDay()[i].name
-            contentSame = oldItem.getLecturesOfDay()[i].date == newItem.getLecturesOfDay()[i].date
-            contentSame = oldItem.getLecturesOfDay()[i].time == newItem.getLecturesOfDay()[i].time
-        }
-
-        return oldItem.getDateValue() == newItem.getDateValue() && contentSame
+        return oldItem.getUUID() == newItem.getUUID()
     }
 }
