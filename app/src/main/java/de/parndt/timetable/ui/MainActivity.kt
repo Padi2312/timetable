@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjection
 import de.parndt.timetable.R
 import de.parndt.timetable.general.lectures.LecturesFragment
+import de.parndt.timetable.general.settings.SettingsFragment
 import de.parndt.timetable.general.timetable.TimetableParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -35,23 +36,29 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == R.id.refreshButton) {
-            GlobalScope.launch(Dispatchers.IO) {
-                timetableParser.setAndUpdateTimeTable()
-            }
+        if (id == R.id.settingsButton) {
+                navigateToNextFragment(SettingsFragment())
         }
         return super.onOptionsItemSelected(item)
     }
 
+
     fun init() {
         navigateToFragment(LecturesFragment())
-
     }
 
     fun navigateToFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.drawerLayout, fragment)
+        fragmentTransaction.commit()
+    }
+
+    fun navigateToNextFragment(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.drawerLayout, fragment)
+        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
 

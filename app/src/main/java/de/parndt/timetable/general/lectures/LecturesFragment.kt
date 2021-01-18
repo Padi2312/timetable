@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,14 +44,50 @@ class LecturesFragment : Fragment() {
         lecturesList.layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
+
+
         viewModel.getLectures().observe(viewLifecycleOwner) {
             adapter.submitList(it)
             setTodaysLectures()
+            scrollDependingOnOptions()
             lecturesLoadingIndicator.visibility = View.GONE
         }
+        loadLecturesDependingOnOptions()
 
-        viewModel.loadLectures()
 
+        lecturesExpandingBar.setOnClickListener {
+
+            lecturesExpandingLayout.visibility = if (lecturesExpandingLayout.visibility == View.GONE) {
+                lecturesShowMoreIcon.setImageDrawable(
+                        ContextCompat.getDrawable(requireContext(),
+                                R.drawable.ic_baseline_expand_less_24)
+                )
+                View.VISIBLE
+            } else {
+                lecturesShowMoreIcon.setImageDrawable(
+                        ContextCompat.getDrawable(requireContext(),
+                                R.drawable.ic_baseline_expand_more_24)
+                )
+                View.GONE
+            }
+        }
+    }
+
+
+
+    private fun scrollDependingOnOptions() {
+        if (viewModel.showPreviousLecturesEnabled()) {
+            val positon = adapter.getPositionOfItemByDate(viewModel.getCurrentDate())
+            lecturesList.scrollToPosition(positon)
+        }
+    }
+
+    private fun loadLecturesDependingOnOptions() {
+        if (viewModel.showPreviousLecturesEnabled()) {
+            viewModel.loadAllLectures()
+        } else {
+            viewModel.loadLectures()
+        }
     }
 
     private fun setTodaysLectures() {
@@ -62,24 +99,22 @@ class LecturesFragment : Fragment() {
             return seperator
         }
 
-        val currentLecturesDay = viewModel.getTodaysLecturesDay()
+        val todayLectures = viewModel.getTodayLectures()
 
-        if (currentLecturesDay == null || currentLecturesDay.getLecturesOfDay().isEmpty())
+        if (todayLectures == null ||todayLectures.isEmpty()) {
             lecturesNoLecturesLabel.visibility = View.VISIBLE
-        else {
-            val todaysLectures = currentLecturesDay.getLecturesOfDay()
-
-            for (i in todaysLectures.indices) {
-
+            lecturesLecturesOfDay.visibility = View.GONE
+        } else {
+            for (i in todayLectures.indices) {
                 val lecturesView = LayoutInflater.from(requireContext())
                         .inflate(R.layout.list_item_lecture, null, true)
 
-                lecturesView.findViewById<TextView>(R.id.lectureName).text = todaysLectures[i].name
-                lecturesView.findViewById<TextView>(R.id.lectureTime).text = todaysLectures[i].time
+                lecturesView.findViewById<TextView>(R.id.lectureName).text = todayLectures[i].name
+                lecturesView.findViewById<TextView>(R.id.lectureTime).text = todayLectures[i].time
 
                 lecturesLecturesOfDay.addView(lecturesView)
 
-                if (i != todaysLectures.size - 1) {
+                if (i != todayLectures.size - 1) {
                     lecturesLecturesOfDay.addView(getSeperatorView())
                 }
             }

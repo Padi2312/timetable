@@ -28,22 +28,44 @@ class TimetableParser @Inject constructor() {
             val date = getDateOnly(dateTime)
 
             listOfLectures.add(
-                Lecture(UUID.randomUUID().toString(),name, date, time)
+                    Lecture(UUID.randomUUID().toString(), name, date, time)
             )
         }
 
         return listOfLectures
     }
 
+    fun getAllLectures(): List<Lecture> {
+        val listOfLectures = mutableListOf<Lecture>()
+        val rawLectures = getLectureViews(getFullTimetable())
 
-    fun setAndUpdateTimeTable() {
+        rawLectures.forEach { rawLecture ->
+            val name = getNameOfLecutre(rawLecture)
+            val dateTime = getDateTimeOfLecture(rawLecture)
+
+            val time = getTimeOnly(dateTime)
+            val date = getDateOnly(dateTime)
+
+            listOfLectures.add(
+                    Lecture(UUID.randomUUID().toString(), name, date, time)
+            )
+        }
+
+        return listOfLectures
+    }
+
+    private fun getFullTimetable(): Document {
+        return JsoupHelper.getPage("https://rapla.dhbw.de/rapla/calendar?key=25q8zGuMAw3elezlMsiegXs3Z-sCY45qHbigy7wiQ2e27FEEw1gUZrt95IawaK3jxZy_Y5bukYcuFWfh6SXaWeOzULboKmCdOurqipdCTePxrK7MHDzUEN1QHugfpBJAVAKMP3iDe18qS1sBr3NWbJHzr8hTTRxuZThgyq72Yxv-nZHBs65QFvlWbydaYESj&salt=-2070726140")
+    }
+
+    private fun setAndUpdateTimetable() {
         timeTable =
-            JsoupHelper.getPage("https://rapla.dhbw.de/rapla/calendar?key=25q8zGuMAw3elezlMsiegXs3Z-sCY45qHbigy7wiQ2e27FEEw1gUZrt95IawaK3jxZy_Y5bukYcuFWfh6SXaWeOzULboKmCdOurqipdCTePxrK7MHDzUEN1QHugfpBJAVAKMP3iDe18qS1sBr3NWbJHzr8hTTRxuZThgyq72Yxv-nZHBs65QFvlWbydaYESj&salt=-2070726140&today=Heute")
+                JsoupHelper.getPage("https://rapla.dhbw.de/rapla/calendar?key=25q8zGuMAw3elezlMsiegXs3Z-sCY45qHbigy7wiQ2e27FEEw1gUZrt95IawaK3jxZy_Y5bukYcuFWfh6SXaWeOzULboKmCdOurqipdCTePxrK7MHDzUEN1QHugfpBJAVAKMP3iDe18qS1sBr3NWbJHzr8hTTRxuZThgyq72Yxv-nZHBs65QFvlWbydaYESj&salt=-2070726140&today=Heute")
     }
 
     private fun getTimetable(): Document {
         if (timeTable == null) {
-            setAndUpdateTimeTable()
+            setAndUpdateTimetable()
         }
         return timeTable!!
     }

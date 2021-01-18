@@ -1,60 +1,70 @@
 package de.parndt.timetable.general.lectures
 
 import android.content.Context
-import android.graphics.Color
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.view.children
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import de.parndt.timetable.R
-import de.parndt.timetable.lecturesmodels.LecturesDay
-import kotlinx.android.synthetic.main.list_item_daily_lectures.view.*
+import de.parndt.timetable.general.lectures.viewholder.CurrentLecturesDayViewHolder
+import de.parndt.timetable.general.lectures.viewholder.DefaultLecturesDayViewHolder
+import de.parndt.timetable.general.lectures.viewholder.PreviousLecturesDayViewHolder
+import de.parndt.timetable.general.lectures.viewholder.WeekendDayViewHolder
+import de.parndt.timetable.lecturesmodels.*
+import de.parndt.timetable.utils.Logger
+import java.time.LocalDate
 
+
+const val currentLecturesDay = 0
+const val previousLecturesDay = 1
+const val weekendDay = 2
+const val defaultDay = 3
 
 class LecutresListAdapter(val _context: Context) :
-        ListAdapter<LecturesDay, LecutresListAdapter.LecturesViewHolder>(LecturesListDiffCallback) {
+        ListAdapter<LecturesDay, RecyclerView.ViewHolder>(LecturesListDiffCallback) {
 
     private var lecturesList: List<LecturesDay> = mutableListOf()
 
-    inner class LecturesViewHolder(view: View) :
-            RecyclerView.ViewHolder(view) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        fun bind(item: LecturesDay, _context: Context) {
-            itemView.lectureDate.text = item.getDate()
-
-            if (itemView.lecturesOfDay.childCount == 0) {
-
-                val lecturesOfDay = item.getLecturesOfDay()
-
-                for (i in lecturesOfDay.indices) {
-
-                    val lecturesView = LayoutInflater.from(_context)
-                            .inflate(R.layout.list_item_lecture, null, true)
-
-                    lecturesView.findViewById<TextView>(R.id.lectureName).text = lecturesOfDay[i].name
-                    lecturesView.findViewById<TextView>(R.id.lectureTime).text = lecturesOfDay[i].time
-
-                    itemView.lecturesOfDay.addView(lecturesView)
-
-                    if (i != lecturesOfDay.size - 1) {
-                        itemView.lecturesOfDay.addView(getSeperatorView())
-                    }
-                }
-
+        return when (viewType) {
+            currentLecturesDay -> {
+                CurrentLecturesDayViewHolder.from(parent, _context)
             }
-
+            previousLecturesDay -> {
+                PreviousLecturesDayViewHolder.from(parent, _context)
+            }
+            weekendDay -> {
+                WeekendDayViewHolder.from(parent, _context)
+            }
+            defaultDay -> {
+                DefaultLecturesDayViewHolder.from(parent, _context)
+            }
+            else -> {
+                Logger.error("No view type found for $viewType")
+                DefaultLecturesDayViewHolder.from(parent, _context)
+            }
         }
     }
 
-    fun getSeperatorView(): View {
-        val seperator = View(_context)
-        seperator.setBackgroundColor(Color.GRAY)
-        seperator.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2)
-        return seperator
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val item = getItem(position)) {
+            is CurrentLecturesDay -> {
+                (holder as CurrentLecturesDayViewHolder).bind(item)
+            }
+            is PreviousLecturesDay -> {
+                (holder as PreviousLecturesDayViewHolder).bind(item)
+            }
+            is WeekendDay -> {
+                (holder as WeekendDayViewHolder).bind(item)
+            }
+            is DefaultLecturesDay -> {
+                (holder as DefaultLecturesDayViewHolder).bind(item)
+            }
+            else -> {
+                Logger.error("No view holder found for $item")
+                (holder as DefaultLecturesDayViewHolder).bind(item)
+            }
+        }
     }
 
     override fun submitList(list: List<LecturesDay>?) {
@@ -62,16 +72,6 @@ class LecutresListAdapter(val _context: Context) :
         lecturesList = list ?: mutableListOf()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LecturesViewHolder {
-        return LecturesViewHolder(
-                LayoutInflater.from(parent.context)
-                        .inflate(R.layout.list_item_daily_lectures, parent, false)
-        )
-    }
-
-    override fun onBindViewHolder(holder: LecturesViewHolder, position: Int) {
-        holder.bind(getItem(position), _context)
-    }
 
     override fun getItemCount(): Int {
         return currentList.size
@@ -82,8 +82,26 @@ class LecutresListAdapter(val _context: Context) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return position
+        return when (super.getItem(position)) {
+            is CurrentLecturesDay -> {
+                currentLecturesDay
+            }
+            is DefaultLecturesDay -> {
+                defaultDay
+            }
+            is PreviousLecturesDay -> {
+                previousLecturesDay
+            }
+            is WeekendDay -> {
+                weekendDay
+            }
+        }
     }
+
+    fun getPositionOfItemByDate(date: LocalDate): Int {
+        return this.currentList.indexOfFirst { it.getDateValue() == date }
+    }
+
 }
 
 
