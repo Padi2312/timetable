@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryColor">#d50000</color>
+    <color name="primaryColor">#333333</color>
+    <color name="textColorOnPrimary">#EFEFEF</color>
+    <color name="cardViewBackgroundColor">#515151</color>
 </resources>

@@ -49,7 +49,7 @@ class LecturesFragment : Fragment() {
         viewModel.getLectures().observe(viewLifecycleOwner) {
             adapter.submitList(it)
             setTodaysLectures()
-            scrollDependingOnOptions()
+            scrollToCurrentDay()
             lecturesLoadingIndicator.visibility = View.GONE
         }
         loadLecturesDependingOnOptions()
@@ -74,12 +74,9 @@ class LecturesFragment : Fragment() {
     }
 
 
-
-    private fun scrollDependingOnOptions() {
-        if (viewModel.showPreviousLecturesEnabled()) {
-            val positon = adapter.getPositionOfItemByDate(viewModel.getCurrentDate())
-            lecturesList.scrollToPosition(positon)
-        }
+    private fun scrollToCurrentDay() {
+        val positon = adapter.getPositionOfItemByDate(viewModel.getCurrentDate())
+        lecturesList.scrollToPosition(positon)
     }
 
     private fun loadLecturesDependingOnOptions() {
@@ -101,7 +98,7 @@ class LecturesFragment : Fragment() {
 
         val todayLectures = viewModel.getTodayLectures()
 
-        if (todayLectures == null ||todayLectures.isEmpty()) {
+        if (todayLectures == null || todayLectures.isEmpty()) {
             lecturesNoLecturesLabel.visibility = View.VISIBLE
             lecturesLecturesOfDay.visibility = View.GONE
         } else {

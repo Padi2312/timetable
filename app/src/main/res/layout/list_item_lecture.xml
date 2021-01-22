@@ -12,12 +12,14 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:text="Vorlesung"
+        android:textAppearance="?attr/textAppearanceBody1"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/lectureTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceBody1"
         android:text="Start/Endzeit"
         android:textSize="12sp" />
 

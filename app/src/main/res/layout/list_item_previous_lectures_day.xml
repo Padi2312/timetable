@@ -9,12 +9,8 @@
     android:elevation="8dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
+    app:cardBackgroundColor="#222222"
     app:layout_constraintTop_toTopOf="parent">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#817A7A7A"/>
 
     <LinearLayout
         android:layout_width="match_parent"

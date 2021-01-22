@@ -37,6 +37,7 @@
             android:layout_marginBottom="2dp"
             android:gravity="center"
             android:text="Wochenende"
+            android:textAppearance="?attr/textAppearanceBody1"
             android:textSize="16sp" />
 
     </LinearLayout>

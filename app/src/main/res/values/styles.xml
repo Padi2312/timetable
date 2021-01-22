@@ -1,11 +1,21 @@
 <resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="colorPrimary">#ffcc0000</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="actionBarTheme">@style/ActionBar</item>
+        <item name="materialCardViewStyle">@style/CardViewDark</item>
+        <item name="android:textColorPrimary">@color/textColorOnPrimary</item>
         <!-- Customize your theme here.
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorSecondary">@color/primaryLightColor</item>
         <item name="colorBackgroundFloating">@color/secondaryTextColor</item>-->
+    </style>
+
+    <style name="ActionBar" parent="Widget.MaterialComponents.ActionBar.Primary">
+    </style>
+
+    <style name="CardViewDark">
+        <item name="cardBackgroundColor">@color/cardViewBackgroundColor</item>
     </style>
 
 </resources>
