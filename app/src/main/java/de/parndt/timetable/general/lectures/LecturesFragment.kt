@@ -48,31 +48,13 @@ class LecturesFragment : Fragment() {
 
         viewModel.getLectures().observe(viewLifecycleOwner) {
             adapter.submitList(it)
-            setTodaysLectures()
             scrollToCurrentDay()
             lecturesLoadingIndicator.visibility = View.GONE
         }
         loadLecturesDependingOnOptions()
 
 
-        lecturesExpandingBar.setOnClickListener {
-
-            lecturesExpandingLayout.visibility = if (lecturesExpandingLayout.visibility == View.GONE) {
-                lecturesShowMoreIcon.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(),
-                                R.drawable.ic_baseline_expand_less_24)
-                )
-                View.VISIBLE
-            } else {
-                lecturesShowMoreIcon.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(),
-                                R.drawable.ic_baseline_expand_more_24)
-                )
-                View.GONE
-            }
-        }
     }
-
 
     private fun scrollToCurrentDay() {
         val positon = adapter.getPositionOfItemByDate(viewModel.getCurrentDate())
@@ -87,36 +69,5 @@ class LecturesFragment : Fragment() {
         }
     }
 
-    private fun setTodaysLectures() {
-
-        fun getSeperatorView(): View {
-            val seperator = View(requireContext())
-            seperator.setBackgroundColor(Color.GRAY)
-            seperator.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2)
-            return seperator
-        }
-
-        val todayLectures = viewModel.getTodayLectures()
-
-        if (todayLectures == null || todayLectures.isEmpty()) {
-            lecturesNoLecturesLabel.visibility = View.VISIBLE
-            lecturesLecturesOfDay.visibility = View.GONE
-        } else {
-            for (i in todayLectures.indices) {
-                val lecturesView = LayoutInflater.from(requireContext())
-                        .inflate(R.layout.list_item_lecture, null, true)
-
-                lecturesView.findViewById<TextView>(R.id.lectureName).text = todayLectures[i].name
-                lecturesView.findViewById<TextView>(R.id.lectureTime).text = todayLectures[i].time
-
-                lecturesLecturesOfDay.addView(lecturesView)
-
-                if (i != todayLectures.size - 1) {
-                    lecturesLecturesOfDay.addView(getSeperatorView())
-                }
-            }
-        }
-
-    }
 
 }

@@ -1,8 +1,8 @@
 package de.parndt.timetable.lecturesmodels
 
+import de.parndt.timetable.utils.Utils
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 sealed class LecturesDay(id: String, dateOfDay: String, lecturesList: List<Lecture>) {
 
@@ -14,15 +14,33 @@ sealed class LecturesDay(id: String, dateOfDay: String, lecturesList: List<Lectu
 
     fun getLecturesOfDay() = lectures
 
-    fun getDate() = date
+    open fun getDate() = date
 
-    fun getDateValue(): LocalDate {
-        val formatter = DateTimeFormatter.ofPattern("EE dd.MM.yy")
-        return LocalDate.parse(date, formatter)
+    open fun getDateValue(): LocalDate {
+        return LocalDate.parse(date, Utils.dateFormater("EE dd.MM.yy"))
     }
 }
 
-class DefaultLecturesDay(id: String, dateOfDay: String, lecturesList: List<Lecture>):LecturesDay(id,dateOfDay,lecturesList)
-class CurrentLecturesDay(id: String, dateOfDay: String, lecturesList: List<Lecture>):LecturesDay(id,dateOfDay,lecturesList)
-class PreviousLecturesDay(id: String, dateOfDay: String, lecturesList: List<Lecture>):LecturesDay(id,dateOfDay,lecturesList)
-class WeekendDay(id: String, dateOfDay: String, lecturesList: List<Lecture> = listOf()):LecturesDay(id,dateOfDay,lecturesList)
+class DefaultLecturesDay(id: String, dateOfDay: String, lecturesList: List<Lecture>) : LecturesDay(id, dateOfDay, lecturesList)
+class CurrentLecturesDay(id: String, dateOfDay: String, lecturesList: List<Lecture>) : LecturesDay(id, dateOfDay, lecturesList)
+class PreviousLecturesDay(id: String, dateOfDay: String, lecturesList: List<Lecture>) : LecturesDay(id, dateOfDay, lecturesList)
+class Weekend(id: String, dateSaturday: String, dateSunday: String, lecturesList: List<Lecture> = listOf()) : LecturesDay(id, dateSaturday, lecturesList) {
+
+    private var saturdayDate = dateSaturday
+    private var sundayDate = dateSunday
+
+    override fun getDate(): String {
+        return "$saturdayDate - $sundayDate"
+    }
+
+    override fun getDateValue(): LocalDate {
+        val localeDateSaturday = LocalDate.parse(saturdayDate, Utils.dateFormater("dd.MM.yy"))
+        val localeDateSunday = LocalDate.parse(sundayDate, Utils.dateFormater("dd.MM.yy"))
+
+        return if (LocalDate.now().equals(localeDateSaturday))
+            localeDateSaturday
+        else
+            localeDateSunday
+
+    }
+}

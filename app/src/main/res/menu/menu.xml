@@ -6,6 +6,7 @@
     android:id="@+id/settingsButton"
     android:orderInCategory="100"
     app:showAsAction="always"
+    android:visible="false"
     android:tooltipText="Einstellungen"
     android:icon="@drawable/ic_baseline_settings_24"
     android:title="Einstellungen" />

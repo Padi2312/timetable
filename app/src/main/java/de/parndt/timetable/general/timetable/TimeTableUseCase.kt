@@ -5,7 +5,6 @@ import de.parndt.timetable.utils.Logger
 import de.parndt.timetable.utils.Utils
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,7 +34,7 @@ class TimeTableUseCase @Inject constructor(
             listLecturesDay.add(lecturesDay)
         }
         listLecturesDay.sortBy { it.getDateValue() }
-        val weekendDaysList = addWeekendDays(listLecturesDay)
+        val weekendDaysList = addWeekend(listLecturesDay)
         listLecturesDay.addAll(weekendDaysList)
         listLecturesDay.sortBy { it.getDateValue() }
 
@@ -70,7 +69,7 @@ class TimeTableUseCase @Inject constructor(
             listLecturesDay.add(lecturesDay)
         }
         listLecturesDay.sortBy { it.getDateValue() }
-        val weekendDaysList = addWeekendDays(listLecturesDay)
+        val weekendDaysList = addWeekend(listLecturesDay)
         listLecturesDay.addAll(weekendDaysList)
         listLecturesDay.sortBy { it.getDateValue() }
 
@@ -78,8 +77,7 @@ class TimeTableUseCase @Inject constructor(
     }
 
     private fun parseDateToString(date: LocalDate): String {
-        val formatter = DateTimeFormatter.ofPattern("EE dd.MM.yy")
-        return date.format(formatter)
+        return date.format(Utils.dateFormater("EE dd.MM.yy"))
     }
 
     private fun getAllLecturesFromBeginning(): List<Lecture> {
@@ -97,20 +95,14 @@ class TimeTableUseCase @Inject constructor(
 
     private fun formatStringDate(date: String): String {
         val date = parseStringToDate(date)
-        val formatter = DateTimeFormatter.ofPattern("EE dd.MM.yy")
-        return date.format(formatter)
+        return date.format(Utils.dateFormater("EE dd.MM.yy"))
     }
 
     private fun parseStringToDate(date: String): LocalDate {
-        val formatter = DateTimeFormatter.ofPattern("dd.MM.yy")
-        return LocalDate.parse(date, formatter)
+        return LocalDate.parse(date, Utils.dateFormater("dd.MM.yy"))
     }
 
-    /**
-     * Creates LecturesDay on weekend days depending on the inserted list.
-     * List of LecturesDay have to be sorted ascending by date!
-     */
-    private fun addWeekendDays(listLecturesDay: List<LecturesDay>): List<LecturesDay> {
+    private fun addWeekend(listLecturesDay: List<LecturesDay>): List<LecturesDay> {
         val weekendDaysList = mutableListOf<LecturesDay>()
 
         var previousLecturesDay: LecturesDay? = null
@@ -120,12 +112,12 @@ class TimeTableUseCase @Inject constructor(
                 val saturdayDate = previousLecturesDay!!.getDateValue().plusDays(1)
                 val sundayDate = previousLecturesDay!!.getDateValue().plusDays(2)
 
-                val formatedSaturdayDate = parseDateToString(saturdayDate)
-                val formatedSundayDate = parseDateToString(sundayDate)
+                val formatter = Utils.dateFormater("dd.MM.yy")
 
+                val formatedSaturdayDate =  saturdayDate.format(formatter)
+                val formatedSundayDate = sundayDate.format(formatter)
 
-                weekendDaysList.add(WeekendDay(Utils.getUUIDString(), formatedSaturdayDate, listOf()))
-                weekendDaysList.add(WeekendDay(Utils.getUUIDString(), formatedSundayDate, listOf()))
+                weekendDaysList.add(Weekend(Utils.getUUIDString(), formatedSaturdayDate, formatedSundayDate))
             }
 
             previousLecturesDay = it

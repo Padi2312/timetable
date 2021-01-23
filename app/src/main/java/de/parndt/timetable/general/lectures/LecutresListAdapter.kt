@@ -54,7 +54,7 @@ class LecutresListAdapter(val _context: Context) :
             is PreviousLecturesDay -> {
                 (holder as PreviousLecturesDayViewHolder).bind(item)
             }
-            is WeekendDay -> {
+            is Weekend -> {
                 (holder as WeekendDayViewHolder).bind(item)
             }
             is DefaultLecturesDay -> {
@@ -92,7 +92,7 @@ class LecutresListAdapter(val _context: Context) :
             is PreviousLecturesDay -> {
                 previousLecturesDay
             }
-            is WeekendDay -> {
+            is Weekend -> {
                 weekendDay
             }
         }

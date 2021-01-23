@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import de.parndt.timetable.R
 import de.parndt.timetable.lecturesmodels.LecturesDay
+import de.parndt.timetable.lecturesmodels.Weekend
 import kotlinx.android.synthetic.main.list_item_weekend_day.view.*
 
 class WeekendDayViewHolder private constructor(view: View,private val context: Context): RecyclerView.ViewHolder(view){
 
-    fun bind(item: LecturesDay){
+    fun bind(item: Weekend){
         itemView.weekendLectureDate.text = item.getDate()
     }
 
