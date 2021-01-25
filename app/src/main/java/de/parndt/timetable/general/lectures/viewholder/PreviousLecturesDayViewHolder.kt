@@ -9,35 +9,35 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import de.parndt.timetable.R
 import de.parndt.timetable.lecturesmodels.LecturesDay
+import kotlinx.android.synthetic.main.list_item_default_lectures.view.*
 import kotlinx.android.synthetic.main.list_item_previous_lectures_day.view.*
 import java.time.LocalDate
 
-class PreviousLecturesDayViewHolder  private constructor(view: View,private val context: Context): RecyclerView.ViewHolder(view){
+class PreviousLecturesDayViewHolder private constructor(view: View, private val context: Context) : RecyclerView.ViewHolder(view) {
 
-    fun bind(item: LecturesDay){
+    fun bind(item: LecturesDay) {
         itemView.previousLectureDate.text = item.getDate()
 
+        itemView.defaultLecturesOfDay?.removeAllViews()
 
-        if (itemView.previousLecturesOfDay.childCount == 0) {
+        val lecturesOfDay = item.getLecturesOfDay()
 
-            val lecturesOfDay = item.getLecturesOfDay()
+        for (i in lecturesOfDay.indices) {
 
-            for (i in lecturesOfDay.indices) {
+            val lecturesView = LayoutInflater.from(context)
+                    .inflate(R.layout.list_item_lecture, null, true)
 
-                val lecturesView = LayoutInflater.from(context)
-                        .inflate(R.layout.list_item_lecture, null, true)
+            lecturesView.findViewById<TextView>(R.id.lectureName).text = lecturesOfDay[i].name
+            lecturesView.findViewById<TextView>(R.id.lectureTime).text = lecturesOfDay[i].time
 
-                lecturesView.findViewById<TextView>(R.id.lectureName).text = lecturesOfDay[i].name
-                lecturesView.findViewById<TextView>(R.id.lectureTime).text = lecturesOfDay[i].time
+            itemView.previousLecturesOfDay.addView(lecturesView)
 
-                itemView.previousLecturesOfDay.addView(lecturesView)
-
-                if (i != lecturesOfDay.size - 1) {
-                    itemView.previousLecturesOfDay.addView(getSeperatorView())
-                }
+            if (i != lecturesOfDay.size - 1) {
+                itemView.previousLecturesOfDay.addView(getSeperatorView())
             }
-
         }
+
+
     }
 
     private fun getSeperatorView(): View {
@@ -48,7 +48,7 @@ class PreviousLecturesDayViewHolder  private constructor(view: View,private val 
     }
 
     companion object {
-        fun from(parent: ViewGroup,context: Context): PreviousLecturesDayViewHolder {
+        fun from(parent: ViewGroup, context: Context): PreviousLecturesDayViewHolder {
             val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.list_item_previous_lectures_day, parent, false)
 

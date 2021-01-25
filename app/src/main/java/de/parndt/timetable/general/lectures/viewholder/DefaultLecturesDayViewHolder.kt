@@ -11,31 +11,31 @@ import de.parndt.timetable.R
 import de.parndt.timetable.lecturesmodels.LecturesDay
 import kotlinx.android.synthetic.main.list_item_default_lectures.view.*
 
-class DefaultLecturesDayViewHolder private constructor(view: View, private val context: Context): RecyclerView.ViewHolder(view){
+class DefaultLecturesDayViewHolder private constructor(view: View, private val context: Context) : RecyclerView.ViewHolder(view) {
 
-    fun bind(item: LecturesDay){
+    fun bind(item: LecturesDay) {
         itemView.defaultLectureDate.text = item.getDate()
+        itemView.defaultLecturesOfDay?.removeAllViews()
 
-        if (itemView.defaultLecturesOfDay.childCount == 0) {
 
-            val lecturesOfDay = item.getLecturesOfDay()
+        val lecturesOfDay = item.getLecturesOfDay()
 
-            for (i in lecturesOfDay.indices) {
+        for (i in lecturesOfDay.indices) {
 
-                val lecturesView = LayoutInflater.from(context)
-                        .inflate(R.layout.list_item_lecture, null, true)
+            val lecturesView = LayoutInflater.from(context)
+                    .inflate(R.layout.list_item_lecture, null, true)
 
-                lecturesView.findViewById<TextView>(R.id.lectureName).text = lecturesOfDay[i].name
-                lecturesView.findViewById<TextView>(R.id.lectureTime).text = lecturesOfDay[i].time
+            lecturesView.findViewById<TextView>(R.id.lectureName).text = lecturesOfDay[i].name
+            lecturesView.findViewById<TextView>(R.id.lectureTime).text = lecturesOfDay[i].time
 
-                itemView.defaultLecturesOfDay.addView(lecturesView)
+            itemView.defaultLecturesOfDay.addView(lecturesView)
 
-                if (i != lecturesOfDay.size - 1) {
-                    itemView.defaultLecturesOfDay.addView(getSeperatorView())
-                }
+            if (i != lecturesOfDay.size - 1) {
+                itemView.defaultLecturesOfDay.addView(getSeperatorView())
             }
-
         }
+
+
     }
 
     private fun getSeperatorView(): View {
@@ -46,7 +46,7 @@ class DefaultLecturesDayViewHolder private constructor(view: View, private val c
     }
 
     companion object {
-        fun from(parent: ViewGroup,context: Context): DefaultLecturesDayViewHolder {
+        fun from(parent: ViewGroup, context: Context): DefaultLecturesDayViewHolder {
             val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.list_item_default_lectures, parent, false)
 
