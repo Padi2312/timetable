@@ -17,7 +17,6 @@ class DefaultLecturesDayViewHolder private constructor(view: View, private val c
         itemView.defaultLectureDate.text = item.getDate()
         itemView.defaultLecturesOfDay?.removeAllViews()
 
-
         val lecturesOfDay = item.getLecturesOfDay()
 
         for (i in lecturesOfDay.indices) {

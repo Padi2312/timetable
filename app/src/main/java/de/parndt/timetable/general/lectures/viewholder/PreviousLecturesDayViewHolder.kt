@@ -18,7 +18,7 @@ class PreviousLecturesDayViewHolder private constructor(view: View, private val 
     fun bind(item: LecturesDay) {
         itemView.previousLectureDate.text = item.getDate()
 
-        itemView.defaultLecturesOfDay?.removeAllViews()
+        itemView.previousLecturesOfDay?.removeAllViews()
 
         val lecturesOfDay = item.getLecturesOfDay()
 

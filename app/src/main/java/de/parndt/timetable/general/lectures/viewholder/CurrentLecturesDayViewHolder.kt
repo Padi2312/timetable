@@ -19,10 +19,11 @@ class CurrentLecturesDayViewHolder private constructor(view: View, private val c
     fun bind(item: LecturesDay) {
         itemView.currentLectureDate.text = item.getDate()
 
+        itemView.currentLecturesOfDay?.removeAllViews()
+
         if (item.getDateValue() == LocalDate.now())
             itemView.dailyLecturesView.strokeWidth = 6
 
-        itemView.defaultLecturesOfDay?.removeAllViews()
 
         val lecturesOfDay = item.getLecturesOfDay()
 
