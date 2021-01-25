@@ -13,7 +13,7 @@ class TimetableApplication : DaggerApplication(), HasAndroidInjector {
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
         applicationComponent =
             DaggerApplicationComponent.builder()
-                .networkModule("").context(this).build()
+                .networkModule("https://apache2.allthing.eu/timetable").context(this).build()
         return applicationComponent
     }
 

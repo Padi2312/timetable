@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.timetable.R
+import de.parndt.timetable.update.Updater
 import kotlinx.android.synthetic.main.fragment_lectures.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LecturesFragment : Fragment() {
@@ -22,11 +25,15 @@ class LecturesFragment : Fragment() {
     @Inject
     lateinit var viewModel: LecturesViewModel
 
+    @Inject
+    lateinit var updater: Updater
+
+
     private lateinit var adapter: LecutresListAdapter
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_lectures, container, false)
     }
@@ -42,7 +49,7 @@ class LecturesFragment : Fragment() {
         adapter = LecutresListAdapter(requireContext())
         lecturesList.adapter = adapter
         lecturesList.layoutManager =
-                LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
 
 
@@ -53,6 +60,7 @@ class LecturesFragment : Fragment() {
         }
         loadLecturesDependingOnOptions()
 
+        GlobalScope.launch { updater.getUpdateInfo() }
 
     }
 

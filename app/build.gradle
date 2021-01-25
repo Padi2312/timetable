@@ -76,7 +76,7 @@ dependencies {
 
     //OkHttp
     implementation 'com.squareup.okhttp3:okhttp:4.+'
-    implementation 'com.squareup.okio:okio:2.+'
+    implementation 'com.squareup.okio:okio:2.10.0'
 
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
