@@ -55,7 +55,7 @@ class Update @Inject constructor(
 
     }
 
-    fun checkIfUpdateIsAvailable(): Boolean {
+    private fun checkIfUpdateIsAvailable(): Boolean {
         val appVersion = getAppVersion()
         return when {
             appVersion == updateInfo.getVersionNumber() -> {
@@ -84,7 +84,7 @@ class Update @Inject constructor(
 
             val file = File(_context.getExternalFilesDir(null), "timetable.apk")
             val uri =
-                getUriForFile(_context, "de.parndt.timetable.provider", file)//Uri.fromFile(file)
+                getUriForFile(_context, "de.parndt.timetable.provider", file)
             val sink: BufferedSink = file.sink().buffer()
             sink.writeAll(response.body!!.source())
             sink.close()
