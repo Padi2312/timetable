@@ -6,6 +6,7 @@ import de.parndt.timetable.general.settings.SettingsUseCase
 import de.parndt.timetable.general.timetable.TimeTableUseCase
 import de.parndt.timetable.lecturesmodels.Lecture
 import de.parndt.timetable.lecturesmodels.LecturesDay
+import de.parndt.timetable.update.Update
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -14,8 +15,9 @@ import javax.inject.Inject
 class LecturesViewModel @Inject constructor(
         private val context: Context,
         private val timeTableUseCase: TimeTableUseCase,
-        private val settingsUseCase: SettingsUseCase
-) : ViewModel() {
+        private val settingsUseCase: SettingsUseCase,
+        private val update: Update
+) : ViewModel(){
 
     private val _lectures = MutableLiveData<List<LecturesDay>>()
     fun getLectures(): LiveData<List<LecturesDay>> = _lectures
@@ -47,15 +49,32 @@ class LecturesViewModel @Inject constructor(
         return timeTableUseCase.getCurrentDate()
     }
 
+    fun checkForUpdates() {
+        viewModelScope.launch(Dispatchers.IO) {
+            update.getUpdateInfo()
+        }
+    }
+
+    fun initUpdateFunction(actions: Update.Actions) {
+        update.initActionInterface(actions)
+    }
+
+    fun updateApp() {
+        viewModelScope.launch(Dispatchers.IO) {
+            update.downloadNewVersion()
+        }
+    }
 
     class Factory @Inject constructor(
             private val context: Context,
             private val timeTableUseCase: TimeTableUseCase,
-            private val settingsUseCase: SettingsUseCase
+            private val settingsUseCase: SettingsUseCase,
+            private val update: Update
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return LecturesViewModel(context, timeTableUseCase,settingsUseCase) as T
+            return LecturesViewModel(context, timeTableUseCase, settingsUseCase, update) as T
         }
     }
+
 }

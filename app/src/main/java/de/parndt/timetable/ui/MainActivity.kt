@@ -10,6 +10,7 @@ import de.parndt.timetable.R
 import de.parndt.timetable.general.lectures.LecturesFragment
 import de.parndt.timetable.general.settings.SettingsFragment
 import de.parndt.timetable.general.timetable.TimetableParser
+import de.parndt.timetable.update.Update
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var timetableParser: TimetableParser
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity() {
 
 
     fun init() {
+        //Set Main Fragment into view
         navigateToFragment(LecturesFragment())
     }
 

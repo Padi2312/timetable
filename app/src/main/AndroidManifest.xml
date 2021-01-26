@@ -4,12 +4,15 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+
     <application
+        android:name="de.parndt.timetable.TimetableApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="Timetable"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:name="de.parndt.timetable.TimetableApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="de.parndt.timetable.ui.MainActivity">
@@ -21,6 +24,16 @@
         </activity>
 
         <receiver android:name="de.parndt.timetable.notification.NotificationReceiver" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="de.parndt.timetable.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/paths" />
+        </provider>
     </application>
+
 
 </manifest>

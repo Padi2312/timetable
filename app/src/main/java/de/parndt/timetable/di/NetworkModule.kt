@@ -31,7 +31,7 @@ class NetworkModule {
                 return@Authenticator null // Give up, we've already attempted to authenticate.
             }
             println("Authenticating for response: $response")
-            System.out.println("Challenges: " + response.challenges())
+            println("Challenges: " + response.challenges())
             val credential = Credentials.basic("admin", "qT7VEQZkzDuN~R@e")
             response.request.newBuilder()
                 .header("Authorization", credential)
