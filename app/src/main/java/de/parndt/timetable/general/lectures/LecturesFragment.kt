@@ -1,7 +1,6 @@
 package de.parndt.timetable.general.lectures
 
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,25 +12,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.timetable.R
-import de.parndt.timetable.update.Update
+import de.parndt.timetable.update.Updater
+import de.parndt.timetable.update.ui.UpdaterDialogFragment
 import de.parndt.timetable.utils.Logger
 import kotlinx.android.synthetic.main.fragment_lectures.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
-class LecturesFragment : Fragment(), Update.Actions {
+class LecturesFragment : Fragment(), Updater.Actions {
 
     @Inject
     lateinit var viewModel: LecturesViewModel
 
-
+    private var updaterDialogFragment: UpdaterDialogFragment? = null
     private lateinit var adapter: LecutresListAdapter
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_lectures, container, false)
     }
@@ -43,14 +40,14 @@ class LecturesFragment : Fragment(), Update.Actions {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initUpdateDialogFragment()
         viewModel.initUpdateFunction(this)
         viewModel.checkForUpdates()
 
         adapter = LecutresListAdapter(requireContext())
         lecturesList.adapter = adapter
         lecturesList.layoutManager =
-                LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
 
         viewModel.getLectures().observe(viewLifecycleOwner) {
@@ -65,16 +62,30 @@ class LecturesFragment : Fragment(), Update.Actions {
     private fun showUpdateAvailable() {
         requireActivity().runOnUiThread {
             MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Update verfügbar")
-                    .setMessage("Wollen sie das Update installieren?")
-                    .setNegativeButton("Nein") { dialog, which ->
-                        dialog.dismiss()
-                    }
-                    .setPositiveButton("Update") { dialog, which ->
-                        viewModel.updateApp()
-                    }
-                    .show()
+                .setTitle("Update verfügbar")
+                .setMessage("Wollen sie das Update installieren?")
+                .setNegativeButton("Nein") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Update") { dialog, which ->
+                    startAppUpdate()
+                }
+                .show()
         }
+    }
+
+    private fun initUpdateDialogFragment() {
+        if (updaterDialogFragment == null)
+            updaterDialogFragment = UpdaterDialogFragment.Instance(::updateCanceled)
+    }
+
+    private fun updateCanceled() {
+        viewModel.cancelDownload()
+    }
+
+    private fun startAppUpdate() {
+        updaterDialogFragment?.show(parentFragmentManager, "dialog_add_todo")
+        viewModel.startAppUpdate()
     }
 
     private fun scrollToCurrentDay() {
@@ -91,17 +102,18 @@ class LecturesFragment : Fragment(), Update.Actions {
     }
 
     override fun updateAvailable() {
-
         showUpdateAvailable()
     }
 
-    override fun updateDownloaded(pathToFile: Uri) {
+    override fun downloadProgress(progress: Long, maxSize: Long) {
+        updaterDialogFragment?.updateProgress(progress, maxSize)
+    }
+
+    override fun downloadComplete(pathToFile: Uri) {
         try {
-            val install = Intent(Intent.ACTION_VIEW)
-            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            install.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            install.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true)
-            install.data = pathToFile
+            updaterDialogFragment?.dismiss()
+
+            val install = viewModel.getInstallIntent(pathToFile)
             requireActivity().startActivity(install)
         } catch (e: Exception) {
             Logger.error(e)

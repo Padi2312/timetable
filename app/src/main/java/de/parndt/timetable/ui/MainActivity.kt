@@ -10,10 +10,6 @@ import de.parndt.timetable.R
 import de.parndt.timetable.general.lectures.LecturesFragment
 import de.parndt.timetable.general.settings.SettingsFragment
 import de.parndt.timetable.general.timetable.TimetableParser
-import de.parndt.timetable.update.Update
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 

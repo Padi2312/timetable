@@ -30,7 +30,6 @@
 
     </LinearLayout>
 
-
     <ProgressBar
         android:id="@+id/lecturesLoadingIndicator"
         style="@android:style/Widget.ProgressBar.Large"
