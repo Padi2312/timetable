@@ -3,8 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primaryColor"
     android:orientation="vertical"
     android:weightSum="100">
+
+    <RelativeLayout
+        android:id="@+id/loadingIndicatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            style="@android:style/Widget.Material.ProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="@color/textColorOnPrimary"
+            android:layout_centerInParent="true"
+            android:text="Suche nach updates..." />
+
+    </RelativeLayout>
+
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
@@ -14,5 +37,6 @@
         tools:context=".ui.MainActivity">
 
     </androidx.drawerlayout.widget.DrawerLayout>
+
 
 </LinearLayout>

@@ -18,7 +18,6 @@ class LecturesViewModel @Inject constructor(
     private val context: Context,
     private val timeTableUseCase: TimeTableUseCase,
     private val settingsUseCase: SettingsUseCase,
-    private val updater: Updater
 ) : ViewModel() {
 
     private val _lectures = MutableLiveData<List<LecturesDay>>()
@@ -52,40 +51,15 @@ class LecturesViewModel @Inject constructor(
         return timeTableUseCase.getCurrentDate()
     }
 
-    fun checkForUpdates() {
-        viewModelScope.launch(Dispatchers.IO) {
-            updater.getUpdateInfo()
-        }
-    }
-
-    fun initUpdateFunction(actions: Updater.Actions) {
-        updater.initActionInterface(actions)
-    }
-
-
-    fun cancelDownload() {
-        updater.cancelDownload()
-    }
-
-    fun startAppUpdate() {
-        viewModelScope.launch(Dispatchers.IO) {
-            updater.startAppUpdate()
-        }
-    }
-
-    fun getInstallIntent(uri: Uri): Intent {
-        return updater.getInstallIntent(uri)
-    }
 
     class Factory @Inject constructor(
         private val context: Context,
         private val timeTableUseCase: TimeTableUseCase,
         private val settingsUseCase: SettingsUseCase,
-        private val updater: Updater
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return LecturesViewModel(context, timeTableUseCase, settingsUseCase, updater) as T
+            return LecturesViewModel(context, timeTableUseCase, settingsUseCase) as T
         }
     }
 

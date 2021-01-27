@@ -25,12 +25,15 @@ class Updater @Inject constructor(
 ) : FileProvider() {
 
     private lateinit var updateInfo: UpdateInfo
+
+    //Set this true to download allow experimental version update
     private val isExperimental = true
+
     private lateinit var actions: Actions
     private var isCanceled = false
 
     interface Actions {
-        fun updateAvailable()
+        fun updateAvailable(isAvailable: Boolean)
         fun downloadProgress(progress: Long, maxSize: Long)
         fun downloadComplete(pathToFile: Uri)
     }
@@ -51,8 +54,10 @@ class Updater @Inject constructor(
 
             updateInfo = gson.fromJson(response.body!!.string(), UpdateInfo::class.java)
 
-            if ((checkIfUpdateIsAvailable() && !updateInfo.experimental) || isExperimental)
-                actions.updateAvailable()
+            val updateAvailable =
+                (checkIfUpdateIsAvailable() && !updateInfo.experimental) || isExperimental
+
+            actions.updateAvailable(updateAvailable)
         }
 
     }
