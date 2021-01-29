@@ -27,7 +27,7 @@ class Updater @Inject constructor(
     private lateinit var updateInfo: UpdateInfo
 
     //Set this true to download allow experimental version update
-    private val isExperimental = true
+    private val isExperimental = false
 
     private lateinit var actions: Actions
     private var isCanceled = false
