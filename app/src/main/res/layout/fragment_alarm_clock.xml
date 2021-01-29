@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimaryDark"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchEnableAlarmClock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wecker vor der Vorlesung"
+        android:textColor="@android:color/white" />
+
+    <LinearLayout
+        android:id="@+id/alarmClockSettingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/alarmValueMenu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Vor Vorlesungsbeginn wecken"
+            android:textColorHint="@color/textColorOnPrimary"
+            app:boxBackgroundColor="@color/primaryColor"
+            app:boxBackgroundMode="filled"
+            app:hintTextColor="@color/textColorOnPrimary"
+            app:suffixTextColor="@color/textColorOnPrimary">
+
+            <AutoCompleteTextView
+                android:id="@+id/alarmValueField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textColor="@color/textColorOnPrimary" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+

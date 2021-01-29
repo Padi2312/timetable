@@ -11,4 +11,14 @@
     android:icon="@drawable/ic_baseline_settings_24"
     android:title="Einstellungen" />
 
+    <item
+        android:id="@+id/alarmClock"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:visible="true"
+        android:tooltipText="Wecker"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="Wecker" />
+
+
 </menu>

@@ -1,4 +1,4 @@
-package de.parndt.timetable.general.settings
+package de.parndt.timetable.settings
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,6 +8,8 @@ import javax.inject.Inject
 class SettingsUseCase @Inject constructor(val context: Context) {
 
     private val settingPreviousLectures = "show_previous_lectures"
+    private val enableAlarmClock = "enable_alarm_clock"
+
 
     private fun getSharedPrefs(): SharedPreferences? {
         return context.getSharedPreferences("settings", Context.MODE_PRIVATE)
@@ -30,6 +32,14 @@ class SettingsUseCase @Inject constructor(val context: Context) {
 
     fun valueOfPreviousLecturesSetting(): Boolean {
         return readKeyValueFromSharedPrefs(settingPreviousLectures) ?: false
+    }
+
+    fun setAlarmClockEnabled(value: Boolean) {
+        writeKeyValueToSharedPrefs(enableAlarmClock, value)
+    }
+
+    fun isAlarmEnabled(): Boolean {
+        return readKeyValueFromSharedPrefs(enableAlarmClock) ?: false
     }
 
 }

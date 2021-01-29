@@ -1,4 +1,4 @@
-package de.parndt.timetable.general.settings
+package de.parndt.timetable.settings
 
 import android.content.Context
 import androidx.lifecycle.*

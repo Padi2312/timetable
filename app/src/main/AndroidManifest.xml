@@ -25,6 +25,8 @@
         </activity>
 
         <receiver android:name="de.parndt.timetable.notification.NotificationReceiver" />
+        <receiver android:name="de.parndt.timetable.notification.NotificationReceiver" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="de.parndt.timetable.provider"

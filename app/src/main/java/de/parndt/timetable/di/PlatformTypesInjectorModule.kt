@@ -2,8 +2,10 @@ package de.parndt.timetable.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import de.parndt.timetable.general.lectures.LecturesFragment
-import de.parndt.timetable.general.settings.SettingsFragment
+import de.parndt.timetable.alarmclock.AlarmClockFragment
+import de.parndt.timetable.general.tabs.daily.di.AlarmClockFragmentModule
+import de.parndt.timetable.lectures.LecturesFragment
+import de.parndt.timetable.settings.SettingsFragment
 import de.parndt.timetable.general.tabs.daily.di.LecturesFragmentModule
 import de.parndt.timetable.general.tabs.daily.di.SettingsFragmentModule
 import de.parndt.timetable.ui.MainActivity
@@ -21,5 +23,8 @@ abstract class PlatformTypesInjectorModule {
 
     @ContributesAndroidInjector(modules = [SettingsFragmentModule::class])
     abstract fun contributeSettingsFragment(): SettingsFragment
+
+    @ContributesAndroidInjector(modules = [AlarmClockFragmentModule::class])
+    abstract fun contributeAlarmClockFragment(): AlarmClockFragment
 }
 

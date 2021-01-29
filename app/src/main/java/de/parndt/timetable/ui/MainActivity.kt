@@ -10,9 +10,10 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.AndroidInjection
 import de.parndt.timetable.R
-import de.parndt.timetable.general.lectures.LecturesFragment
-import de.parndt.timetable.general.settings.SettingsFragment
-import de.parndt.timetable.general.timetable.TimetableParser
+import de.parndt.timetable.alarmclock.AlarmClockFragment
+import de.parndt.timetable.lectures.LecturesFragment
+import de.parndt.timetable.settings.SettingsFragment
+import de.parndt.timetable.timetable.TimetableParser
 import de.parndt.timetable.update.Updater
 import de.parndt.timetable.update.ui.UpdaterDialogFragment
 import de.parndt.timetable.utils.Logger
@@ -56,6 +57,10 @@ class MainActivity : AppCompatActivity(), Updater.Actions {
         val id = item.itemId
         if (id == R.id.settingsButton) {
             navigateToNextFragment(SettingsFragment())
+        }
+
+        if (id == R.id.alarmClock) {
+            navigateToNextFragment(AlarmClockFragment())
         }
         return super.onOptionsItemSelected(item)
     }

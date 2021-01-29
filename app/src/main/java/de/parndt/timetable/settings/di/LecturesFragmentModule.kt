@@ -3,10 +3,8 @@ package de.parndt.timetable.general.tabs.daily.di
 import androidx.lifecycle.ViewModelProvider
 import dagger.Module
 import dagger.Provides
-import de.parndt.timetable.general.lectures.LecturesFragment
-import de.parndt.timetable.general.lectures.LecturesViewModel
-import de.parndt.timetable.general.settings.SettingsFragment
-import de.parndt.timetable.general.settings.SettingsViewModel
+import de.parndt.timetable.settings.SettingsFragment
+import de.parndt.timetable.settings.SettingsViewModel
 
 
 @Module

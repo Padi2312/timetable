@@ -1,7 +1,6 @@
-package de.parndt.timetable.general.lectures
+package de.parndt.timetable.lectures
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.AndroidSupportInjection
 import de.parndt.timetable.R
-import de.parndt.timetable.update.Updater
-import de.parndt.timetable.update.ui.UpdaterDialogFragment
-import de.parndt.timetable.utils.Logger
 import kotlinx.android.synthetic.main.fragment_lectures.*
 import javax.inject.Inject
 

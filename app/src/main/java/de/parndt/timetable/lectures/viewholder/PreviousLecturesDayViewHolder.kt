@@ -1,4 +1,4 @@
-package de.parndt.timetable.general.lectures.viewholder
+package de.parndt.timetable.lectures.viewholder
 
 import android.content.Context
 import android.graphics.Color
@@ -9,9 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import de.parndt.timetable.R
 import de.parndt.timetable.lecturesmodels.LecturesDay
-import kotlinx.android.synthetic.main.list_item_default_lectures.view.*
 import kotlinx.android.synthetic.main.list_item_previous_lectures_day.view.*
-import java.time.LocalDate
 
 class PreviousLecturesDayViewHolder private constructor(view: View, private val context: Context) : RecyclerView.ViewHolder(view) {
 

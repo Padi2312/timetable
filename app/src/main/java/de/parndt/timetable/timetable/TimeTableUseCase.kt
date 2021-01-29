@@ -1,10 +1,9 @@
-package de.parndt.timetable.general.timetable
+package de.parndt.timetable.timetable
 
 import de.parndt.timetable.lecturesmodels.*
 import de.parndt.timetable.utils.Logger
 import de.parndt.timetable.utils.Utils
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import javax.inject.Singleton
 

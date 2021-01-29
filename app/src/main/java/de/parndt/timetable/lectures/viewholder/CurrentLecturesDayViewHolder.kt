@@ -1,4 +1,4 @@
-package de.parndt.timetable.general.lectures.viewholder
+package de.parndt.timetable.lectures.viewholder
 
 import android.content.Context
 import android.graphics.Color
@@ -9,13 +9,20 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import de.parndt.timetable.R
 import de.parndt.timetable.lecturesmodels.LecturesDay
-import kotlinx.android.synthetic.main.list_item_default_lectures.view.*
+import kotlinx.android.synthetic.main.list_item_current_lectures_day.view.*
+import kotlinx.android.synthetic.main.list_item_current_lectures_day.view.dailyLecturesView
+import java.time.LocalDate
 
-class DefaultLecturesDayViewHolder private constructor(view: View, private val context: Context) : RecyclerView.ViewHolder(view) {
+class CurrentLecturesDayViewHolder private constructor(view: View, private val context: Context) : RecyclerView.ViewHolder(view) {
 
     fun bind(item: LecturesDay) {
-        itemView.defaultLectureDate.text = item.getDate()
-        itemView.defaultLecturesOfDay?.removeAllViews()
+        itemView.currentLectureDate.text = item.getDate()
+
+        itemView.currentLecturesOfDay?.removeAllViews()
+
+        if (item.getDateValue() == LocalDate.now())
+            itemView.dailyLecturesView.strokeWidth = 6
+
 
         val lecturesOfDay = item.getLecturesOfDay()
 
@@ -27,10 +34,10 @@ class DefaultLecturesDayViewHolder private constructor(view: View, private val c
             lecturesView.findViewById<TextView>(R.id.lectureName).text = lecturesOfDay[i].name
             lecturesView.findViewById<TextView>(R.id.lectureTime).text = lecturesOfDay[i].time
 
-            itemView.defaultLecturesOfDay.addView(lecturesView)
+            itemView.currentLecturesOfDay.addView(lecturesView)
 
             if (i != lecturesOfDay.size - 1) {
-                itemView.defaultLecturesOfDay.addView(getSeperatorView())
+                itemView.currentLecturesOfDay.addView(getSeperatorView())
             }
         }
 
@@ -45,11 +52,11 @@ class DefaultLecturesDayViewHolder private constructor(view: View, private val c
     }
 
     companion object {
-        fun from(parent: ViewGroup, context: Context): DefaultLecturesDayViewHolder {
+        fun from(parent: ViewGroup, context: Context): CurrentLecturesDayViewHolder {
             val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.list_item_default_lectures, parent, false)
+                    .inflate(R.layout.list_item_current_lectures_day, parent, false)
 
-            return DefaultLecturesDayViewHolder(
+            return CurrentLecturesDayViewHolder(
                     view,
                     context
             )

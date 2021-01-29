@@ -1,4 +1,4 @@
-package de.parndt.timetable.general.timetable
+package de.parndt.timetable.timetable
 
 import de.parndt.timetable.lecturesmodels.Lecture
 import de.parndt.timetable.utils.JsoupHelper

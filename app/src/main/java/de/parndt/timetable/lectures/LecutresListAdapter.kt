@@ -1,14 +1,14 @@
-package de.parndt.timetable.general.lectures
+package de.parndt.timetable.lectures
 
 import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import de.parndt.timetable.general.lectures.viewholder.CurrentLecturesDayViewHolder
-import de.parndt.timetable.general.lectures.viewholder.DefaultLecturesDayViewHolder
-import de.parndt.timetable.general.lectures.viewholder.PreviousLecturesDayViewHolder
-import de.parndt.timetable.general.lectures.viewholder.WeekendDayViewHolder
+import de.parndt.timetable.lectures.viewholder.CurrentLecturesDayViewHolder
+import de.parndt.timetable.lectures.viewholder.DefaultLecturesDayViewHolder
+import de.parndt.timetable.lectures.viewholder.PreviousLecturesDayViewHolder
+import de.parndt.timetable.lectures.viewholder.WeekendDayViewHolder
 import de.parndt.timetable.lecturesmodels.*
 import de.parndt.timetable.utils.Logger
 import java.time.LocalDate

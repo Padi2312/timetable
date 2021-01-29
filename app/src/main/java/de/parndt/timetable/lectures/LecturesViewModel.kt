@@ -1,14 +1,11 @@
-package de.parndt.timetable.general.lectures
+package de.parndt.timetable.lectures
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.lifecycle.*
-import de.parndt.timetable.general.settings.SettingsUseCase
-import de.parndt.timetable.general.timetable.TimeTableUseCase
+import de.parndt.timetable.settings.SettingsUseCase
+import de.parndt.timetable.timetable.TimeTableUseCase
 import de.parndt.timetable.lecturesmodels.Lecture
 import de.parndt.timetable.lecturesmodels.LecturesDay
-import de.parndt.timetable.update.Updater
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
