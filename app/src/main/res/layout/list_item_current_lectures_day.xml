@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
     app:strokeColor="#EFEFEF"
-    app:strokeWidth="6dp"
+    app:strokeWidth="8dp"
     android:elevation="8dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
